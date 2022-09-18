@@ -1,18 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WPF
 {
@@ -26,7 +16,7 @@ namespace WPF
         {
             InitializeComponent();
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7169/testhub")
+                .WithUrl("https://localhost:7169/serverhub")
                 .Build();
             _connection.Closed += async (error) =>
             {
@@ -50,16 +40,41 @@ namespace WPF
                     messagesList.Items.Add(value);
                 }));
             });
+            _connection.On<string, string>("ReceiveMessage", (user, message) =>
+            {
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    AddToList(user + " says " + message);
+                }));
+            });
             try
             {
                 await _connection.StartAsync();
                 messagesList.Items.Add("Connection started");
-                btnConnect.IsEnabled = false;
+                btnConnect.Visibility = Visibility.Collapsed;
+                var SendPanel = FindName("sendPanel") as StackPanel;
+                SendPanel.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
                 messagesList.Items.Add(ex.Message);
             }
+        }
+
+        private async void BtnSend_Send(object sender, RoutedEventArgs e)
+        {
+            var user = FindName("userName") as TextBox;
+            var message = FindName("message") as TextBox;
+          
+            if(user != null && message != null)
+            {
+                await _connection.InvokeAsync("SendMessage", user.Text, message.Text);
+            }
+        }
+
+        private void AddToList(string value)
+        {
+            messagesList.Items.Add(value);
         }
     }
 }
