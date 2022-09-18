@@ -7,31 +7,56 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel VerticalAlignment="Top"
+                    Orientation="Vertical">
+            <ListBox
+            x:Name="messagesList"
+            Width="386"
+            Height="100"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Text="ConnectionId:" />
+                <TextBlock
+                    x:Name="tbMain"
+                    Margin="5 0"
+                    HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                Text="Not Connected" />
+            </StackPanel>
+            
+            <Button
             x:Name="btnConnect"
             Width="75"
-            Margin="321,115,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Click="BtnConnect_Click"
             Content="Connect" />
-        <ListBox
-            x:Name="messagesList"
-            Width="386"
-            Height="100"
-            Margin="10,10,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top" />
-        <Label
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Content="ConnectionId:"
-            Margin="10,112,0,0" />
-        <TextBlock
-            x:Name="tbMain"
+        </StackPanel>
+        <StackPanel Grid.Column="1"
+                    x:Name="sendPanel"
+                    Visibility="Collapsed">
+            <StackPanel Orientation="Vertical">
+                <Label Content="User:"/>
+                <TextBox x:Name="userName"/>
+                <Label Content="Message:"/>
+                <TextBox x:Name="message"/>
+                <Button
+            x:Name="btnSend"
+            Width="90"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Text="Not Connected"
-            Margin="94,117,0,0" />
+            Click="BtnSend_Send"
+            Content="Send message" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
+    
 </Window>
