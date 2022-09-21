@@ -8,8 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\orange.jpg" />
+    <None Remove="images\pacman.jpg" />
+    <None Remove="images\pink.jpg" />
+    <None Remove="images\red.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="6.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\orange.jpg" />
+    <Resource Include="images\pacman.jpg" />
+    <Resource Include="images\pink.jpg" />
+    <Resource Include="images\red.jpg" />
   </ItemGroup>
 
 </Project>
