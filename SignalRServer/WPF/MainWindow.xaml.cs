@@ -48,7 +48,7 @@ namespace WPF
 
         private async void BtnConnect_Click(object sender, RoutedEventArgs e)
         {
-            _connection.On<string>("Connected",
+           /* _connection.On<string>("Connected",
                 (connectionid) =>
             {
                 tbMain.Text = connectionid;
@@ -78,7 +78,7 @@ namespace WPF
             catch (Exception ex)
             {
                 messagesList.Items.Add(ex.Message);
-            }
+            }*/
         }
 
         private async void BtnSend_Send(object sender, RoutedEventArgs e)
@@ -92,12 +92,12 @@ namespace WPF
             }
         }
 
-        private void AddToList(string value)
+       /* private void AddToList(string value)
         {
             messagesList.Items.Add(value);
-        }
+        }*/
 
-        private void CanvasKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private async void CanvasKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
 
             if (e.Key == Key.Left && !noLeft)
@@ -108,6 +108,7 @@ namespace WPF
                 goLeft = true;
 
                 pacman.RenderTransform = new RotateTransform(-180, pacman.Width / 2, pacman.Height / 2);
+                await _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "Go Left");
             }
 
             if (e.Key == Key.Right && !noRight)
@@ -117,7 +118,8 @@ namespace WPF
 
                 goRight = true; 
 
-                pacman.RenderTransform = new RotateTransform(0, pacman.Width / 2, pacman.Height / 2); 
+                pacman.RenderTransform = new RotateTransform(0, pacman.Width / 2, pacman.Height / 2);
+                await _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "Go Right");
 
             }
 
@@ -129,6 +131,7 @@ namespace WPF
                 goUp = true; 
 
                 pacman.RenderTransform = new RotateTransform(-90, pacman.Width / 2, pacman.Height / 2);
+                await _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "Go Up");
             }
 
             if (e.Key == Key.Down && !noDown)
@@ -139,10 +142,11 @@ namespace WPF
                 goDown = true; 
 
                 pacman.RenderTransform = new RotateTransform(90, pacman.Width / 2, pacman.Height / 2);
+                await _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "Go Down");
             }
         }
 
-        private void GameSetup()
+        private async void GameSetup()
         {
             MyCanvas.Focus();
             gameTimer.Tick += GameLoop;
@@ -165,6 +169,19 @@ namespace WPF
             ImageBrush pinkGhost = new ImageBrush();
             pinkGhost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/pink.jpg"));
             pinkguy.Fill = pinkGhost;
+
+            try
+            {
+                await _connection.StartAsync();
+               /* messagesList.Items.Add("Connection started");
+                btnConnect.Visibility = Visibility.Collapsed;*/
+                /*var SendPanel = FindName("sendPanel") as StackPanel;
+                SendPanel.Visibility = Visibility.Visible;*/
+            }
+            catch (Exception ex)
+            {
+                
+            }
         }
 
         private void GameLoop(object? sender, EventArgs e)
