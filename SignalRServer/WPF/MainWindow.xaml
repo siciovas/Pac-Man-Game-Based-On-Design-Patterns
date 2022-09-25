@@ -17,11 +17,22 @@
                        Name="txtScore"
                        Foreground="White"
                        Content="Score: 0"></Label>
+                <Label FontSize="20"
+                       Name="txtScoreTwo"
+                       Foreground="White"
+                       Canvas.Left="650"
+                       Content="Score Two: 0"></Label>
                 <Rectangle Name="pacman"
                            Width="30"
                            Height="30"
                            Fill="Yellow"
                            Canvas.Left="364"
+                           Canvas.Top="260" HorizontalAlignment="Left" VerticalAlignment="Top"></Rectangle>
+                <Rectangle Name="pacmantwo"
+                           Width="30"
+                           Height="30"
+                           Fill="Green"
+                           Canvas.Left="410"
                            Canvas.Top="260" HorizontalAlignment="Left" VerticalAlignment="Top"></Rectangle>
 
                 <Rectangle Name="redguy"
@@ -305,44 +316,15 @@
             Width="386"
             Height="100"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top" />
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Text="ConnectionId:" />
-                    <TextBlock
-                    x:Name="tbMain"
-                    Margin="5 0"
-                    HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                Text="Not Connected" />
-                </StackPanel>
-
+            VerticalAlignment="Top" 
+                    />
                 <Button
-            x:Name="btnConnect"
-            Width="75"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Click="BtnConnect_Click"
-            Content="Connect" />
-            </StackPanel>
-            <StackPanel Grid.Column="1"
-                    x:Name="sendPanel"
-                    Visibility="Collapsed">
-                <StackPanel Orientation="Vertical">
-                    <Label Content="User:"/>
-                    <TextBox x:Name="userName"/>
-                    <Label Content="Message:"/>
-                    <TextBox x:Name="message"/>
-                    <Button
-            x:Name="btnSend"
+            x:Name="firstPlayer"
             Width="90"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Click="BtnSend_Send"
-            Content="Send message" />
-                </StackPanel>
+            Click="FirstPlayer_Join"
+            Content="Join" />
             </StackPanel>
         </Grid>
     </StackPanel>

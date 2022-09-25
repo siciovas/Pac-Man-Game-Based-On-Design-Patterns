@@ -6,6 +6,7 @@ namespace SignalRServer.Hubs
     {
         public override Task OnConnectedAsync()
         {
+            Console.WriteLine("AA");
             Clients.Caller.SendAsync("Connected", Context.ConnectionId);
             return base.OnConnectedAsync();
         }
@@ -15,9 +16,10 @@ namespace SignalRServer.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendMessage(string user, string message)
+        public async Task SendMessage(string user)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            Console.WriteLine("Message" + user);
+            await Clients.All.SendAsync("ReceiveMessage", user);
             //await Clients.Others.SendAsync("ReceiveMessage", user, message);
             //await Clients.Caller.SendAsync("ReceiveMessage", user, "delivered: " + message);
         }
