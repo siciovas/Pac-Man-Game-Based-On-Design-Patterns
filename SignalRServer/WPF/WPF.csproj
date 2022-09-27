@@ -12,6 +12,7 @@
     <None Remove="images\pacman.jpg" />
     <None Remove="images\pink.jpg" />
     <None Remove="images\red.jpg" />
+	<None Remove="images\pacmanOp.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,13 @@
     <Resource Include="images\pacman.jpg" />
     <Resource Include="images\pink.jpg" />
     <Resource Include="images\red.jpg" />
+	<Resource Include="images\pacmanOp.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MainWindow.xaml.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

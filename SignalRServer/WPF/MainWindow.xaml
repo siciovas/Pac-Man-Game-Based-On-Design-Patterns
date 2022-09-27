@@ -17,10 +17,21 @@
                        Name="txtScore"
                        Foreground="White"
                        Content="Score: 0"></Label>
+                <Label FontSize="20"
+                       Name="oponentTxtScore"
+                       Foreground="White"
+                       Canvas.Left="600"
+                       Content="Oponent Score: 0"></Label>
                 <Rectangle Name="pacman"
                            Width="30"
                            Height="30"
                            Fill="Yellow"
+                           Canvas.Left="364"
+                           Canvas.Top="260" HorizontalAlignment="Left" VerticalAlignment="Top"></Rectangle>
+                <Rectangle Name="oponentPacman"
+                           Width="30"
+                           Height="30"
+                           Fill="Green"
                            Canvas.Left="364"
                            Canvas.Top="260" HorizontalAlignment="Left" VerticalAlignment="Top"></Rectangle>
 
