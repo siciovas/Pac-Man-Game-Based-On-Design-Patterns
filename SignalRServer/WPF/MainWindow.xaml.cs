@@ -45,10 +45,10 @@ namespace WPF
             };
 
             GameSetup();
-            Testas();
+            ListenServer();
         }
 
-        private void Testas()
+        private void ListenServer()
         {
             _connection.On<string, string>("ReceiveMessage", (connectionId, move) =>
             {
@@ -153,22 +153,6 @@ namespace WPF
 
         private async void CanvasKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-           /* _connection.On<string, string>("ReceiveMessage", (connectionId, move) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (move == "left" && !noLeft)
-                    {
-                        goRight = goUp = goDown = false;
-                        noRight = noUp = noDown = false;
-
-                        goLeft = true;
-
-                        pacman.RenderTransform = new RotateTransform(-180, pacman.Width / 2, pacman.Height / 2);
-                    }
-                }));
-            });*/
-
             if (e.Key == Key.Left && !noLeft)
             {
                 goRight = goUp = goDown = false;
