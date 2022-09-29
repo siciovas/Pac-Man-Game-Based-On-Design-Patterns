@@ -9,6 +9,9 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Linq;
+using WPF.Game.Factory.Interfaces;
+using WPF.Game.Factory.Classes;
+using System.Collections.Generic;
 
 namespace WPF
 {
@@ -23,6 +26,8 @@ namespace WPF
         bool noLeft, noRight, noUp, noDown;
         string oponentConnectionId;
         int speed = 8;
+        CoinFactory _coinFactory;
+        List<ICoin> allCoins = new List<ICoin>();
 
         Rect pacmanHitBox;
 
@@ -34,6 +39,7 @@ namespace WPF
 
         public MainWindow()
         {
+            _coinFactory = new CoinFactory();
             InitializeComponent();
             _connection = new HubConnectionBuilder()
                 .WithUrl("https://localhost:7169/serverhub")
@@ -227,6 +233,8 @@ namespace WPF
             pinkGhost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/pink.jpg"));
             pinkguy.Fill = pinkGhost;
 
+            FindAllCoins();
+
             try
             {
                 await _connection.StartAsync();
@@ -238,6 +246,18 @@ namespace WPF
             catch (Exception ex)
             {
                 
+            }
+        }
+
+        private void FindAllCoins()
+        {
+            foreach (var x in MyCanvas.Children.OfType<Rectangle>())
+            {
+                if ((string)x.Tag == "coin")
+                {
+                    ICoin coin = _coinFactory.GetCoin(1);
+                    allCoins.Add(coin);
+                }
             }
         }
 
@@ -335,7 +355,8 @@ namespace WPF
                             // set the coin visiblity to hidden
                             x.Visibility = Visibility.Hidden;
                             // add 1 to the score
-                            score++;
+                            score = score + allCoins.First().Value;
+                            allCoins.RemoveAt(0);
                         }
                     }
                 }
