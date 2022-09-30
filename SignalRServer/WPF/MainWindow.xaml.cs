@@ -12,10 +12,7 @@ using System.Linq;
 using WPF.Game.Factory.Interfaces;
 using WPF.Game.Factory.Classes;
 using System.Collections.Generic;
-using WPF.Game.AbstractFactory;
-using WPF.Game.AbstractFactory.Classes.StrongMob;
-using WPF.Game.AbstractFactory.Interfaces;
-using WPF.Game.AbstractFactory.Classes.StrongMobFactory;
+using WPF.Game.Singleton.Classes;
 
 namespace WPF
 {
@@ -33,7 +30,7 @@ namespace WPF
         CoinFactory _coinFactory;
         List<ICoin> allCoins = new List<ICoin>();
 
-        Rect pacmanHitBox;
+        PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance();
 
         int ghostSpeed = 10;
         int ghostMoveStep = 130;
@@ -317,7 +314,7 @@ namespace WPF
                     goRight = false;
                 }
 
-                pacmanHitBox = new Rect(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
+                Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
 
                 foreach (var x in MyCanvas.Children.OfType<Rectangle>())
                 {
@@ -418,7 +415,7 @@ namespace WPF
                     goRight = false;
                 }
 
-                pacmanHitBox = new Rect(Canvas.GetLeft(oponentPacman), Canvas.GetTop(oponentPacman), oponentPacman.Width, oponentPacman.Height);
+                Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(oponentPacman), Canvas.GetTop(oponentPacman), oponentPacman.Width, oponentPacman.Height);
 
                 foreach (var x in MyCanvas.Children.OfType<Rectangle>())
                 {
