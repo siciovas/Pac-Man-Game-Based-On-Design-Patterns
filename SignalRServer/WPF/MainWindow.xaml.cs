@@ -25,7 +25,7 @@ namespace WPF
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
-        string oponentConnectionId;
+        string opponentConnectionId;
         int speed = 8;
         CoinFactory _coinFactory;
         List<ICoin> allCoins = new List<ICoin>();
@@ -36,7 +36,8 @@ namespace WPF
         int ghostMoveStep = 130;
         int currentGhostStep;
         int score = 0;
-        int oponentScore = 0;
+        int opponentScore = 0;
+        private int level;
 
         public MainWindow()
         {
@@ -60,8 +61,8 @@ namespace WPF
             _connection.On<string, string>("ReceiveMessage", (connectionId, move) =>
             {
                 Dispatcher.BeginInvoke((Action)(() => {
-                    oponentConnectionId = connectionId;
-                    if (oponentConnectionId != _connection.ConnectionId)
+                    opponentConnectionId = connectionId;
+                    if (opponentConnectionId != _connection.ConnectionId)
                     {
                         if (move == "left" && !noLeft)
                         {
@@ -208,6 +209,13 @@ namespace WPF
 
         private async void GameSetup()
         {
+
+            //if(level == 5)
+            //{
+            //    MobFactory zombie = new StrongMobFactory();
+            //    IZombie strongZombie = zombie.CreateZombie();
+            //}
+
             MyCanvas.Focus();
             gameTimer.Tick += GameLoop;
             gameTimer.Tick += OponentControll;
@@ -266,7 +274,7 @@ namespace WPF
         {
             txtScore.Content = "Score: " + score;
             // show the scoreo to the txtscore label. 
-            if (oponentConnectionId == _connection.ConnectionId)
+            if (opponentConnectionId == _connection.ConnectionId)
             {
                 if (goRight)
                 {
@@ -366,8 +374,8 @@ namespace WPF
 
         private void OponentControll(object? sender, EventArgs e)
         {
-            oponentTxtScore.Content = "Oponent Score: " + oponentScore;
-            if (oponentConnectionId != _connection.ConnectionId)
+            oponentTxtScore.Content = "Oponent Score: " + opponentScore;
+            if (opponentConnectionId != _connection.ConnectionId)
             {
                 if (goRight)
                 {
@@ -457,7 +465,7 @@ namespace WPF
                             // set the coin visiblity to hidden
                             x.Visibility = Visibility.Hidden;
                             // add 1 to the score
-                            oponentScore++;
+                            opponentScore++;
                         }
                     }
                 }

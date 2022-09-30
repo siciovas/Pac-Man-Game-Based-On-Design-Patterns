@@ -8,7 +8,7 @@ using WPF.Game.Factory.Interfaces;
 
 namespace WPF.Game.Factory.Classes
 {
-    internal class BronzeCoin : ICoin
+    public class BronzeCoin : ICoin
     {
         public BronzeCoin()
         {
