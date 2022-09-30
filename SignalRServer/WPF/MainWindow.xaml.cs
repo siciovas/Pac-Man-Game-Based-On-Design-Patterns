@@ -30,7 +30,6 @@ namespace WPF
         CoinFactory _coinFactory;
         List<ICoin> allCoins = new List<ICoin>();
 
-        Rect pacmanHitBox;
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance();
 
         int ghostSpeed = 10;
@@ -307,8 +306,7 @@ namespace WPF
                     goRight = false;
                 }
 
-                //pacmanHitBox = new Rect(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
-                pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
+                Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(pacman), Canvas.GetTop(pacman), pacman.Width, pacman.Height);
 
                 foreach (var x in MyCanvas.Children.OfType<Rectangle>())
                 {
@@ -409,8 +407,7 @@ namespace WPF
                     goRight = false;
                 }
 
-                //pacmanHitBox = new Rect(Canvas.GetLeft(oponentPacman), Canvas.GetTop(oponentPacman), oponentPacman.Width, oponentPacman.Height);
-                pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(oponentPacman), Canvas.GetTop(oponentPacman), oponentPacman.Width, oponentPacman.Height);
+                Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(Canvas.GetLeft(oponentPacman), Canvas.GetTop(oponentPacman), oponentPacman.Width, oponentPacman.Height);
 
                 foreach (var x in MyCanvas.Children.OfType<Rectangle>())
                 {
