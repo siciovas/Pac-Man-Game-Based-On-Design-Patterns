@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="WPF.Levels.StartPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPF.Levels"
+             mc:Ignorable="d" 
+             Background="Black"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <StackPanel VerticalAlignment="Center">
+        <Button Height="50"
+                Width="250"
+                FontSize="25"
+                Command="{Binding ButtonCommand}" 
+                Background="Blue">CONNECT TO PLAY</Button>
+        
+        <TextBlock HorizontalAlignment="Center"
+                   Visibility="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                Path=DataContext.IsTextVisible}"
+                   FontSize="25"
+                   Foreground="White">
+            Waiting for other player to connect....
+        </TextBlock>
+    </StackPanel>
+</UserControl>
