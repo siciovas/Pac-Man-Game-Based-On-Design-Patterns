@@ -21,7 +21,7 @@ namespace WPF.Game.AbstractFactory.Classes.StrongMobFactory
         }
         public override IDemogorgon CreateDemogorgon()
         {
-            throw new NotImplementedException();
+            return new StrongDemogorgon();
         }
     }
 }

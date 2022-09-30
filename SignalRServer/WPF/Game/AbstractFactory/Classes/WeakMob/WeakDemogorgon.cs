@@ -7,7 +7,7 @@ using WPF.Game.AbstractFactory.Interfaces;
 
 namespace WPF.Game.AbstractFactory.Classes.WeakMob
 {
-    internal class WeakDemogorgon : IDemogorgon
+    public class WeakDemogorgon : IDemogorgon
     {
         public int Speed { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
