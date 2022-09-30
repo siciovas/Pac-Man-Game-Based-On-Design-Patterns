@@ -11,5 +11,6 @@ namespace WPF.Game.AbstractFactory
     {
         public abstract IGhost CreateGhost();
         public abstract IZombie CreateZombie();
+        public abstract IDemogorgon CreateDemogorgon();
     }
 }

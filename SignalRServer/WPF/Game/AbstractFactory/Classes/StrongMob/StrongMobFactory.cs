@@ -19,5 +19,9 @@ namespace WPF.Game.AbstractFactory.Classes.StrongMobFactory
         {
             return new StrongZombie();
         }
+        public override IDemogorgon CreateDemogorgon()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

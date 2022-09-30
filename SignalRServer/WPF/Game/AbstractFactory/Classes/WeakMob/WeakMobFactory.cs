@@ -19,5 +19,9 @@ namespace WPF.Game.AbstractFactory.Classes.WeakMobFactory
         {
             return new WeakZombie();
         }
+        public override IDemogorgon CreateDemogorgon()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
