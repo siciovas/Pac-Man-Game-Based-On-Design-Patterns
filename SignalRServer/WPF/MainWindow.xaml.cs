@@ -30,7 +30,7 @@ namespace WPF
         CoinFactory _coinFactory;
         List<ICoin> allCoins = new List<ICoin>();
 
-        PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance();
+        PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
         int ghostSpeed = 10;
         int ghostMoveStep = 130;
@@ -51,7 +51,6 @@ namespace WPF
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };
-
             GameSetup();
             ListenServer();
         }
