@@ -33,8 +33,10 @@
                            Width="30"
                            Height="30"
                            Fill="Green"
-                           Canvas.Left="364"
-                           Canvas.Top="260" 
+                           Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.GreenPacmanLeft}"
+                           Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.GreenPacmanTop}"
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Top"></Rectangle>
 

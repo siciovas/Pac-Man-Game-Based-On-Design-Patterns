@@ -17,9 +17,10 @@ namespace WPF
         IConnectionProvider connection;
         private readonly NavigationStore _navigationStore;
 
-        /*        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel; //sita atkomentuot reik
-        */
-        public ViewModelBase CurrentViewModel => _firstLecelViewModel;
+        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel; 
+
+        /*        public ViewModelBase CurrentViewModel => _firstLecelViewModel;
+        */ //sita galit atkomentuot kai norit pasitestuot tik 
         public ViewModelBase _firstLecelViewModel;
         public MainWindowViewModel(IConnectionProvider connectionProvider, NavigationStore navigationStore)
         {

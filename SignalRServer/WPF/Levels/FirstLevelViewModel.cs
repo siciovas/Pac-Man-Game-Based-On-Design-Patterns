@@ -63,7 +63,42 @@ namespace WPF.Levels
             }
         }
 
-        PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance();
+        private int _greenPacmanLeft;
+
+        public int GreenPacmanLeft
+        {
+            get
+            {
+                return _greenPacmanLeft;
+            }
+            private set
+            {
+                if (value != _greenPacmanLeft)
+                {
+                    _greenPacmanLeft = value;
+                    OnPropertyChanged("GreenPacmanLeft");
+                }
+            }
+        }
+
+        private int _greenPacmanTop;
+        public int GreenPacmanTop
+        {
+            get
+            {
+                return _greenPacmanTop;
+            }
+            private set
+            {
+                if (value != _greenPacmanTop)
+                {
+                    _greenPacmanTop = value;
+                    OnPropertyChanged("GreenPacmanTop");
+                }
+            }
+        }
+
+        PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
         int ghostSpeed = 10;
         int ghostMoveStep = 130;
@@ -71,94 +106,34 @@ namespace WPF.Levels
         int score = 0;
         int oponentScore = 0;
 
-        public ICommand _upCommand { get; set; }
-        public ICommand DownCommand { get; set; }
-
-        public ICommand LeftCommand { get; set; }
-
-        public ICommand RightCommand { get; set; }
-
-        public ICommand UpCommand
-        {
-            get
-            {
-                _upCommand = new DelegateCommand(UpClicked);
-                return _upCommand;
-            }
-        }
-
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new CoinFactory();
             _connection = connectionProvider.GetConnection();
 
+            GreenPacmanTop = 20;
+            GreenPacmanLeft = 20;
+            YellowPacmanLeft = 20;
+            YellowPacmanTop = 20;
+
             GameSetup();
-
+            ListenServer();
         }
 
-        private void UpClicked()
-        {
-
-        }
 
         private void ListenServer()
         {
-           /* _connection.On<string, string>("ReceiveMessage", (connectionId, move) =>
+            _connection.On<int, int>("OponentCordinates", (top, left) =>
             {
-                Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    oponentConnectionId = connectionId;
-                    if (oponentConnectionId != _connection.ConnectionId)
-                    {
-                        if (move == "left" && !noLeft)
-                        {
-                            goRight = goUp = goDown = false;
-                            noRight = noUp = noDown = false;
-
-                            goLeft = true;
-
-                            oponentPacman.RenderTransform = new RotateTransform(-180, oponentPacman.Width / 2, oponentPacman.Height / 2);
-                        }
-                        if (move == "right" && !noRight)
-                        {
-                            noLeft = noUp = noDown = false;
-                            goLeft = goUp = goDown = false;
-
-                            goRight = true;
-
-                            oponentPacman.RenderTransform = new RotateTransform(0, oponentPacman.Width / 2, oponentPacman.Height / 2);
-
-                        }
-
-                        if (move == "up" && !noUp)
-                        {
-                            noRight = noDown = noLeft = false;
-                            goRight = goDown = goLeft = false;
-
-                            goUp = true;
-
-                            oponentPacman.RenderTransform = new RotateTransform(-90, oponentPacman.Width / 2, oponentPacman.Height / 2);
-                        }
-
-                        if (move == "down" && !noDown)
-                        {
-                            noUp = noLeft = noRight = false;
-                            goUp = goLeft = goRight = false;
-
-                            goDown = true;
-
-                            oponentPacman.RenderTransform = new RotateTransform(90, oponentPacman.Width / 2, oponentPacman.Height / 2);
-                        }
-                    }
-                }));
-            });*/
+                GreenPacmanLeft = left;
+                GreenPacmanTop = top;
+            });
         }
 
         private async void GameSetup()
         {
             gameTimer.Tick += GameLoop;
-           // gameTimer.Tick += OponentControll;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(20); ///will tick every 20ms
+            gameTimer.Interval = TimeSpan.FromMilliseconds(30); ///will tick every 20ms
             gameTimer.Start();
             currentGhostStep = ghostMoveStep;
 
@@ -177,109 +152,114 @@ namespace WPF.Levels
             }*/
         }
 
-        private void GameLoop(object? sender, EventArgs e)
+        private async void GameLoop(object? sender, EventArgs e)
         {
-            //txtScore.Content = "Score: " + score; TODO bing to score property 
+            //txtScore.Content = "Score: " + score; TODO bind to score property 
             // show the scoreo to the txtscore label. 
 
             int AppHeight = (int)Application.Current.MainWindow.Height;
             int AppWidth = (int)Application.Current.MainWindow.Width;
-            if (oponentConnectionId == _connection.ConnectionId)
+            int oldLeft = YellowPacmanLeft;
+            int oldTop = YellowPacmanTop;
+            if (goRight)
             {
-                if (goRight)
-                {
-                    YellowPacmanLeft+= speed;
-                }
-                if (goLeft)
-                {
-                    YellowPacmanLeft -= speed; 
-                }
-                if (goUp)
-                {
-                    YellowPacmanTop -= speed;
-                }
-                if (goDown)
-                {
-                    YellowPacmanTop += speed;
-                }
-
-                if (goDown && YellowPacmanTop + 280 > AppHeight)
-                {
-                    noDown = true;
-                    goDown = false;
-                }
-                if (goUp && YellowPacmanTop < 5)
-                {
-                    noUp = true;
-                    goUp = false;
-                }
-                if (goLeft && YellowPacmanTop - 10 < 1)
-                {
-                    noLeft = true;
-                    goLeft = false;
-                }
-                if (goRight && YellowPacmanLeft + 40 > AppWidth)
-                {
-                    noRight = true;
-                    goRight = false;
-                }
-
-                Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(YellowPacmanLeft, YellowPacmanTop, 30, 30);
-
-                /*foreach (var x in MyCanvas.Children.OfType<Rectangle>())
-                {
-                    // loop through all of the rectangles inside of the game and identify them using the x variable
-
-                    Rect hitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height); // create a new rect called hit box for all of the available rectangles inside of the game
-
-                    // find the walls, if any of the rectangles inside of the game has the tag wall inside of it
-                    if ((string)x.Tag == "wall")
-                    {
-                        // check if we are colliding with the wall while moving left if true then stop the pac man movement
-                        if (goLeft == true && pacmanHitBox.IntersectsWith(hitBox))
-                        {
-                            Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) + 10);
-                            noLeft = true;
-                            goLeft = false;
-                        }
-                        // check if we are colliding with the wall while moving right if true then stop the pac man movement
-                        if (goRight == true && pacmanHitBox.IntersectsWith(hitBox))
-                        {
-                            Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) - 10);
-                            noRight = true;
-                            goRight = false;
-                        }
-                        // check if we are colliding with the wall while moving down if true then stop the pac man movement
-                        if (goDown == true && pacmanHitBox.IntersectsWith(hitBox))
-                        {
-                            Canvas.SetTop(pacman, Canvas.GetTop(pacman) - 10);
-                            noDown = true;
-                            goDown = false;
-                        }
-                        // check if we are colliding with the wall while moving up if true then stop the pac man movement
-                        if (goUp == true && pacmanHitBox.IntersectsWith(hitBox))
-                        {
-                            Canvas.SetTop(pacman, Canvas.GetTop(pacman) + 10);
-                            noUp = true;
-                            goUp = false;
-                        }
-                    }
-
-                    // check if the any of the rectangles has a coin tag inside of them
-                    if ((string)x.Tag == "coin")
-                    {
-                        // if pac man collides with any of the coin and coin is still visible to the screen
-                        if (pacmanHitBox.IntersectsWith(hitBox) && x.Visibility == Visibility.Visible)
-                        {
-                            // set the coin visiblity to hidden
-                            x.Visibility = Visibility.Hidden;
-                            // add 1 to the score
-                            score = score + allCoins.First().Value;
-                            allCoins.RemoveAt(0);
-                        }
-                    }*/
-                }
+                YellowPacmanLeft+= speed;
             }
+            if (goLeft)
+            {
+                YellowPacmanLeft -= speed; 
+            }
+            if (goUp)
+            {
+                YellowPacmanTop -= speed;
+            }
+            if (goDown)
+            {
+                YellowPacmanTop += speed;
+            }
+
+            if (oldLeft != YellowPacmanLeft || oldTop != YellowPacmanTop)
+            {
+                await _connection.InvokeAsync("SendPacManCordinates", YellowPacmanTop, YellowPacmanLeft);
+            }
+
+            if (goDown && YellowPacmanTop + 280 > AppHeight)
+            {
+                noDown = true;
+                goDown = false;
+            }
+            if (goUp && YellowPacmanTop < 5)
+            {
+                noUp = true;
+                goUp = false;
+            }
+            if (goLeft && YellowPacmanLeft - 5 < 1)
+            {
+                noLeft = true;
+                goLeft = false;
+            }
+            if (goRight && YellowPacmanLeft + 40 > AppWidth)
+            {
+                noRight = true;
+                goRight = false;
+            }
+
+            Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(YellowPacmanLeft, YellowPacmanTop, 30, 30);
+
+            /*foreach (var x in MyCanvas.Children.OfType<Rectangle>())
+            {
+                // loop through all of the rectangles inside of the game and identify them using the x variable
+
+                Rect hitBox = new Rect(Canvas.GetLeft(x), Canvas.GetTop(x), x.Width, x.Height); // create a new rect called hit box for all of the available rectangles inside of the game
+
+                // find the walls, if any of the rectangles inside of the game has the tag wall inside of it
+                if ((string)x.Tag == "wall")
+                {
+                    // check if we are colliding with the wall while moving left if true then stop the pac man movement
+                    if (goLeft == true && pacmanHitBox.IntersectsWith(hitBox))
+                    {
+                        Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) + 10);
+                        noLeft = true;
+                        goLeft = false;
+                    }
+                    // check if we are colliding with the wall while moving right if true then stop the pac man movement
+                    if (goRight == true && pacmanHitBox.IntersectsWith(hitBox))
+                    {
+                        Canvas.SetLeft(pacman, Canvas.GetLeft(pacman) - 10);
+                        noRight = true;
+                        goRight = false;
+                    }
+                    // check if we are colliding with the wall while moving down if true then stop the pac man movement
+                    if (goDown == true && pacmanHitBox.IntersectsWith(hitBox))
+                    {
+                        Canvas.SetTop(pacman, Canvas.GetTop(pacman) - 10);
+                        noDown = true;
+                        goDown = false;
+                    }
+                    // check if we are colliding with the wall while moving up if true then stop the pac man movement
+                    if (goUp == true && pacmanHitBox.IntersectsWith(hitBox))
+                    {
+                        Canvas.SetTop(pacman, Canvas.GetTop(pacman) + 10);
+                        noUp = true;
+                        goUp = false;
+                    }
+                }
+
+                // check if the any of the rectangles has a coin tag inside of them
+                if ((string)x.Tag == "coin")
+                {
+                    // if pac man collides with any of the coin and coin is still visible to the screen
+                    if (pacmanHitBox.IntersectsWith(hitBox) && x.Visibility == Visibility.Visible)
+                    {
+                        // set the coin visiblity to hidden
+                        x.Visibility = Visibility.Hidden;
+                        // add 1 to the score
+                        score = score + allCoins.First().Value;
+                        allCoins.RemoveAt(0);
+                    }
+                }*/
+
+        }
 
         public override void OnRightClick()
         {
@@ -291,7 +271,7 @@ namespace WPF.Levels
                 goRight = true;
 
                // pacman.RenderTransform = new RotateTransform(0, pacman.Width / 2, pacman.Height / 2);
-                _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "right");
+               // _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "right");
 
             }
         }
@@ -306,7 +286,7 @@ namespace WPF.Levels
                 goDown = true;
 
                // pacman.RenderTransform = new RotateTransform(90, pacman.Width / 2, pacman.Height / 2);
-                _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "down");
+                //_connection.InvokeAsync("SendMessage", _connection.ConnectionId, "down");
             }
            
         }
@@ -321,7 +301,7 @@ namespace WPF.Levels
                 goUp = true;
 
                // pacman.RenderTransform = new RotateTransform(-90, pacman.Width / 2, pacman.Height / 2);
-                _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "up");
+               // _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "up");
             }
         }
 
@@ -335,7 +315,7 @@ namespace WPF.Levels
                 goLeft = true;
 
                /* pacman.RenderTransform = new RotateTransform(-180, pacman.Width / 2, pacman.Height / 2);*/
-                _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "left");
+               // _connection.InvokeAsync("SendMessage", _connection.ConnectionId, "left");
             }
         }
     }

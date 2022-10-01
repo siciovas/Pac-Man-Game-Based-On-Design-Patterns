@@ -6,18 +6,24 @@ namespace WPF.Game.Singleton.Classes
     {
         private PacmanHitbox()
         {
-
         }
 
-        private static PacmanHitbox _instance;
+        private static PacmanHitbox _instance = null;
+        private static readonly object threadLock = new object();
 
-        public static PacmanHitbox GetInstance()
+        public static PacmanHitbox GetInstance
         {
-            if (_instance == null)
+            get
             {
-                _instance = new PacmanHitbox();
+                lock (threadLock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new PacmanHitbox();
+                    }
+                }
+                return _instance;
             }
-            return _instance;
         }
 
         public Rect GetCurrentHitboxPosition(double x, double y, double width, double height)
