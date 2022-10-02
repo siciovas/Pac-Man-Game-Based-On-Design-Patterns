@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using WPF.Connection;
-using WPF.Levels;
+using WPF.Game.Factory.Classes;
+using WPF.Game.Factory.Interfaces;
+using WPF.Game.ViewModels;
+using WPF.Game.Views;
 using WPF.Stores;
 
 namespace WPF
@@ -23,12 +21,23 @@ namespace WPF
         {
             IServiceCollection services = new ServiceCollection();
 
+            services.AddTransient<ICoin, GoldCoin>();
+            services.AddTransient<ICoin, BronzeCoin>();
+            services.AddTransient<ICoin, SilverCoin>();
+
+
             services.AddSingleton<IConnectionProvider, ConnectionProvider>();
 
             services.AddSingleton<MainWindowViewModel>();
             services.AddSingleton<StartPageViewModel>();
             services.AddSingleton<FirstLevelViewModel>();
+            services.AddSingleton<SecondLevelViewModel>();
+            services.AddSingleton<ThirdLevelView>();
+
             services.AddSingleton<NavigationStore>();
+
+            services.AddTransient<CoinViewModel>();
+
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {
@@ -41,6 +50,18 @@ namespace WPF
             services.AddSingleton<FirstLevelView>(s => new FirstLevelView()
             {
                 DataContext = s.GetRequiredService<FirstLevelViewModel>()
+            });
+            services.AddSingleton<SecondLevelView>(s => new SecondLevelView()
+            {
+                DataContext = s.GetRequiredService<SecondLevelViewModel>()
+            });
+            services.AddSingleton<ThirdLevelView>(s => new ThirdLevelView()
+            {
+                DataContext = s.GetRequiredService<ThirdLevelViewModel>()
+            });
+            services.AddTransient<CoinView>(s => new CoinView()
+            {
+                DataContext = s.GetRequiredService<ICoin>()
             });
             _serviceProvider = services.BuildServiceProvider();
 

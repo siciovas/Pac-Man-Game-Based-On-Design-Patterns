@@ -1,14 +1,11 @@
 ﻿using Prism.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using WPF.Connection;
-using WPF.Levels;
 using WPF.Stores;
+using WPF.Game.ViewModels;
 using WPF.Views;
+using System;
+using GalaSoft.MvvmLight.Command;
 
 namespace WPF
 {
@@ -16,19 +13,44 @@ namespace WPF
     {
         IConnectionProvider connection;
         private readonly NavigationStore _navigationStore;
+        public ICommand NextView { get; set; }
 
-        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel; 
-
-        /*        public ViewModelBase CurrentViewModel => _firstLecelViewModel;
-        */ //sita galit atkomentuot kai norit pasitestuot tik 
-        public ViewModelBase _firstLecelViewModel;
+        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+        
+        public ViewModelBase _firstLevelViewModel;
+        public ViewModelBase _secondLevelViewModel;
+        public ViewModelBase _thirdLevelViewModel;
+        private StartPageViewModel _startPageViewModel;
         public MainWindowViewModel(IConnectionProvider connectionProvider, NavigationStore navigationStore)
         {
             connection = connectionProvider;
-            _firstLecelViewModel = new FirstLevelViewModel(connection);
+            _firstLevelViewModel = new FirstLevelViewModel(connection);
+            _secondLevelViewModel = new SecondLevelViewModel(connection);
+            _thirdLevelViewModel = new ThirdLevelViewModel(connection);
+
+            _startPageViewModel = new StartPageViewModel(connectionProvider);
             _navigationStore = navigationStore;
-            _navigationStore.CurrentViewModel = new StartPageViewModel(connectionProvider);
+            _navigationStore.CurrentViewModel = _startPageViewModel;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+
+            NextView = new RelayCommand(new Action(GoToNextView));
+        }
+
+        private void GoToNextView()
+        {
+            //this button is just for testing do not use it for game purposes bc it only works for one view >:)
+            if (_navigationStore.CurrentViewModel.Equals(_startPageViewModel))
+            {
+                _navigationStore.CurrentViewModel = _firstLevelViewModel;
+            }
+            else if (_navigationStore.CurrentViewModel.Equals(_firstLevelViewModel))
+            {
+                _navigationStore.CurrentViewModel = _secondLevelViewModel;
+            }
+            else if (_navigationStore.CurrentViewModel.Equals(_secondLevelViewModel))
+            {
+                _navigationStore.CurrentViewModel = _thirdLevelViewModel;
+            }
         }
 
         private ICommand _upCommand;

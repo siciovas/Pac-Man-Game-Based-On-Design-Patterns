@@ -5,7 +5,7 @@ using System.Windows.Input;
 using WPF.Connection;
 using WPF.Views;
 
-namespace WPF.Levels
+namespace WPF.Game.ViewModels
 {
     public class StartPageViewModel : ViewModelBase
     {

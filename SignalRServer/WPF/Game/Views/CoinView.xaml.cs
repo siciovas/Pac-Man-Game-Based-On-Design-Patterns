@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPF.Levels
+namespace WPF.Game.Views
 {
     /// <summary>
-    /// Interaction logic for StartPageView.xaml
+    /// Interaction logic for CoinView.xaml
     /// </summary>
-    public partial class StartPageView : UserControl
+    public partial class CoinView : UserControl
     {
-        public StartPageView()
+        public CoinView()
         {
             InitializeComponent();
         }

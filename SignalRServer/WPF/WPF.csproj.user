@@ -7,18 +7,36 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Levels\FirstLevelView.xaml.cs">
+    <Compile Update="Game\Views\CoinView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Levels\StartPageView.xaml.cs">
+    <Compile Update="Game\Views\FirstLevelView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Game\Views\SecondLevelView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Game\Views\StartPageView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Game\Views\ThirdLevelView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Levels\FirstLevelView.xaml">
+    <Page Update="Game\Views\CoinView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Levels\StartPageView.xaml">
+    <Page Update="Game\Views\FirstLevelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\SecondLevelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\StartPageView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\ThirdLevelView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
