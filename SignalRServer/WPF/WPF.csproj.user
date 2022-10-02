@@ -24,6 +24,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Game\Views\MobView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Game\Views\CoinView.xaml">
       <SubType>Designer</SubType>
     </Page>

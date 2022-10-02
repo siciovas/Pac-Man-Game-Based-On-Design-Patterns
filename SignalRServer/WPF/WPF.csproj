@@ -13,6 +13,8 @@
     <None Remove="images\pink.jpg" />
     <None Remove="images\red.jpg" />
 	<None Remove="images\pacmanOp.jpg" />
+	<None Remove="images\strongGhost.png" />
+	<None Remove="images\weakZombie.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,12 +36,24 @@
     <Resource Include="images\pink.jpg" />
     <Resource Include="images\red.jpg" />
 	<Resource Include="images\pacmanOp.jpg" />
+	<Resource Include="images\strongGhost.png" />
+	<Resource Include="images\weakZombie.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Game\Views\MobView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MainWindow.xaml.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Game\Views\MobView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

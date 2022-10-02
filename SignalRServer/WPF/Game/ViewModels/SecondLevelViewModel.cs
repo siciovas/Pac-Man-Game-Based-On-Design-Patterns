@@ -5,6 +5,9 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
+using WPF.Game.AbstractFactory.Classes.StrongMobFactory;
+using WPF.Game.AbstractFactory.Classes.WeakMobFactory;
+using WPF.Game.AbstractFactory.Interfaces;
 using WPF.Game.Classes;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
@@ -21,6 +24,8 @@ namespace WPF.Game.ViewModels
         int speed = 8;
         CoinFactory _coinFactory;
         HubConnection _connection;
+        WeakMobFactory _mobFactory;
+        StrongMobFactory _strongMobFactory;
         Pacman pacman;
         Pacman greenPacman;
 
@@ -94,6 +99,7 @@ namespace WPF.Game.ViewModels
         }
 
         public ObservableCollection<ICoin> Coins { get; set; }
+        public ObservableCollection<IGhost> Mobs { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
@@ -104,6 +110,8 @@ namespace WPF.Game.ViewModels
         public SecondLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new SecondLevelCoinCreator();
+            _mobFactory = new WeakMobFactory();
+            _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman();
             greenPacman = new Pacman();
@@ -113,6 +121,7 @@ namespace WPF.Game.ViewModels
             YellowPacmanTop = 20;
 
             Coins = GetCoins();
+            Mobs = SpawnGhosts();
             GameSetup();
             ListenServer();
         }
@@ -144,6 +153,20 @@ namespace WPF.Game.ViewModels
                     result.Add(coin);
                 }
             }
+            return result;
+        }
+
+        private ObservableCollection<IGhost> SpawnGhosts()
+        {
+            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
+            var firstGhost = _mobFactory.CreateGhost(500, 600);
+            var secondGhost = _strongMobFactory.CreateGhost(50, 750);
+            var thirdGhost = _strongMobFactory.CreateGhost(500, 50);
+            var fourthGhost = _strongMobFactory.CreateGhost(300, 300);
+            result.Add(firstGhost);
+            result.Add(secondGhost);
+            result.Add(thirdGhost);
+            result.Add(fourthGhost);
             return result;
         }
 

@@ -24,6 +24,7 @@ namespace SignalRServer.Hubs
 
         public override Task OnDisconnectedAsync(Exception? exception)
         {
+            _clientCounter?.RemoveClient();
             return base.OnDisconnectedAsync(exception);
         }
 

@@ -2,6 +2,9 @@
 using System;
 using System.Windows;
 using WPF.Connection;
+using WPF.Game.AbstractFactory.Classes.StrongMob;
+using WPF.Game.AbstractFactory.Classes.WeakMob;
+using WPF.Game.AbstractFactory.Interfaces;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
 using WPF.Game.ViewModels;
@@ -24,7 +27,12 @@ namespace WPF
             services.AddTransient<ICoin, GoldCoin>();
             services.AddTransient<ICoin, BronzeCoin>();
             services.AddTransient<ICoin, SilverCoin>();
-
+            services.AddTransient<IGhost, WeakGhost>();
+            services.AddTransient<IGhost, StrongGhost>();
+            services.AddTransient<IZombie, WeakZombie>();
+            services.AddTransient<IZombie, StrongZombie>();
+            services.AddTransient<IDemogorgon, WeakDemogorgon>();
+            services.AddTransient<IDemogorgon, StrongDemogorgon>();
 
             services.AddSingleton<IConnectionProvider, ConnectionProvider>();
 

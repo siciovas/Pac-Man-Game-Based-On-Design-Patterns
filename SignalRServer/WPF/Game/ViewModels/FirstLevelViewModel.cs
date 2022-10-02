@@ -5,6 +5,9 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
+using WPF.Game.AbstractFactory.Classes.WeakMob;
+using WPF.Game.AbstractFactory.Classes.WeakMobFactory;
+using WPF.Game.AbstractFactory.Interfaces;
 using WPF.Game.Classes;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
@@ -21,6 +24,7 @@ namespace WPF.Game.ViewModels
         int speed = 8;
         CoinFactory _coinFactory;
         HubConnection _connection;
+        WeakMobFactory _mobFactory;
         Pacman pacman;
         Pacman greenPacman;
 
@@ -94,6 +98,7 @@ namespace WPF.Game.ViewModels
         }
 
         public ObservableCollection<ICoin> Coins { get; set; }
+        public ObservableCollection<IGhost> Mobs { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
@@ -104,6 +109,7 @@ namespace WPF.Game.ViewModels
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new FirstLevelCoinCreator();
+            _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman();
             greenPacman = new Pacman();
@@ -112,6 +118,7 @@ namespace WPF.Game.ViewModels
             YellowPacmanLeft = 20;
             YellowPacmanTop = 20;
 
+            Mobs = SpawnGhosts();
             Coins = GetCoins();
             GameSetup();
             ListenServer();
@@ -128,6 +135,20 @@ namespace WPF.Game.ViewModels
                     result.Add(coin);
                 }
             }
+            return result;
+        }
+
+        private ObservableCollection<IGhost> SpawnGhosts()
+        {
+            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
+            var firstGhost = _mobFactory.CreateGhost(500, 600);
+            var secondGhost = _mobFactory.CreateGhost(50, 750);
+            var thirdGhost = _mobFactory.CreateGhost(500, 50);
+            var fourthGhost = _mobFactory.CreateGhost(300, 300);
+            result.Add(firstGhost);
+            result.Add(secondGhost);
+            result.Add(thirdGhost);
+            result.Add(fourthGhost);
             return result;
         }
 

@@ -10,9 +10,9 @@ namespace WPF.Game.AbstractFactory.Classes.StrongMobFactory
 {
     public class StrongMobFactory : MobFactory
     {
-        public override IGhost CreateGhost()
+        public override IGhost CreateGhost(int top, int left)
         {
-            return new StrongGhost();
+            return new StrongGhost(top, left);
         }
 
         public override IZombie CreateZombie()
