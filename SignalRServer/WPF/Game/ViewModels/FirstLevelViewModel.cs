@@ -99,7 +99,7 @@ namespace WPF.Game.ViewModels
 
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
-            _coinFactory = new CoinFactory();
+            _coinFactory = new FirstLevelCoinCreator();
             _connection = connectionProvider.GetConnection();
 
             GreenPacmanTop = 20;
@@ -107,9 +107,23 @@ namespace WPF.Game.ViewModels
             YellowPacmanLeft = 20;
             YellowPacmanTop = 20;
 
-            Coins = _coinFactory.GetCoins(1);
+            Coins = GetCoins();
             GameSetup();
             ListenServer();
+        }
+
+        private ObservableCollection<ICoin> GetCoins()
+        {
+            ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
+            for (int i = 10; i < 800; i = i + 50)
+            {
+                for (int j = 50; j < 800; j = j + 50)
+                {
+                    var coin = _coinFactory.GetCoin(i, j);
+                    result.Add(coin);
+                }
+            }
+            return result;
         }
 
         private void ListenServer()
