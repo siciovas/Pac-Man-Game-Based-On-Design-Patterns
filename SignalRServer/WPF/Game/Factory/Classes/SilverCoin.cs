@@ -13,7 +13,7 @@ namespace WPF.Game.Factory.Classes
     {
         public SilverCoin(int left, int top)
         {
-            Value = 2;
+            Value = 3;
             Color = "silver";
             Left = left;
             Top = top;

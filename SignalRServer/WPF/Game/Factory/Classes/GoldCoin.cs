@@ -11,7 +11,7 @@ namespace WPF.Game.Factory.Classes
 
         public GoldCoin(int left, int top)
         {
-            Value = 2;
+            Value = 5;
             Color = "gold";
             Left = left;
             Top = top;
