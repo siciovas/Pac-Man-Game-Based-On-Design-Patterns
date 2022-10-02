@@ -1,20 +1,9 @@
-﻿using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace WPF.Levels
+namespace WPF.Game.Views
 {
     /// <summary>
     /// Interaction logic for FirstLevelView.xaml
@@ -27,7 +16,7 @@ namespace WPF.Levels
             GameSetup();
         }
 
-        private async void GameSetup()
+        private void GameSetup()
         {
             MyCanvas.Focus();
 
@@ -40,7 +29,7 @@ namespace WPF.Levels
             oponentPacman.Fill = oponentPacmanBrush;
 
             //add images to ghosts too 
-            ImageBrush redGhost = new ImageBrush();
+         /*   ImageBrush redGhost = new ImageBrush();
             redGhost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/red.jpg"));
             redguy.Fill = redGhost;
             ImageBrush orangeGhost = new ImageBrush();
@@ -48,7 +37,7 @@ namespace WPF.Levels
             orangeguy.Fill = orangeGhost;
             ImageBrush pinkGhost = new ImageBrush();
             pinkGhost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Images/pink.jpg"));
-            pinkguy.Fill = pinkGhost;
+            pinkguy.Fill = pinkGhost;*/
 
         }
     }

@@ -11,10 +11,16 @@ namespace WPF.Game.Factory.Classes
 {
     public class SilverCoin : ICoin
     {
-        public SilverCoin()
+        public SilverCoin(int left, int top)
         {
-            Value = 1;
+            Value = 2;
+            Color = "silver";
+            Left = left;
+            Top = top;
         }
         public int Value { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public string Color { get; set; }
     }
 }
