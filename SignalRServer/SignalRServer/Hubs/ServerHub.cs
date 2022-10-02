@@ -35,9 +35,9 @@ namespace SignalRServer.Hubs
             //await Clients.Caller.SendAsync("ReceiveMessage", user, "delivered: " + message);
         }
 
-        public async Task SendPacManCordinates(int top, int left)
+        public async Task SendPacManCordinates(string serializedObject)
         {
-            await Clients.Others.SendAsync("OponentCordinates", top, left);
+            await Clients.Others.SendAsync("OponentCordinates", serializedObject);
         }
     }
 }
