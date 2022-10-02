@@ -10,9 +10,9 @@ namespace WPF.Game.AbstractFactory.Classes.WeakMobFactory
 {
     public class WeakMobFactory : MobFactory
     {
-        public override IGhost CreateGhost()
+        public override IGhost CreateGhost(int top, int left)
         {
-            return new WeakGhost();
+            return new WeakGhost(top, left);
         }
 
         public override IZombie CreateZombie()
