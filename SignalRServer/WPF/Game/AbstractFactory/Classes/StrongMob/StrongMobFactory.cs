@@ -15,9 +15,9 @@ namespace WPF.Game.AbstractFactory.Classes.StrongMobFactory
             return new StrongGhost(top, left);
         }
 
-        public override IZombie CreateZombie()
+        public override IZombie CreateZombie(int top, int left)
         {
-            return new StrongZombie();
+            return new StrongZombie(top, left);
         }
         public override IDemogorgon CreateDemogorgon()
         {

@@ -10,7 +10,7 @@ namespace WPF.Game.AbstractFactory
     public abstract class MobFactory
     {
         public abstract IGhost CreateGhost(int top, int left);
-        public abstract IZombie CreateZombie();
+        public abstract IZombie CreateZombie(int top, int left);
         public abstract IDemogorgon CreateDemogorgon();
     }
 }

@@ -14,7 +14,7 @@
     <None Remove="images\red.jpg" />
 	<None Remove="images\pacmanOp.jpg" />
 	<None Remove="images\strongGhost.png" />
-	<None Remove="images\weakZombie.jpg" />
+	<None Remove="images\weakZombie.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +37,7 @@
     <Resource Include="images\red.jpg" />
 	<Resource Include="images\pacmanOp.jpg" />
 	<Resource Include="images\strongGhost.png" />
-	<Resource Include="images\weakZombie.jpg" />
+	<Resource Include="images\weakZombie.png" />
   </ItemGroup>
 
   <ItemGroup>

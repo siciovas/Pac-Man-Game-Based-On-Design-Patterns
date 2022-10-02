@@ -5,6 +5,9 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
+using WPF.Game.AbstractFactory.Classes.StrongMobFactory;
+using WPF.Game.AbstractFactory.Classes.WeakMobFactory;
+using WPF.Game.AbstractFactory.Interfaces;
 using WPF.Game.Classes;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
@@ -21,6 +24,8 @@ namespace WPF.Game.ViewModels
         int speed = 8;
         CoinFactory _coinFactory;
         HubConnection _connection;
+        WeakMobFactory _mobFactory;
+        StrongMobFactory _strongMobFactory;
         Pacman pacman;
         Pacman greenPacman;
 
@@ -94,6 +99,8 @@ namespace WPF.Game.ViewModels
         }
 
         public ObservableCollection<ICoin> Coins { get; set; }
+        public ObservableCollection<IGhost> GhostMobs { get; set; }
+        public ObservableCollection<IZombie> ZombieMobs { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
@@ -104,6 +111,8 @@ namespace WPF.Game.ViewModels
         public ThirdLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new ThirdLevelCoinCreator();
+            _mobFactory = new WeakMobFactory();
+            _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman();
             greenPacman = new Pacman();
@@ -113,6 +122,8 @@ namespace WPF.Game.ViewModels
             YellowPacmanTop = 20;
 
             Coins = GetCoins();
+            GhostMobs = SpawnGhosts();
+            ZombieMobs = SpawnZombies();
             GameSetup();
             ListenServer();
         }
@@ -153,6 +164,26 @@ namespace WPF.Game.ViewModels
                     result.Add(coin);
                 }
             }
+            return result;
+        }
+
+        private ObservableCollection<IGhost> SpawnGhosts()
+        {
+            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
+            var firstGhost = _strongMobFactory.CreateGhost(500, 600);
+            var secondGhost = _strongMobFactory.CreateGhost(50, 750);
+            result.Add(firstGhost);
+            result.Add(secondGhost);
+            return result;
+        }
+
+        private ObservableCollection<IZombie> SpawnZombies()
+        {
+            ObservableCollection<IZombie> result = new ObservableCollection<IZombie>();
+            var firstZombie = _mobFactory.CreateZombie(500, 50);
+            var secondZombie = _mobFactory.CreateZombie(300, 300);
+            result.Add(firstZombie);
+            result.Add(secondZombie);
             return result;
         }
 
