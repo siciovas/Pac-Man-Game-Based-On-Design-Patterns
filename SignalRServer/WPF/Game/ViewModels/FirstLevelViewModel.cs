@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
+using WPF.Game.Classes;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
 using WPF.Game.Singleton.Classes;
@@ -19,19 +21,21 @@ namespace WPF.Game.ViewModels
         int speed = 8;
         CoinFactory _coinFactory;
         HubConnection _connection;
+        Pacman pacman;
+        Pacman greenPacman;
 
         private int _yellowPacmanLeft;
         public int YellowPacmanLeft
         {
             get
             {
-                return _yellowPacmanLeft;
+                return pacman.PacmanLeft;
             }
             private set
             {
-                if (value != _yellowPacmanLeft)
+                if (value != pacman.PacmanLeft)
                 {
-                    _yellowPacmanLeft = value;
+                    pacman.PacmanLeft = value;
                     OnPropertyChanged("YellowPacmanLeft");
                 }
             }
@@ -42,13 +46,13 @@ namespace WPF.Game.ViewModels
         {
             get
             {
-                return _yellowPacmanTop;
+                return pacman.PacmanTop;
             }
             private set
             {
-                if (value != _yellowPacmanTop)
+                if (value != pacman.PacmanTop)
                 {
-                    _yellowPacmanTop = value;
+                    pacman.PacmanTop = value;
                     OnPropertyChanged("YellowPacmanTop");
                 }
             }
@@ -60,13 +64,13 @@ namespace WPF.Game.ViewModels
         {
             get
             {
-                return _greenPacmanLeft;
+                return greenPacman.PacmanLeft;
             }
             private set
             {
-                if (value != _greenPacmanLeft)
+                if (value != greenPacman.PacmanLeft)
                 {
-                    _greenPacmanLeft = value;
+                    greenPacman.PacmanLeft = value;
                     OnPropertyChanged("GreenPacmanLeft");
                 }
             }
@@ -77,13 +81,13 @@ namespace WPF.Game.ViewModels
         {
             get
             {
-                return _greenPacmanTop;
+                return greenPacman.PacmanTop;
             }
             private set
             {
-                if (value != _greenPacmanTop)
+                if (value != greenPacman.PacmanTop)
                 {
-                    _greenPacmanTop = value;
+                    greenPacman.PacmanTop = value;
                     OnPropertyChanged("GreenPacmanTop");
                 }
             }
@@ -101,7 +105,8 @@ namespace WPF.Game.ViewModels
         {
             _coinFactory = new FirstLevelCoinCreator();
             _connection = connectionProvider.GetConnection();
-
+            pacman = new Pacman();
+            greenPacman = new Pacman();
             GreenPacmanTop = 20;
             GreenPacmanLeft = 20;
             YellowPacmanLeft = 20;
@@ -128,10 +133,11 @@ namespace WPF.Game.ViewModels
 
         private void ListenServer()
         {
-            _connection.On<int, int>("OponentCordinates", (top, left) =>
+            _connection.On<string>("OponentCordinates", (serializedObject) =>
             {
-                GreenPacmanLeft = left;
-                GreenPacmanTop = top;
+                Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
+                GreenPacmanLeft = deserializedObject.PacmanLeft;
+                GreenPacmanTop = deserializedObject.PacmanTop;
             });
         }
 
@@ -170,7 +176,8 @@ namespace WPF.Game.ViewModels
 
             if (oldLeft != YellowPacmanLeft || oldTop != YellowPacmanTop)
             {
-                await _connection.InvokeAsync("SendPacManCordinates", YellowPacmanTop, YellowPacmanLeft);
+                string serializedObject = JsonSerializer.Serialize(pacman);
+                await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
             if (goDown && YellowPacmanTop + 280 > AppHeight)
