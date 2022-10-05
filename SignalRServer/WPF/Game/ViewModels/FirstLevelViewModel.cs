@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
@@ -12,6 +14,7 @@ using WPF.Game.Classes;
 using WPF.Game.Factory.Classes;
 using WPF.Game.Factory.Interfaces;
 using WPF.Game.Singleton.Classes;
+using WPF.Game.Strategy;
 using WPF.Views;
 
 namespace WPF.Game.ViewModels
@@ -21,7 +24,6 @@ namespace WPF.Game.ViewModels
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
-        int speed = 8;
         CoinFactory _coinFactory;
         HubConnection _connection;
         WeakMobFactory _mobFactory;
@@ -99,6 +101,12 @@ namespace WPF.Game.ViewModels
 
         public ObservableCollection<ICoin> Coins { get; set; }
         public ObservableCollection<IGhost> Mobs { get; set; }
+        public ObservableCollection<Apple> Apples { get; set; }
+        public List<Apple> ApplesList { get; set; }
+        public ObservableCollection<RottenApple> RottenApples { get; set; }
+        public List<RottenApple> RottenApplesList { get; set; }
+        public ObservableCollection<Cherry> Cherries { get; set; }
+        public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
@@ -108,34 +116,30 @@ namespace WPF.Game.ViewModels
 
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
-            _coinFactory = new FirstLevelCoinCreator();
+            _coinFactory = new BronzeCoinCreator();
             _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman();
             greenPacman = new Pacman();
+            ApplesList = new List<Apple>();
+            var tempApplesList = ApplesList;
+            RottenApplesList = new List<RottenApple>();
+            var tempRottenApplesList = RottenApplesList;
             GreenPacmanTop = 20;
             GreenPacmanLeft = 20;
             YellowPacmanLeft = 20;
             YellowPacmanTop = 20;
 
             Mobs = SpawnGhosts();
-            Coins = GetCoins();
+            Coins = Utils.Utils.GetCoins(_coinFactory);
+            Apples = Utils.Utils.CreateApples(ref tempApplesList);
+            ApplesList = tempApplesList;
+            RottenApples = Utils.Utils.CreateRottenApples(ref tempRottenApplesList);
+            RottenApplesList = tempRottenApplesList;
+            Cherries = Utils.Utils.CreateCherries();
+            Strawberries = Utils.Utils.CreateStrawberries();
             GameSetup();
             ListenServer();
-        }
-
-        private ObservableCollection<ICoin> GetCoins()
-        {
-            ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
-            for (int i = 10; i < 800; i = i + 50)
-            {
-                for (int j = 50; j < 800; j = j + 50)
-                {
-                    var coin = _coinFactory.GetCoin(i, j);
-                    result.Add(coin);
-                }
-            }
-            return result;
         }
 
         private ObservableCollection<IGhost> SpawnGhosts()
@@ -180,19 +184,19 @@ namespace WPF.Game.ViewModels
             int oldTop = YellowPacmanTop;
             if (goRight)
             {
-                YellowPacmanLeft += speed;
+                YellowPacmanLeft += pacman.Speed;
             }
             if (goLeft)
             {
-                YellowPacmanLeft -= speed;
+                YellowPacmanLeft -= pacman.Speed;
             }
             if (goUp)
             {
-                YellowPacmanTop -= speed;
+                YellowPacmanTop -= pacman.Speed;
             }
             if (goDown)
             {
-                YellowPacmanTop += speed;
+                YellowPacmanTop += pacman.Speed;
             }
 
             if (oldLeft != YellowPacmanLeft || oldTop != YellowPacmanTop)
@@ -223,6 +227,36 @@ namespace WPF.Game.ViewModels
             }
 
             Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(YellowPacmanLeft, YellowPacmanTop, 30, 30);
+
+            
+
+            foreach (var item in ApplesList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    pacman.SetAlgorithm(new GiveSpeed());
+                    pacman.Action(ref pacman);
+                    var index = ApplesList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
+                    Apples.RemoveAt(index);
+                    ApplesList.RemoveAt(index);
+                    break;
+                }
+            }
+
+            foreach (var item in RottenApplesList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    pacman.SetAlgorithm(new ReduceSpeed());
+                    pacman.Action(ref pacman);
+                    var index = RottenApplesList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
+                    RottenApples.RemoveAt(index);
+                    RottenApplesList.RemoveAt(index);
+                    break;
+                }
+            }
 
         }
 

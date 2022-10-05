@@ -40,7 +40,9 @@ namespace WPF
             services.AddSingleton<StartPageViewModel>();
             services.AddSingleton<FirstLevelViewModel>();
             services.AddSingleton<SecondLevelViewModel>();
-            services.AddSingleton<ThirdLevelView>();
+            services.AddSingleton<ThirdLevelViewModel>();
+            services.AddSingleton<FourthLevelViewModel>();
+            services.AddSingleton<FifthLevelViewModel>();
 
             services.AddSingleton<NavigationStore>();
 
@@ -66,6 +68,14 @@ namespace WPF
             services.AddSingleton<ThirdLevelView>(s => new ThirdLevelView()
             {
                 DataContext = s.GetRequiredService<ThirdLevelViewModel>()
+            });
+            services.AddSingleton<FourthLevelView>(s => new FourthLevelView()
+            {
+                DataContext = s.GetRequiredService<FourthLevelViewModel>()
+            });
+            services.AddSingleton<FifthLevelView>(s => new FifthLevelView()
+            {
+                DataContext = s.GetRequiredService<FifthLevelViewModel>()
             });
             services.AddTransient<CoinView>(s => new CoinView()
             {

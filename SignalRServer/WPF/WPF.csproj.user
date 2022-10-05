@@ -24,6 +24,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Game\Views\FifthLevelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Game\Views\MobView.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -37,6 +40,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Game\Views\StartPageView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\FourthLevelView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Game\Views\ThirdLevelView.xaml">

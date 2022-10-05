@@ -36,7 +36,7 @@ namespace WPF.Connection
 
         public Task StartGame()
         {
-            _navigationStore.CurrentViewModel = new FirstLevelViewModel(this);
+            _navigationStore.CurrentViewModel = new FifthLevelViewModel(this);
             return Task.CompletedTask;
         }
 

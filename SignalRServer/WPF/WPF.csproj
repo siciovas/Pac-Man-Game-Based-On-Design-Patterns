@@ -15,6 +15,10 @@
 	<None Remove="images\pacmanOp.jpg" />
 	<None Remove="images\strongGhost.png" />
 	<None Remove="images\weakZombie.png" />
+	<None Remove="images\apple.png" />
+	<None Remove="images\rottenApple.png" />
+	<None Remove="images\cherry.png" />
+	<None Remove="images\strawberry.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,10 +42,20 @@
 	<Resource Include="images\pacmanOp.jpg" />
 	<Resource Include="images\strongGhost.png" />
 	<Resource Include="images\weakZombie.png" />
+	<Resource Include="images\apple.png" />
+	<Resource Include="images\rottenApple.png" />
+	<Resource Include="images\cherry.png" />
+	<Resource Include="images\strawberry.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Game\Views\FifthLevelView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Game\Views\MobView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Game\Views\FourthLevelView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MainWindow.xaml.cs">
@@ -50,7 +64,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Game\Views\FifthLevelView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Game\Views\MobView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\FourthLevelView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
