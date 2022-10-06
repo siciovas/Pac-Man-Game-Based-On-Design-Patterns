@@ -20,6 +20,8 @@ namespace WPF
         public ViewModelBase _firstLevelViewModel;
         public ViewModelBase _secondLevelViewModel;
         public ViewModelBase _thirdLevelViewModel;
+        public ViewModelBase _fourthLevelViewModel;
+        public ViewModelBase _fifthLevelViewModel;
         private StartPageViewModel _startPageViewModel;
         public MainWindowViewModel(IConnectionProvider connectionProvider, NavigationStore navigationStore)
         {
@@ -27,6 +29,8 @@ namespace WPF
             _firstLevelViewModel = new FirstLevelViewModel(connection);
             _secondLevelViewModel = new SecondLevelViewModel(connection);
             _thirdLevelViewModel = new ThirdLevelViewModel(connection);
+            _fourthLevelViewModel = new FourthLevelViewModel(connection);
+            _fifthLevelViewModel = new FifthLevelViewModel(connection);
 
             _startPageViewModel = new StartPageViewModel(connectionProvider);
             _navigationStore = navigationStore;
@@ -50,6 +54,14 @@ namespace WPF
             else if (_navigationStore.CurrentViewModel.Equals(_secondLevelViewModel))
             {
                 _navigationStore.CurrentViewModel = _thirdLevelViewModel;
+            }
+            else if (_navigationStore.CurrentViewModel.Equals(_thirdLevelViewModel))
+            {
+                _navigationStore.CurrentViewModel = _fourthLevelViewModel;
+            }
+            else if (_navigationStore.CurrentViewModel.Equals(_fourthLevelViewModel))
+            {
+                _navigationStore.CurrentViewModel = _fifthLevelViewModel;
             }
         }
 
