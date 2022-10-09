@@ -39,5 +39,25 @@ namespace SignalRServer.Hubs
         {
             await Clients.Others.SendAsync("OponentCordinates", serializedObject);
         }
+
+        public async Task SendApplesIndex(int index)
+        {
+            await Clients.Others.SendAsync("ApplesIndex", index);
+        }
+
+        public async Task SendRottenApplesIndex(int index)
+        {
+            await Clients.Others.SendAsync("RottenApplesIndex", index);
+        }
+
+        public async Task SendCoinsIndex(int index)
+        {
+            await Clients.Others.SendAsync("CoinsIndex", index);
+        }
+
+        public async Task SendCherriesIndex(int index)
+        {
+            await Clients.Others.SendAsync("CherriesIndex", index);
+        }
     }
 }
