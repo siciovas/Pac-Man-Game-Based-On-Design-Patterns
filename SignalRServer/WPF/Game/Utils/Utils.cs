@@ -37,6 +37,7 @@ namespace WPF.Game.Utils
             {
                 for (int j = 50; j < 300; j = j + 50)
                 {
+                    if (i == 10 && j == 50) continue;
                     var coin = _coinFactory.GetCoin(i, j);
                     result.Add(coin);
                     coinsList.Add(coin);
