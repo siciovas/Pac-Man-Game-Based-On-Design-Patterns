@@ -12,6 +12,7 @@ namespace WPF.Game.Classes
         public int PacmanTop { get; set; }
         public int PacmanLeft { get; set; }
         public int Speed { get; set; }
+        public int Score { get; set; }
 
         private Algorithm algorithm;
 
@@ -28,6 +29,7 @@ namespace WPF.Game.Classes
         public Pacman() 
         {
             Speed = 8;
+            Score = 0;
         }
 
         public void Action(ref Pacman pacman)

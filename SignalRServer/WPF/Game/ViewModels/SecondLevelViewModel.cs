@@ -101,12 +101,14 @@ namespace WPF.Game.ViewModels
         }
 
         public ObservableCollection<ICoin> Coins { get; set; }
+        public List<ICoin> CoinsList { get; set; }
         public ObservableCollection<IGhost> Mobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
         public List<RottenApple> RottenApplesList { get; set; }
         public ObservableCollection<Cherry> Cherries { get; set; }
+        public List<Cherry> CherriesList { get; set; }
         public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
@@ -128,19 +130,25 @@ namespace WPF.Game.ViewModels
             var tempApplesList = ApplesList;
             RottenApplesList = new List<RottenApple>();
             var tempRottenApplesList = RottenApplesList;
+            CherriesList = new List<Cherry>();
+            var tempCherriesList = CherriesList;
+            CoinsList = new List<ICoin>();
+            var tempCoinsList = CoinsList;
             GreenPacmanTop = 20;
             GreenPacmanLeft = 20;
             YellowPacmanLeft = 20;
             YellowPacmanTop = 20;
 
-            Coins = Utils.Utils.GetFirstHalfCoins(_BronzeCoinFactory);
-            Coins = Utils.Utils.GetSecondHalfCoins(_SilverCoinFactory, Coins);
+            Coins = Utils.Utils.GetFirstHalfCoins(_BronzeCoinFactory, ref tempCoinsList);
+            Coins = Utils.Utils.GetSecondHalfCoins(_SilverCoinFactory, Coins, ref tempCoinsList);
+            CoinsList = tempCoinsList;
             Mobs = SpawnGhosts();
             Apples = Utils.Utils.CreateApples(ref tempApplesList);
             ApplesList = tempApplesList;
             RottenApples = Utils.Utils.CreateRottenApples(ref tempRottenApplesList);
             RottenApplesList = tempRottenApplesList;
-            Cherries = Utils.Utils.CreateCherries();
+            Cherries = Utils.Utils.CreateCherries(ref tempCherriesList);
+            CherriesList = tempCherriesList;
             Strawberries = Utils.Utils.CreateStrawberries();
             GameSetup();
             ListenServer();
@@ -167,6 +175,30 @@ namespace WPF.Game.ViewModels
                 Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
                 GreenPacmanLeft = deserializedObject.PacmanLeft;
                 GreenPacmanTop = deserializedObject.PacmanTop;
+            });
+
+            _connection.On<int>("ApplesIndex", (index) =>
+            {
+                Apples.RemoveAt(index);
+                ApplesList.RemoveAt(index);
+            });
+
+            _connection.On<int>("RottenApplesIndex", (index) =>
+            {
+                RottenApples.RemoveAt(index);
+                RottenApplesList.RemoveAt(index);
+            });
+
+            _connection.On<int>("CoinsIndex", (index) =>
+            {
+                Coins.RemoveAt(index);
+                CoinsList.RemoveAt(index);
+            });
+
+            _connection.On<int>("CherriesIndex", (index) =>
+            {
+                Cherries.RemoveAt(index);
+                CherriesList.RemoveAt(index);
             });
         }
 
@@ -256,6 +288,35 @@ namespace WPF.Game.ViewModels
                     var index = RottenApplesList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
                     RottenApples.RemoveAt(index);
                     RottenApplesList.RemoveAt(index);
+                    break;
+                }
+            }
+
+            foreach (var item in CoinsList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    var index = CoinsList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
+                    await _connection.InvokeAsync("SendCoinsIndex", index);
+                    Coins.RemoveAt(index);
+                    CoinsList.RemoveAt(index);
+                    pacman.Score += item.Value;
+                    break;
+                }
+            }
+
+            foreach (var item in CherriesList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    pacman.SetAlgorithm(new DoublePoints());
+                    pacman.Action(ref pacman);
+                    var index = CherriesList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
+                    await _connection.InvokeAsync("SendCherriesIndex", index);
+                    Cherries.RemoveAt(index);
+                    CherriesList.RemoveAt(index);
                     break;
                 }
             }

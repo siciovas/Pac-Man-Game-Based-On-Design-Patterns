@@ -14,21 +14,23 @@ namespace WPF.Game.Utils
 {
     public class Utils
     {
-        public static ObservableCollection<ICoin> GetCoins(CoinFactory _coinFactory)
+        public static ObservableCollection<ICoin> GetCoins(CoinFactory _coinFactory, ref List<ICoin> coinsList)
         {
             ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
             for (int i = 10; i < 800; i = i + 50)
             {
                 for (int j = 50; j < 600; j = j + 50)
                 {
+                    if (i == 10 && j == 50) continue;
                     var coin = _coinFactory.GetCoin(i, j);
+                    coinsList.Add(coin);
                     result.Add(coin);
                 }
             }
             return result;
         }
 
-        public static ObservableCollection<ICoin> GetFirstHalfCoins(CoinFactory _coinFactory)
+        public static ObservableCollection<ICoin> GetFirstHalfCoins(CoinFactory _coinFactory, ref List<ICoin> coinsList)
         {
             ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
             for (int i = 10; i < 800; i = i + 50)
@@ -37,12 +39,13 @@ namespace WPF.Game.Utils
                 {
                     var coin = _coinFactory.GetCoin(i, j);
                     result.Add(coin);
+                    coinsList.Add(coin);
                 }
             }
             return result;
         }
 
-        public static ObservableCollection<ICoin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<ICoin> Coins)
+        public static ObservableCollection<ICoin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<ICoin> Coins, ref List<ICoin> coinsList)
         {
             //ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
             for (int i = 10; i < 800; i = i + 50)
@@ -51,6 +54,7 @@ namespace WPF.Game.Utils
                 {
                     var coin = _coinFactory.GetCoin(i, j);
                     Coins.Add(coin);
+                    coinsList.Add(coin);
                 }
             }
             return Coins;
@@ -80,13 +84,15 @@ namespace WPF.Game.Utils
             return result;
         }
 
-        public static ObservableCollection<Cherry> CreateCherries()
+        public static ObservableCollection<Cherry> CreateCherries(ref List<Cherry> CherriesList)
         {
             ObservableCollection<Cherry> result = new ObservableCollection<Cherry>();
             var firstCherry = new Cherry(30, 300);
             var secondCherry = new Cherry(390, 110);
             result.Add(firstCherry);
             result.Add(secondCherry);
+            CherriesList.Add(firstCherry);
+            CherriesList.Add(secondCherry);
             return result;
         }
 
