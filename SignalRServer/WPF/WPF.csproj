@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="images\orange.jpg" />
     <Resource Include="images\pacman.jpg" />
     <Resource Include="images\pink.jpg" />

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
-using WPF.Stores;
 using WPF.Game.ViewModels;
+using ClassLibrary.Stores;
 
 namespace WPF.Connection
 {

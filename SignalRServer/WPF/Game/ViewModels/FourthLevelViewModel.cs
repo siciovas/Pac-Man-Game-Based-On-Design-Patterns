@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using ClassLibrary.Coins.Factories;
+using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Fruits;
+using ClassLibrary.Mobs.Interfaces;
+using ClassLibrary.Mobs.StrongMob;
+using ClassLibrary.Mobs.WeakMob;
+using ClassLibrary.Pacmen;
+using ClassLibrary.Strategies;
+using ClassLibrary.Views;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
-using WPF.Game.AbstractFactory.Classes.StrongMobFactory;
-using WPF.Game.AbstractFactory.Classes.WeakMobFactory;
-using WPF.Game.AbstractFactory.Interfaces;
-using WPF.Game.Classes;
-using WPF.Game.Factory.Classes;
-using WPF.Game.Factory.Interfaces;
-using WPF.Game.Singleton.Classes;
-using WPF.Game.Strategy;
-using WPF.Views;
 
 namespace WPF.Game.ViewModels
 {
