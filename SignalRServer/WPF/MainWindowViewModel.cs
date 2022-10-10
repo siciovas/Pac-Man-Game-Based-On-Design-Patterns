@@ -1,11 +1,11 @@
 ﻿using Prism.Commands;
 using System.Windows.Input;
 using WPF.Connection;
-using WPF.Stores;
 using WPF.Game.ViewModels;
-using WPF.Views;
 using System;
 using GalaSoft.MvvmLight.Command;
+using ClassLibrary.Views;
+using ClassLibrary.Stores;
 
 namespace WPF
 {

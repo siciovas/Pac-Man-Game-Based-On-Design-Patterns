@@ -1,14 +1,8 @@
-﻿using System;
+﻿using ClassLibrary.Coins.Factories;
+using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Fruits;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WPF.Game.AbstractFactory;
-using WPF.Game.AbstractFactory.Interfaces;
-using WPF.Game.Classes;
-using WPF.Game.Factory.Classes;
-using WPF.Game.Factory.Interfaces;
 
 namespace WPF.Game.Utils
 {

@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using ClassLibrary.Views;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Windows;
 using System.Windows.Input;
 using WPF.Connection;
-using WPF.Views;
 
 namespace WPF.Game.ViewModels
 {

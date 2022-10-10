@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ClassLibrary.Coins;
+using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Mobs.Interfaces;
+using ClassLibrary.Mobs.StrongMob;
+using ClassLibrary.Mobs.WeakMob;
+using ClassLibrary.Stores;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using WPF.Connection;
-using WPF.Game.AbstractFactory.Classes.StrongMob;
-using WPF.Game.AbstractFactory.Classes.WeakMob;
-using WPF.Game.AbstractFactory.Interfaces;
-using WPF.Game.Factory.Classes;
-using WPF.Game.Factory.Interfaces;
 using WPF.Game.ViewModels;
 using WPF.Game.Views;
-using WPF.Stores;
 
 namespace WPF
 {
@@ -45,9 +45,6 @@ namespace WPF
             services.AddSingleton<FifthLevelViewModel>();
 
             services.AddSingleton<NavigationStore>();
-
-            services.AddTransient<CoinViewModel>();
-
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {
