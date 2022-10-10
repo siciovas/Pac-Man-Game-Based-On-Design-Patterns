@@ -14,7 +14,8 @@
             <Label FontSize="20"
                        Name="txtScore"
                        Foreground="White"
-                       Content="Score: 0"></Label>
+                       Content="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.score}"></Label>
             <Label FontSize="20"
                        Foreground="White"
                        Canvas.Left="325"
