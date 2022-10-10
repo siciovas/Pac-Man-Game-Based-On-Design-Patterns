@@ -111,7 +111,18 @@ namespace WPF.Game.ViewModels
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
 
         int ghostMoveStep = 130;
-        int score = 0;
+        public int score 
+        {
+            get
+            {
+                return pacman.Score;
+            }
+            private set
+            {
+                pacman.Score = value;
+                OnPropertyChanged("score");
+            }
+        }
         int oponentScore = 0;
 
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
@@ -298,6 +309,7 @@ namespace WPF.Game.ViewModels
                     Coins.RemoveAt(index);
                     CoinsList.RemoveAt(index);
                     pacman.Score += item.Value;
+                    score = pacman.Score;
                     break;
                 }
             }
