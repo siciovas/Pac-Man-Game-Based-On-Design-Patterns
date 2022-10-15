@@ -5,16 +5,14 @@ using System.Windows.Media.Imaging;
 
 namespace ClassLibrary.Mobs.StrongMob
 {
-    public class StrongGhost : IGhost
+    public class StrongGhost : Mob, IGhost
     {
-        public int Speed { get; set; }
         public int Top { get; set; }
         public int Left { get; set; }
         public ImageBrush Fill { get; set; }
 
-        public StrongGhost(int top, int left)
+        public StrongGhost(int top, int left, string name) : base(name)
         {
-            Speed = 8;
             Top = top;
             Left = left;
             ImageBrush ghost = new ImageBrush();

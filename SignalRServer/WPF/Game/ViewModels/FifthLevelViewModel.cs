@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
+using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
@@ -101,8 +102,7 @@ namespace WPF.Game.ViewModels
 
         public ObservableCollection<ICoin> Coins { get; set; }
         public List<ICoin> CoinsList { get; set; }
-        public ObservableCollection<IGhost> GhostMobs { get; set; }
-        public ObservableCollection<IZombie> ZombieMobs { get; set; }
+        public ObservableCollection<Mob> DemoMobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
@@ -140,8 +140,7 @@ namespace WPF.Game.ViewModels
 
             Coins = Utils.Utils.GetCoins(_coinFactory, ref tempCoinsList);
             CoinsList = tempCoinsList;
-            GhostMobs = SpawnGhosts();
-            ZombieMobs = SpawnZombies();
+            DemoMobs = SpawnDemogorgons();
             Apples = Utils.Utils.CreateApples(ref tempApplesList);
             ApplesList = tempApplesList;
             RottenApples = Utils.Utils.CreateRottenApples(ref tempRottenApplesList);
@@ -152,23 +151,17 @@ namespace WPF.Game.ViewModels
             GameSetup();
             ListenServer();
         }
-        private ObservableCollection<IGhost> SpawnGhosts()
+        private ObservableCollection<Mob> SpawnDemogorgons()
         {
-            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
-            var firstGhost = _strongMobFactory.CreateGhost(500, 600);
-            var secondGhost = _strongMobFactory.CreateGhost(50, 750);
-            result.Add(firstGhost);
-            result.Add(secondGhost);
-            return result;
-        }
-
-        private ObservableCollection<IZombie> SpawnZombies()
-        {
-            ObservableCollection<IZombie> result = new ObservableCollection<IZombie>();
-            var firstZombie = _mobFactory.CreateZombie(500, 50);
-            var secondZombie = _mobFactory.CreateZombie(300, 300);
-            result.Add(firstZombie);
-            result.Add(secondZombie);
+            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
+            var firstDemo = _mobFactory.CreateDemogorgon(500, 600);
+            var secondDemo = _strongMobFactory.CreateDemogorgon(50, 750);
+            var thirdDemo = _strongMobFactory.CreateDemogorgon(500, 50);
+            var fourthDemo = _strongMobFactory.CreateDemogorgon(300, 300);
+            result.Add(firstDemo);
+            result.Add(secondDemo);
+            result.Add(thirdDemo);
+            result.Add(fourthDemo);
             return result;
         }
 

@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
+using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
@@ -101,8 +102,8 @@ namespace WPF.Game.ViewModels
 
         public ObservableCollection<ICoin> Coins { get; set; }
         public List<ICoin> CoinsList { get; set; }
-        public ObservableCollection<IGhost> GhostMobs { get; set; }
-        public ObservableCollection<IZombie> ZombieMobs { get; set; }
+        public ObservableCollection<Mob> GhostMobs { get; set; }
+        public ObservableCollection<Mob> ZombieMobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
@@ -152,9 +153,9 @@ namespace WPF.Game.ViewModels
             GameSetup();
             ListenServer();
         }
-        private ObservableCollection<IGhost> SpawnGhosts()
+        private ObservableCollection<Mob> SpawnGhosts()
         {
-            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
+            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
             var firstGhost = _strongMobFactory.CreateGhost(500, 600);
             var secondGhost = _strongMobFactory.CreateGhost(50, 750);
             result.Add(firstGhost);
@@ -162,9 +163,9 @@ namespace WPF.Game.ViewModels
             return result;
         }
 
-        private ObservableCollection<IZombie> SpawnZombies()
+        private ObservableCollection<Mob> SpawnZombies()
         {
-            ObservableCollection<IZombie> result = new ObservableCollection<IZombie>();
+            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
             var firstZombie = _mobFactory.CreateZombie(500, 50);
             var secondZombie = _mobFactory.CreateZombie(300, 300);
             result.Add(firstZombie);

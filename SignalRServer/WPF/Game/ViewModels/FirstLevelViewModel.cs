@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
+using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.WeakMob;
 using ClassLibrary.Pacmen;
@@ -99,7 +100,7 @@ namespace WPF.Game.ViewModels
 
         public ObservableCollection<ICoin> Coins { get; set; }
         public List<ICoin> CoinsList { get; set; }
-        public ObservableCollection<IGhost> Mobs { get; set; }
+        public ObservableCollection<Mob> Mobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
@@ -159,9 +160,9 @@ namespace WPF.Game.ViewModels
             ListenServer();
         }
 
-        private ObservableCollection<IGhost> SpawnGhosts()
+        private ObservableCollection<Mob> SpawnGhosts()
         {
-            ObservableCollection<IGhost> result = new ObservableCollection<IGhost>();
+            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
             var firstGhost = _mobFactory.CreateGhost(500, 600);
             var secondGhost = _mobFactory.CreateGhost(50, 750);
             var thirdGhost = _mobFactory.CreateGhost(500, 50);

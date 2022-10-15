@@ -101,7 +101,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="50" Height="50" Fill="{Binding Fill}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
