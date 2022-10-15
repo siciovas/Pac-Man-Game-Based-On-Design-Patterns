@@ -6,5 +6,6 @@
         double Top { get; set; }
         double Left { get; set; }
         string Color { get; set; }
+        ICoin Copy();
     }
 }

@@ -1,22 +1,24 @@
 ﻿using ClassLibrary.Coins.Interfaces;
+using System;
 
 namespace ClassLibrary.Coins
 {
     public class GoldCoin : ICoin
     {
-        private double left;
-        private double top;
-
-        public GoldCoin(int left, int top)
+        public GoldCoin()
         {
             Value = 5;
             Color = "gold";
-            Left = left;
-            Top = top;
+            Left = 50;
+            Top = 50;
         }
         public int Value { get; set; }
-        public double Left { get => left; set => left = value; }
-        public double Top { get => top; set => top = value; }
+        public double Left { get; set; }
+        public double Top { get; set; }
         public string Color { get; set; }
+        public ICoin Copy() //shallow copy
+        {
+            return (GoldCoin)this.MemberwiseClone();
+        }
     }
 }
