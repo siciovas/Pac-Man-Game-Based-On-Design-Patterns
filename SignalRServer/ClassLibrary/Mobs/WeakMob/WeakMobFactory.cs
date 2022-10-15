@@ -4,18 +4,27 @@ namespace ClassLibrary.Mobs.WeakMob
 {
     public class WeakMobFactory : MobFactory
     {
-        public override IGhost CreateGhost(int top, int left)
+        public override Mob CreateGhost(int top, int left)
         {
-            return new WeakGhost(top, left);
+            Mob rawMob = new WeakGhost(top, left, "ghost");
+            GhostBuilder builder = new GhostBuilder(rawMob);
+            m_Director.CreateSlowAndWeakMob(builder);
+            return m_Director.Build(builder);
         }
 
-        public override IZombie CreateZombie(int top, int left)
+        public override Mob CreateZombie(int top, int left)
         {
-            return new WeakZombie(top, left);
+            Mob rawMob = new WeakZombie(top, left, "zombie");
+            ZombieBuilder builder = new ZombieBuilder(rawMob);
+            m_Director.CreateSlowAndWeakMob(builder);
+            return m_Director.Build(builder);
         }
-        public override IDemogorgon CreateDemogorgon()
+        public override Mob CreateDemogorgon(int top, int left)
         {
-            return new WeakDemogorgon();
+            Mob rawMob = new WeakDemogorgon(top, left, "demogorgon");
+            DemogorgonBuilder builder = new DemogorgonBuilder(rawMob);
+            m_Director.CreateFastAndWeakMob(builder);
+            return m_Director.Build(builder);
         }
     }
 }

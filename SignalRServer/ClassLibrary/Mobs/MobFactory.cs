@@ -4,8 +4,9 @@ namespace ClassLibrary.Mobs
 {
     public abstract class MobFactory
     {
-        public abstract IGhost CreateGhost(int top, int left);
-        public abstract IZombie CreateZombie(int top, int left);
-        public abstract IDemogorgon CreateDemogorgon();
+        protected MobDirector m_Director = new MobDirector();
+        public abstract Mob CreateGhost(int top, int left);
+        public abstract Mob CreateZombie(int top, int left);
+        public abstract Mob CreateDemogorgon(int top, int left);
     }
 }
