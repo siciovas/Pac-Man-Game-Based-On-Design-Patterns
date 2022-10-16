@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.Coins;
 using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
@@ -27,12 +28,12 @@ namespace WPF
             services.AddTransient<ICoin, GoldCoin>();
             services.AddTransient<ICoin, BronzeCoin>();
             services.AddTransient<ICoin, SilverCoin>();
-            services.AddTransient<IGhost, WeakGhost>();
-            services.AddTransient<IGhost, StrongGhost>();
-            services.AddTransient<IZombie, WeakZombie>();
-            services.AddTransient<IZombie, StrongZombie>();
-            services.AddTransient<IDemogorgon, WeakDemogorgon>();
-            services.AddTransient<IDemogorgon, StrongDemogorgon>();
+            services.AddTransient<Mob, WeakGhost>();
+            services.AddTransient<Mob, StrongGhost>();
+            services.AddTransient<Mob, WeakZombie>();
+            services.AddTransient<Mob, StrongZombie>();
+            services.AddTransient<Mob, WeakDemogorgon>();
+            services.AddTransient<Mob, StrongDemogorgon>();
 
             services.AddSingleton<IConnectionProvider, ConnectionProvider>();
 
