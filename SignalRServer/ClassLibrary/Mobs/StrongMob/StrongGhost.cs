@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace ClassLibrary.Mobs.StrongMob
 {
-    public class StrongGhost : Mob, IGhost
+    public class StrongGhost : Mob
     {
         public int Top { get; set; }
         public int Left { get; set; }
