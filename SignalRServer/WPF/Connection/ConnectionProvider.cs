@@ -3,10 +3,11 @@ using System;
 using System.Threading.Tasks;
 using WPF.Game.ViewModels;
 using ClassLibrary.Stores;
+using ClassLibrary.Observer;
 
 namespace WPF.Connection
 {
-    public class ConnectionProvider : IConnectionProvider
+    public class ConnectionProvider : IConnectionProvider, IObserver
     {
         private HubConnection _connection;
         private NavigationStore _navigationStore;
@@ -22,22 +23,21 @@ namespace WPF.Connection
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };
+            OnStartGame();
+        }
+
+        public void OnStartGame()
+        {
             _connection.On("StartGame",
                 () =>
                 {
-                    StartGame();
+                    _navigationStore.CurrentViewModel = new FirstLevelViewModel(this);
                 });
         }
 
         public HubConnection GetConnection()
         {
             return _connection;
-        }
-
-        public Task StartGame()
-        {
-            _navigationStore.CurrentViewModel = new FirstLevelViewModel(this);
-            return Task.CompletedTask;
         }
 
         public async void Connect()

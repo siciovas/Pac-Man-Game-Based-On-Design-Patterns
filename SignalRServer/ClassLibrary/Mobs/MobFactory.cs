@@ -1,6 +1,4 @@
-﻿using ClassLibrary.Mobs.Interfaces;
-
-namespace ClassLibrary.Mobs
+﻿namespace ClassLibrary.Mobs
 {
     public abstract class MobFactory
     {

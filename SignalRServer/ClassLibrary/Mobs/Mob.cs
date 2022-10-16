@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClassLibrary.Mobs
+﻿namespace ClassLibrary.Mobs
 {
     public abstract class Mob
     {
@@ -17,7 +11,7 @@ namespace ClassLibrary.Mobs
             Name = name;
         }
 
-        public string GetName() 
+        public string GetName()
         {
             return Name;
         }

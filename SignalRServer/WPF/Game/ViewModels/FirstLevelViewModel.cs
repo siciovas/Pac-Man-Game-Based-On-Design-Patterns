@@ -2,7 +2,6 @@
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.WeakMob;
 using ClassLibrary.Pacmen;
 using ClassLibrary.Strategies;
@@ -28,8 +27,6 @@ namespace WPF.Game.ViewModels
         WeakMobFactory _mobFactory;
         Pacman pacman;
         Pacman greenPacman;
-
-        private int _yellowPacmanLeft;
         public int YellowPacmanLeft
         {
             get
@@ -45,8 +42,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _yellowPacmanTop;
         public int YellowPacmanTop
         {
             get
@@ -62,9 +57,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _greenPacmanLeft;
-
         public int GreenPacmanLeft
         {
             get
@@ -80,8 +72,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _greenPacmanTop;
         public int GreenPacmanTop
         {
             get
@@ -97,7 +87,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
         public ObservableCollection<ICoin> Coins { get; set; }
         public List<ICoin> CoinsList { get; set; }
         public ObservableCollection<Mob> Mobs { get; set; }
@@ -110,9 +99,7 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
-
-        int ghostMoveStep = 130;
-        public int score 
+        public int score
         {
             get
             {
@@ -124,7 +111,6 @@ namespace WPF.Game.ViewModels
                 OnPropertyChanged("score");
             }
         }
-        int oponentScore = 0;
 
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
@@ -376,15 +362,6 @@ namespace WPF.Game.ViewModels
             }
         }
     }
-
-    /* private void GameOver(string message)
-     {
-         gameTimer.Stop();
-         MessageBox.Show(message, "PacMan Multiplayer");
-
-         System.Diagnostics.Process.Start(Application.ResourceAssembly.Location); //start a new game
-         Application.Current.Shutdown(); //shtdown current game 
-     }*/
 }
 
 
