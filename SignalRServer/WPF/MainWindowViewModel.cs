@@ -1,11 +1,11 @@
-﻿using Prism.Commands;
+﻿using ClassLibrary.Stores;
+using ClassLibrary.Views;
+using GalaSoft.MvvmLight.Command;
+using Prism.Commands;
+using System;
 using System.Windows.Input;
 using WPF.Connection;
 using WPF.Game.ViewModels;
-using System;
-using GalaSoft.MvvmLight.Command;
-using ClassLibrary.Views;
-using ClassLibrary.Stores;
 
 namespace WPF
 {
@@ -16,7 +16,7 @@ namespace WPF
         public ICommand NextView { get; set; }
 
         public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
-        
+
         public ViewModelBase _firstLevelViewModel;
         public ViewModelBase _secondLevelViewModel;
         public ViewModelBase _thirdLevelViewModel;
@@ -123,19 +123,6 @@ namespace WPF
         {
             CurrentViewModel.OnRightClick();
         }
-
-        /*  public FirstLevelViewModel(IConnectionProvider connectionProvider)
-          {
-              _coinFactory = new CoinFactory();
-              _connection = connectionProvider.GetConnection();
-              // UpCommand = new RelayCommand(new Action(UpClicked));
-              DownCommand = new RelayCommand(new Action(UpClicked));
-
-              LeftCommand = new RelayCommand(new Action(UpClicked));
-
-              RightCommand = new RelayCommand(new Action(UpClicked));
-
-          }*/
 
         private void OnCurrentViewModelChanged()
         {

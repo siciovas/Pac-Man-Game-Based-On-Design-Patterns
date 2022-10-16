@@ -2,7 +2,6 @@
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
 using ClassLibrary.Pacmen;
@@ -31,8 +30,6 @@ namespace WPF.Game.ViewModels
         StrongMobFactory _strongMobFactory;
         Pacman pacman;
         Pacman greenPacman;
-
-        private int _yellowPacmanLeft;
         public int YellowPacmanLeft
         {
             get
@@ -48,8 +45,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _yellowPacmanTop;
         public int YellowPacmanTop
         {
             get
@@ -65,9 +60,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _greenPacmanLeft;
-
         public int GreenPacmanLeft
         {
             get
@@ -83,8 +75,6 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
-
-        private int _greenPacmanTop;
         public int GreenPacmanTop
         {
             get
@@ -115,11 +105,6 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
-
-        int ghostMoveStep = 130;
-        int score = 0;
-        int oponentScore = 0;
-
         public FourthLevelViewModel(IConnectionProvider connectionProvider)
         {
             _GoldCoinFactory = new GoldCoinCreator();
@@ -174,7 +159,7 @@ namespace WPF.Game.ViewModels
         {
             ObservableCollection<Mob> result = new ObservableCollection<Mob>();
             var firstDemo = _mobFactory.CreateDemogorgon(500, 600);
-         
+
             result.Add(firstDemo);
 
             return result;

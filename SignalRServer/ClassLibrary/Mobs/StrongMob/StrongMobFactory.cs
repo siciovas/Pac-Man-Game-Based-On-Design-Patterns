@@ -1,6 +1,4 @@
-﻿using ClassLibrary.Mobs.Interfaces;
-
-namespace ClassLibrary.Mobs.StrongMob
+﻿namespace ClassLibrary.Mobs.StrongMob
 {
     public class StrongMobFactory : MobFactory
     {

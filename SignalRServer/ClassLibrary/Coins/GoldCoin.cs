@@ -1,5 +1,4 @@
 ﻿using ClassLibrary.Coins.Interfaces;
-using System;
 
 namespace ClassLibrary.Coins
 {

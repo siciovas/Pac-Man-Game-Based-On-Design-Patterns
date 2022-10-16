@@ -1,6 +1,4 @@
-﻿using ClassLibrary.Mobs.Interfaces;
-
-namespace ClassLibrary.Mobs.WeakMob
+﻿namespace ClassLibrary.Mobs.WeakMob
 {
     public class WeakMobFactory : MobFactory
     {
