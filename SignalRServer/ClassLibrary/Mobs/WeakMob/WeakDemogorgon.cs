@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace ClassLibrary.Mobs.WeakMob
 {
-    public class WeakDemogorgon : Mob, IDemogorgon
+    public class WeakDemogorgon : Mob
     {
         public int Top { get; set; }
         public int Left { get; set; }
