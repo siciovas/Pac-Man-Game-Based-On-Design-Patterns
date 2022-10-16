@@ -5,10 +5,9 @@ namespace SignalRServer.Hubs
 {
     public class ServerHub : Hub, ISubject
     {
-        private ClientCounter _clientCounter;
-        public ServerHub(ClientCounter clientCounter)
+        private ClientCounter _clientCounter = ClientCounter.Instance;
+        public ServerHub()
         {
-            _clientCounter = clientCounter;
         }
         public override Task OnConnectedAsync()
         {
