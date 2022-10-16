@@ -23,6 +23,7 @@ namespace WPF.Game.ViewModels
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
+        bool mobLeft, mobRight = true;
         CoinFactory _coinFactory;
         HubConnection _connection;
         WeakMobFactory _mobFactory;
@@ -101,6 +102,7 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<ICoin> Coins { get; set; }
         public List<ICoin> CoinsList { get; set; }
         public ObservableCollection<Mob> Mobs { get; set; }
+        public List<Mob> MobsList { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
@@ -141,6 +143,7 @@ namespace WPF.Game.ViewModels
             var tempCherriesList = CherriesList;
             CoinsList = new List<ICoin>();
             var tempCoinsList = CoinsList;
+            MobsList = new List<Mob>();
             GreenPacmanTop = 20;
             GreenPacmanLeft = 20;
             YellowPacmanLeft = 20;
@@ -171,6 +174,10 @@ namespace WPF.Game.ViewModels
             result.Add(secondGhost);
             result.Add(thirdGhost);
             result.Add(fourthGhost);
+            MobsList.Add(firstGhost);
+            MobsList.Add(secondGhost);
+            MobsList.Add(thirdGhost);
+            MobsList.Add(fourthGhost);
             return result;
         }
 
@@ -239,6 +246,29 @@ namespace WPF.Game.ViewModels
             if (goDown)
             {
                 YellowPacmanTop += pacman.Speed;
+            }
+
+            for(int i = 0; i < MobsList.Count; i++)
+            {
+                if (mobRight)
+                {
+                    MobsList[i].SetLeft(5);
+                }
+                else if (mobLeft)
+                {
+                    MobsList[i].SetLeft(-5);
+                }
+                if (MobsList[i].GetLeft() > 600)
+                {
+                    mobLeft = true;
+                    mobRight = false;
+                } else if (MobsList[i].GetLeft() < 0)
+                {
+                    mobRight = true;
+                    mobLeft = false;
+                }
+                Mobs.RemoveAt(i);
+                Mobs.Insert(i, MobsList[i]);
             }
 
             if (oldLeft != YellowPacmanLeft || oldTop != YellowPacmanTop)

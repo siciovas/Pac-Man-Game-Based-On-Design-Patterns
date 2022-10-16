@@ -11,7 +11,7 @@ namespace ClassLibrary.Mobs.WeakMob
         public int Left { get; set; }
         public ImageBrush Fill { get; set; }
 
-        public WeakZombie(int top, int left, string name) : base(name)
+        public WeakZombie(int top, int left, string name) : base(name, top, left)
         {
             Top = top;
             Left = left;

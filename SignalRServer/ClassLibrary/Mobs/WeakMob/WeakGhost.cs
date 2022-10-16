@@ -7,14 +7,12 @@ namespace ClassLibrary.Mobs.WeakMob
 {
     public class WeakGhost : Mob, IGhost
     {
-        public int Top { get; set; }
-        public int Left { get; set; }
         public ImageBrush Fill { get; set; }
+        public int Top { get => GetTop(); }
+        public int Left { get => GetLeft(); }
 
-        public WeakGhost(int top, int left, string name) : base(name)
+        public WeakGhost(int top, int left, string name) : base(name, top, left)
         {
-            Top = top;
-            Left = left;
             ImageBrush ghost = new ImageBrush();
             ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/red.jpg"));
             Fill = ghost;

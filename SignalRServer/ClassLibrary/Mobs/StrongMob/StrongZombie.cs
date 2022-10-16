@@ -11,7 +11,7 @@ namespace ClassLibrary.Mobs.StrongMob
         public int Left { get; set; }
         public ImageBrush Fill { get; set; }
 
-        public StrongZombie(int top, int left, string name) : base(name)
+        public StrongZombie(int top, int left, string name) : base(name, top, left)
         {
             Top = top;
             Left = left;
