@@ -1,9 +1,29 @@
 ﻿namespace SignalRServer
 {
-    public class ClientCounter
+    public sealed class ClientCounter
     {
-        int _counter;
-        List<string> _clients = new();
+        private static readonly ClientCounter _instance;
+
+        private int _counter;
+        private List<string> _clients;
+        static ClientCounter()
+        {
+            _instance = new ClientCounter();
+        }
+
+        private ClientCounter()
+        {
+            _counter = 0;
+            _clients = new();
+        }
+
+        public static ClientCounter Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
         public int GetCount() => _counter;
         public List<string> GetClients() => _clients;
 
