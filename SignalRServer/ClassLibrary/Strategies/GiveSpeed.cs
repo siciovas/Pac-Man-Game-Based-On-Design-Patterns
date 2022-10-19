@@ -1,4 +1,4 @@
-﻿using ClassLibrary.Pacmen;
+﻿using ClassLibrary._Pacman;
 
 namespace ClassLibrary.Strategies
 {

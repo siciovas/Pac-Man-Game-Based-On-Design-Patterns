@@ -3,7 +3,7 @@ using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary.Pacmen;
+using ClassLibrary._Pacman;
 using ClassLibrary.Strategies;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
