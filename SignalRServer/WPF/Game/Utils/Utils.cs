@@ -8,9 +8,9 @@ namespace WPF.Game.Utils
 {
     public class Utils
     {
-        public static ObservableCollection<ICoin> GetCoins(CoinFactory _coinFactory, ref List<ICoin> coinsList)
+        public static ObservableCollection<Coin> GetCoins(CoinFactory _coinFactory, ref List<Coin> coinsList)
         {
-            ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
+            ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
             {
                 for (int j = 50; j < 600; j = j + 50)
@@ -24,9 +24,9 @@ namespace WPF.Game.Utils
             return result;
         }
 
-        public static ObservableCollection<ICoin> GetFirstHalfCoins(CoinFactory _coinFactory, ref List<ICoin> coinsList)
+        public static ObservableCollection<Coin> GetFirstHalfCoins(CoinFactory _coinFactory, ref List<Coin> coinsList)
         {
-            ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
+            ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
             {
                 for (int j = 50; j < 300; j = j + 50)
@@ -40,9 +40,9 @@ namespace WPF.Game.Utils
             return result;
         }
 
-        public static ObservableCollection<ICoin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<ICoin> Coins, ref List<ICoin> coinsList)
+        public static ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<Coin> Coins, ref List<Coin> coinsList)
         {
-            //ObservableCollection<ICoin> result = new ObservableCollection<ICoin>();
+            //ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
             {
                 for (int j = 300; j < 600; j = j + 50)

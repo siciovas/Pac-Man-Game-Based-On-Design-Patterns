@@ -1,21 +1,24 @@
 ﻿using ClassLibrary.Coins.Interfaces;
+using System;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ClassLibrary.Coins
 {
-    public class BronzeCoin : ICoin
+    public class BronzeCoin : Coin
     {
-        public BronzeCoin()
+        public BronzeCoin() : base()
         {
             Value = 2;
-            Color = "RosyBrown";
+            Top = 50;
             Left = 50;
-            Top = 50;  
+            ImageBrush bronzeCoin = new ImageBrush();
+            bronzeCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/bronzeCoin.png"));
+            Appearance = bronzeCoin;
+            Name = "Bronze coin";
         }
-        public double Top { get; set; }
-        public double Left { get; set; }
-        public int Value { get; set; }
-        public string Color { get; set; }
-        public ICoin Copy()
+
+        public override Coin Copy()
         {
             return (BronzeCoin)this.MemberwiseClone();
         }

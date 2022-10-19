@@ -7,17 +7,14 @@ namespace ClassLibrary.Mobs.WeakMob
 {
     public class WeakDemogorgon : Mob
     {
-        public int Top { get; set; }
-        public int Left { get; set; }
-        public ImageBrush Fill { get; set; }
-
-        public WeakDemogorgon(int top, int left, string name) : base(name)
+        public WeakDemogorgon(int top, int left)
         {
             Top = top;
             Left = left;
             ImageBrush demo = new ImageBrush();
             demo.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakDemo.png"));
-            Fill = demo;
+            Appearance = demo;
+            Name = "Weak demogorgon";
         }
     }
 }

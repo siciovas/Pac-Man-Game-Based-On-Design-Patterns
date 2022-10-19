@@ -7,17 +7,14 @@ namespace ClassLibrary.Mobs.WeakMob
 {
     public class WeakZombie : Mob
     {
-        public int Top { get; set; }
-        public int Left { get; set; }
-        public ImageBrush Fill { get; set; }
-
-        public WeakZombie(int top, int left, string name) : base(name)
+        public WeakZombie(int top, int left)
         {
             Top = top;
             Left = left;
-            ImageBrush ghost = new ImageBrush();
-            ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakZombie.png"));
-            Fill = ghost;
+            ImageBrush zombie = new ImageBrush();
+            zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakZombie.png"));
+            Appearance = zombie;
+            Name = "Weak zombie";
         }
     }
 }

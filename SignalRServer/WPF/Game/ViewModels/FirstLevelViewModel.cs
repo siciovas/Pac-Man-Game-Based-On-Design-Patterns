@@ -27,68 +27,68 @@ namespace WPF.Game.ViewModels
         WeakMobFactory _mobFactory;
         Pacman pacman;
         Pacman greenPacman;
-        public int YellowPacmanLeft
+        public int YellowLeft
         {
             get
             {
-                return pacman.PacmanLeft;
+                return pacman.Left;
             }
             private set
             {
-                if (value != pacman.PacmanLeft)
+                if (value != pacman.Left)
                 {
-                    pacman.PacmanLeft = value;
-                    OnPropertyChanged("YellowPacmanLeft");
+                    pacman.Left = value;
+                    OnPropertyChanged("YellowLeft");
                 }
             }
         }
-        public int YellowPacmanTop
+        public int YellowTop
         {
             get
             {
-                return pacman.PacmanTop;
+                return pacman.Top;
             }
             private set
             {
-                if (value != pacman.PacmanTop)
+                if (value != pacman.Top)
                 {
-                    pacman.PacmanTop = value;
-                    OnPropertyChanged("YellowPacmanTop");
+                    pacman.Top = value;
+                    OnPropertyChanged("YellowTop");
                 }
             }
         }
-        public int GreenPacmanLeft
+        public int GreenLeft
         {
             get
             {
-                return greenPacman.PacmanLeft;
+                return greenPacman.Left;
             }
             private set
             {
-                if (value != greenPacman.PacmanLeft)
+                if (value != greenPacman.Left)
                 {
-                    greenPacman.PacmanLeft = value;
-                    OnPropertyChanged("GreenPacmanLeft");
+                    greenPacman.Left = value;
+                    OnPropertyChanged("GreenLeft");
                 }
             }
         }
-        public int GreenPacmanTop
+        public int GreenTop
         {
             get
             {
-                return greenPacman.PacmanTop;
+                return greenPacman.Top;
             }
             private set
             {
-                if (value != greenPacman.PacmanTop)
+                if (value != greenPacman.Top)
                 {
-                    greenPacman.PacmanTop = value;
-                    OnPropertyChanged("GreenPacmanTop");
+                    greenPacman.Top = value;
+                    OnPropertyChanged("GreenTop");
                 }
             }
         }
-        public ObservableCollection<ICoin> Coins { get; set; }
-        public List<ICoin> CoinsList { get; set; }
+        public ObservableCollection<Coin> Coins { get; set; }
+        public List<Coin> CoinsList { get; set; }
         public ObservableCollection<Mob> Mobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
         public List<Apple> ApplesList { get; set; }
@@ -125,12 +125,12 @@ namespace WPF.Game.ViewModels
             var tempRottenApplesList = RottenApplesList;
             CherriesList = new List<Cherry>();
             var tempCherriesList = CherriesList;
-            CoinsList = new List<ICoin>();
+            CoinsList = new List<Coin>();
             var tempCoinsList = CoinsList;
-            GreenPacmanTop = 20;
-            GreenPacmanLeft = 20;
-            YellowPacmanLeft = 20;
-            YellowPacmanTop = 20;
+            GreenTop = 20;
+            GreenLeft = 20;
+            YellowLeft = 20;
+            YellowTop = 20;
 
             Mobs = SpawnGhosts();
             Coins = Utils.Utils.GetCoins(_coinFactory, ref tempCoinsList);
@@ -165,8 +165,8 @@ namespace WPF.Game.ViewModels
             _connection.On<string>("OponentCordinates", (serializedObject) =>
             {
                 Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
-                GreenPacmanLeft = deserializedObject.PacmanLeft;
-                GreenPacmanTop = deserializedObject.PacmanTop;
+                GreenLeft = deserializedObject.Left;
+                GreenTop = deserializedObject.Top;
             });
 
             _connection.On<int>("ApplesIndex", (index) =>
@@ -208,53 +208,53 @@ namespace WPF.Game.ViewModels
 
             int AppHeight = (int)Application.Current.MainWindow.Height;
             int AppWidth = (int)Application.Current.MainWindow.Width;
-            int oldLeft = YellowPacmanLeft;
-            int oldTop = YellowPacmanTop;
+            int oldLeft = YellowLeft;
+            int oldTop = YellowTop;
             if (goRight)
             {
-                YellowPacmanLeft += pacman.Speed;
+                YellowLeft += pacman.Speed;
             }
             if (goLeft)
             {
-                YellowPacmanLeft -= pacman.Speed;
+                YellowLeft -= pacman.Speed;
             }
             if (goUp)
             {
-                YellowPacmanTop -= pacman.Speed;
+                YellowTop -= pacman.Speed;
             }
             if (goDown)
             {
-                YellowPacmanTop += pacman.Speed;
+                YellowTop += pacman.Speed;
             }
 
-            if (oldLeft != YellowPacmanLeft || oldTop != YellowPacmanTop)
+            if (oldLeft != YellowLeft || oldTop != YellowTop)
             {
                 string serializedObject = JsonSerializer.Serialize(pacman);
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
-            if (goDown && YellowPacmanTop + 280 > AppHeight)
+            if (goDown && YellowTop + 280 > AppHeight)
             {
                 noDown = true;
                 goDown = false;
             }
-            if (goUp && YellowPacmanTop < 5)
+            if (goUp && YellowTop < 5)
             {
                 noUp = true;
                 goUp = false;
             }
-            if (goLeft && YellowPacmanLeft - 5 < 1)
+            if (goLeft && YellowLeft - 5 < 1)
             {
                 noLeft = true;
                 goLeft = false;
             }
-            if (goRight && YellowPacmanLeft + 40 > AppWidth)
+            if (goRight && YellowLeft + 40 > AppWidth)
             {
                 noRight = true;
                 goRight = false;
             }
 
-            Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(YellowPacmanLeft, YellowPacmanTop, 30, 30);
+            Rect pacmanHitBox = myPacmanHitBox.GetCurrentHitboxPosition(YellowLeft, YellowTop, 30, 30);
 
             foreach (var item in ApplesList)
             {

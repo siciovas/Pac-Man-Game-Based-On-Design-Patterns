@@ -1,20 +1,11 @@
-﻿namespace ClassLibrary.Mobs
+﻿using ClassLibrary.MainUnit;
+
+namespace ClassLibrary.Mobs
 {
-    public abstract class Mob
+    public abstract class Mob : Unit
     {
-        private string Name = "";
         private int Speed;
         private int Damage;
-
-        public Mob(string name)
-        {
-            Name = name;
-        }
-
-        public string GetName()
-        {
-            return Name;
-        }
 
         public int GetSpeed()
         {

@@ -4,8 +4,8 @@ namespace ClassLibrary.Coins.Factories
 {
     public class BronzeCoinCreator : CoinFactory
     {
-        private ICoin CoinToCopy = new BronzeCoin();
-        public override ICoin GetCoin(int left, int top)
+        private Coin CoinToCopy = new BronzeCoin();
+        public override Coin GetCoin(int left, int top)
         {
             var copy = CoinToCopy.Copy();
             copy.Left = left;

@@ -25,9 +25,9 @@ namespace WPF
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddTransient<ICoin, GoldCoin>();
-            services.AddTransient<ICoin, BronzeCoin>();
-            services.AddTransient<ICoin, SilverCoin>();
+            services.AddTransient<Coin, GoldCoin>();
+            services.AddTransient<Coin, BronzeCoin>();
+            services.AddTransient<Coin, SilverCoin>();
             services.AddTransient<Mob, WeakGhost>();
             services.AddTransient<Mob, StrongGhost>();
             services.AddTransient<Mob, WeakZombie>();
@@ -77,7 +77,7 @@ namespace WPF
             });
             services.AddTransient<CoinView>(s => new CoinView()
             {
-                DataContext = s.GetRequiredService<ICoin>()
+                DataContext = s.GetRequiredService<Coin>()
             });
             _serviceProvider = services.BuildServiceProvider();
 
