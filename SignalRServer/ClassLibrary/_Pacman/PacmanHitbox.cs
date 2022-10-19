@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ClassLibrary.Pacmen
+namespace ClassLibrary._Pacman
 {
     public class PacmanHitbox
     {

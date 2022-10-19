@@ -1,6 +1,6 @@
 ﻿using ClassLibrary.Strategies;
 
-namespace ClassLibrary.Pacmen
+namespace ClassLibrary._Pacman
 {
     public class Pacman
     {
