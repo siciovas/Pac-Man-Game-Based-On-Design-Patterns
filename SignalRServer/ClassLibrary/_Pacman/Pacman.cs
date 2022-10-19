@@ -1,11 +1,10 @@
-﻿using ClassLibrary.Strategies;
+﻿using ClassLibrary.MainUnit;
+using ClassLibrary.Strategies;
 
 namespace ClassLibrary._Pacman
 {
-    public class Pacman
+    public class Pacman : Unit
     {
-        public int PacmanTop { get; set; }
-        public int PacmanLeft { get; set; }
         public int Speed { get; set; }
         public int Score { get; set; }
 
@@ -25,6 +24,7 @@ namespace ClassLibrary._Pacman
         {
             Speed = 8;
             Score = 0;
+            Name = "Pacman";
         }
 
         public void Action(ref Pacman pacman)

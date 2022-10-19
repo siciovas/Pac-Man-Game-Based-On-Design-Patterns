@@ -29,9 +29,9 @@
                            Height="30"
                            Fill="Yellow"
                            Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.YellowPacmanLeft}"
+                                         Path=DataContext.YellowLeft}"
                            Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.YellowPacmanTop}"
+                                         Path=DataContext.YellowTop}"
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Top"></Rectangle>
                 <Rectangle Name="oponentPacman"
@@ -39,9 +39,9 @@
                            Height="30"
                            Fill="Green"
                            Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.GreenPacmanLeft}"
+                                         Path=DataContext.GreenLeft}"
                            Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.GreenPacmanTop}"
+                                         Path=DataContext.GreenTop}"
                            HorizontalAlignment="Left" 
                            VerticalAlignment="Top"></Rectangle>
 
@@ -61,7 +61,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="10" Height="10" Fill="{Binding Color}"/>
+                            <Rectangle Width="15" Height="15" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -82,7 +82,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -103,7 +103,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -124,7 +124,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -145,7 +145,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -166,7 +166,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Fill}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

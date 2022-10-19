@@ -7,17 +7,14 @@ namespace ClassLibrary.Mobs.StrongMob
 {
     public class StrongGhost : Mob
     {
-        public int Top { get; set; }
-        public int Left { get; set; }
-        public ImageBrush Fill { get; set; }
-
-        public StrongGhost(int top, int left, string name) : base(name)
+        public StrongGhost(int top, int left)
         {
             Top = top;
             Left = left;
             ImageBrush ghost = new ImageBrush();
             ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/strongGhost.png"));
-            Fill = ghost;
+            Appearance = ghost;
+            Name = "Strong ghost";
         }
     }
 }

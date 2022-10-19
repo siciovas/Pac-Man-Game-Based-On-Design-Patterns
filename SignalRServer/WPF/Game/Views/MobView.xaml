@@ -9,7 +9,7 @@
     <Rectangle Tag="mob" 
                    Height="30" 
                    Width="30" 
-                   Fill="{Binding Fill}"  
+                   Fill="{Binding Appearance}"  
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"/>
 </UserControl>

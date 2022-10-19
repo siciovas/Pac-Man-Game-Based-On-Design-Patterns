@@ -15,13 +15,16 @@
 	<None Remove="images\pacmanOp.jpg" />
 	<None Remove="images\strongGhost.png" />
 	<None Remove="images\WeakZombie.png" />
-  <None Remove="images\StrongZombie.png" />
-  <None Remove="images\WeakDemo.png" />
-  <None Remove="images\StrongDemo.png" />
+    <None Remove="images\StrongZombie.png" />
+    <None Remove="images\WeakDemo.png" />
+    <None Remove="images\StrongDemo.png" />
 	<None Remove="images\apple.png" />
 	<None Remove="images\rottenApple.png" />
 	<None Remove="images\cherry.png" />
 	<None Remove="images\strawberry.png" />
+	<None Remove="images\goldCoin.png" />
+	<None Remove="images\silverCoin.png" />
+	<None Remove="images\bronzeCoin.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +59,9 @@
     <Resource Include="images\rottenApple.png" />
     <Resource Include="images\cherry.png" />
     <Resource Include="images\strawberry.png" />
+	<Resource Include="images\goldCoin.png" />
+    <Resource Include="images\silverCoin.png" />
+    <Resource Include="images\bronzeCoin.png" />
   </ItemGroup>
 
   <ItemGroup>
