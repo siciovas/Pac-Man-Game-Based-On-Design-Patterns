@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:cm="http://caliburnmicro.com"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WPF.Game.Views" xmlns:i="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic" xmlns:views="clr-namespace:WPF.Game.Views" d:DataContext="{d:DesignInstance Type=local:FirstLevelViewModel}"
+             xmlns:local="clr-namespace:WPF.Game.Views"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
         <Canvas Name="MyCanvas"
                     Focusable="True"
                     Background="Black">
+            <ContentPresenter Content="{Binding Path=LayoutRoot}" />
             <Label FontSize="20"
                        Name="txtScore"
                        Foreground="White"
@@ -20,31 +21,11 @@
                        Foreground="White"
                        Canvas.Left="325"
                        Content="LEVEL 1"></Label>
-                <Label FontSize="20"
+            <Label FontSize="20"
                        Name="oponentTxtScore"
                        Foreground="White"
                        Canvas.Left="600"
                        Content="Oponent Score: 0"></Label>
-                <Rectangle Name="pacman"
-                           Width="30"
-                           Height="30"
-                           Fill="Yellow"
-                           Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.YellowLeft}"
-                           Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.YellowTop}"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Top"></Rectangle>
-            <Rectangle Name="oponentPacman"
-                           Width="30"
-                           Height="30"
-                           Fill="Green"
-                           Canvas.Left="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.GreenLeft}"
-                           Canvas.Top="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                         Path=DataContext.GreenTop}"
-                           HorizontalAlignment="Left" 
-                           VerticalAlignment="Top"></Rectangle>
 
             <ItemsControl ItemsSource="{Binding Coins}">
                 <ItemsControl.ItemsPanel>

@@ -14,6 +14,13 @@ using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
 using WPF.Connection;
+using System.Windows.Controls;
+using System.Reflection.Metadata;
+using System.Windows.Media;
+using System.Windows.Data;
+using System.Drawing;
+using ClassLibrary.MainUnit;
+using ClassLibrary.Decorator;
 
 namespace WPF.Game.ViewModels
 {
@@ -27,6 +34,10 @@ namespace WPF.Game.ViewModels
         WeakMobFactory _mobFactory;
         Pacman pacman;
         Pacman greenPacman;
+
+        Grid mainGrid;
+        Grid opponentGrid;
+        public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
             get
@@ -117,8 +128,15 @@ namespace WPF.Game.ViewModels
             _coinFactory = new BronzeCoinCreator();
             _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
-            pacman = new Pacman();
-            greenPacman = new Pacman();
+            pacman = new Pacman("Pacman");
+            greenPacman = new Pacman("PacmanOp");
+            LayoutRoot = new Canvas();
+            LayoutRoot.Name = "MyCanvas";
+            IDecorator grid = new AddLabel(new AddHealthBar(new Pacman("Pacman")));
+            mainGrid = grid.Draw();
+            opponentGrid = new AddLabel(new AddHealthBar(new Pacman("PacmanOp"))).Draw();
+            LayoutRoot.Children.Add(mainGrid);
+            LayoutRoot.Children.Add(opponentGrid);
             ApplesList = new List<Apple>();
             var tempApplesList = ApplesList;
             RottenApplesList = new List<RottenApple>();
@@ -203,6 +221,10 @@ namespace WPF.Game.ViewModels
 
         private async void GameLoop(object? sender, EventArgs e)
         {
+            Canvas.SetLeft(mainGrid, YellowLeft);
+            Canvas.SetTop(mainGrid, YellowTop);
+            Canvas.SetLeft(opponentGrid, GreenLeft);
+            Canvas.SetTop(opponentGrid, GreenTop);
             //txtScore.Content = "Score: " + score; TODO bind to score property 
             // show the scoreo to the txtscore label. 
 
@@ -229,7 +251,7 @@ namespace WPF.Game.ViewModels
 
             if (oldLeft != YellowLeft || oldTop != YellowTop)
             {
-                string serializedObject = JsonSerializer.Serialize(pacman);
+                string serializedObject = JsonSerializer.Serialize(new { Top = pacman.Top, Left = pacman.Left });
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 

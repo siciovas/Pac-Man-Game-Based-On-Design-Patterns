@@ -1,5 +1,8 @@
 ﻿using ClassLibrary.MainUnit;
 using ClassLibrary.Strategies;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System;
 
 namespace ClassLibrary._Pacman
 {
@@ -20,11 +23,22 @@ namespace ClassLibrary._Pacman
             this.algorithm = algorithm;
         }
 
-        public Pacman() 
+        public Pacman(string name) 
         {
             Speed = 8;
             Score = 0;
-            Name = "Pacman";
+            Name = name;
+            if(name == "Pacman")
+            {
+                ImageBrush pacmanBrush = new ImageBrush();
+                pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
+                Appearance = pacmanBrush;
+            } else
+            {
+                ImageBrush pacmanBrush = new ImageBrush();
+                pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacmanOp.jpg"));
+                Appearance = pacmanBrush;
+            }
         }
 
         public void Action(ref Pacman pacman)
