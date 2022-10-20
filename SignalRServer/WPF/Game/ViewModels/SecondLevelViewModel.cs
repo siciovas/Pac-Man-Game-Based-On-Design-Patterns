@@ -110,8 +110,8 @@ namespace WPF.Game.ViewModels
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
-            pacman = new Pacman();
-            greenPacman = new Pacman();
+            pacman = new Pacman("Pacman");
+            greenPacman = new Pacman("PacmanOp");
             ApplesList = new List<Apple>();
             var tempApplesList = ApplesList;
             RottenApplesList = new List<RottenApple>();
