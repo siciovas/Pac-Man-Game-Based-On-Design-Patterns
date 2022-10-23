@@ -16,5 +16,9 @@ namespace ClassLibrary.Fruits
             Appearance = rottenApple;
             Name = "Rotten apple";
         }
+        public override RottenApple Copy()
+        {
+            return (RottenApple)this.MemberwiseClone();
+        }
     }
 }

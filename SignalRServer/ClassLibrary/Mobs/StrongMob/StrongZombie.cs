@@ -1,4 +1,6 @@
-﻿using ClassLibrary.Mobs.Interfaces;
+﻿using ClassLibrary.Fruits;
+using ClassLibrary.MainUnit;
+using ClassLibrary.Mobs.Interfaces;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +17,11 @@ namespace ClassLibrary.Mobs.StrongMob
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/StrongZombie.png"));
             Appearance = zombie;
             Name = "Strong zombie";
+        }
+
+        public override StrongZombie Copy()
+        {
+            return (StrongZombie)this.MemberwiseClone();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ClassLibrary.Mobs.Interfaces;
+﻿using ClassLibrary.Fruits;
+using ClassLibrary.MainUnit;
+using ClassLibrary.Mobs.Interfaces;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +17,11 @@ namespace ClassLibrary.Mobs.WeakMob
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakZombie.png"));
             Appearance = zombie;
             Name = "Weak zombie";
+        }
+
+        public override WeakZombie Copy()
+        {
+            return (WeakZombie)this.MemberwiseClone();
         }
     }
 }

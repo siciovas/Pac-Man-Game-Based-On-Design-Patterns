@@ -32,5 +32,7 @@ namespace ClassLibrary.MainUnit
             grid.Children.Add(rect);
             return grid;
         }
+
+        public abstract Unit Copy();
     }
 }

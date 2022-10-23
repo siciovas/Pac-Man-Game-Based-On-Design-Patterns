@@ -1,4 +1,6 @@
-﻿using ClassLibrary.Mobs.Interfaces;
+﻿using ClassLibrary.Fruits;
+using ClassLibrary.MainUnit;
+using ClassLibrary.Mobs.Interfaces;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +17,11 @@ namespace ClassLibrary.Mobs.StrongMob
             ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/strongGhost.png"));
             Appearance = ghost;
             Name = "Strong ghost";
+        }
+
+        public override Unit Copy()
+        {
+            return (StrongGhost)this.MemberwiseClone();
         }
     }
 }

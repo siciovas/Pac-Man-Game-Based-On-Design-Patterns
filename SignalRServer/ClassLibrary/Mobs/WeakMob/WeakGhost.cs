@@ -1,4 +1,6 @@
-﻿using ClassLibrary.Mobs.Interfaces;
+﻿using ClassLibrary.Fruits;
+using ClassLibrary.MainUnit;
+using ClassLibrary.Mobs.Interfaces;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +17,11 @@ namespace ClassLibrary.Mobs.WeakMob
             ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/red.jpg"));
             Appearance = ghost;
             Name = "Weak ghost";
+        }
+
+        public override WeakGhost Copy()
+        {
+            return (WeakGhost)this.MemberwiseClone();
         }
     }
 }

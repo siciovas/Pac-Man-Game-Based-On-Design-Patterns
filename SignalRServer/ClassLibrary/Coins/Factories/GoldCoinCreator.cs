@@ -15,7 +15,7 @@ namespace ClassLibrary.Coins.Factories
             var copy = CoinToCopy.Copy();
             copy.Left = left;
             copy.Top = top;
-            return copy;
+            return (Coin)copy;
         }
     }
 }

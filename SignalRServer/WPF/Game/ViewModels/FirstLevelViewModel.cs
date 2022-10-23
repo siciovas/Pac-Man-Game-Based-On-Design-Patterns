@@ -129,12 +129,12 @@ namespace WPF.Game.ViewModels
             _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman("Pacman");
-            greenPacman = new Pacman("PacmanOp");
+            greenPacman = pacman.Copy();
             LayoutRoot = new Canvas();
             LayoutRoot.Name = "MyCanvas";
-            IDecorator grid = new AddLabel(new AddHealthBar(new Pacman("Pacman")));
+            IDecorator grid = new AddLabel(new AddHealthBar(pacman));
             mainGrid = grid.Draw();
-            opponentGrid = new AddLabel(new AddHealthBar(new Pacman("PacmanOp"))).Draw();
+            opponentGrid = new AddLabel(new AddHealthBar(greenPacman)).Draw();
             LayoutRoot.Children.Add(mainGrid);
             LayoutRoot.Children.Add(opponentGrid);
             ApplesList = new List<Apple>();

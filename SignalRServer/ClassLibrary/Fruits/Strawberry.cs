@@ -16,5 +16,10 @@ namespace ClassLibrary.Fruits
             Appearance = strawberry;
             Name = "Strawberry";
         }
+
+        public override Strawberry Copy()
+        {
+            return (Strawberry)this.MemberwiseClone();
+        }
     }
 }

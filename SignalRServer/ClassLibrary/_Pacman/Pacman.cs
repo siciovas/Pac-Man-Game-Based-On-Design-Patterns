@@ -3,6 +3,7 @@ using ClassLibrary.Strategies;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System;
+using ClassLibrary.Fruits;
 
 namespace ClassLibrary._Pacman
 {
@@ -28,22 +29,28 @@ namespace ClassLibrary._Pacman
             Speed = 8;
             Score = 0;
             Name = name;
-            if(name == "Pacman")
-            {
-                ImageBrush pacmanBrush = new ImageBrush();
-                pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
-                Appearance = pacmanBrush;
-            } else
-            {
-                ImageBrush pacmanBrush = new ImageBrush();
-                pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacmanOp.jpg"));
-                Appearance = pacmanBrush;
-            }
+            ImageBrush pacmanBrush = new ImageBrush();
+            pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
+            Appearance = pacmanBrush;
+          
         }
 
         public void Action(ref Pacman pacman)
         {
             algorithm.BehaveDifferently(ref pacman);
+        }
+
+        public override Pacman Copy()
+        {
+            //creates a green copy of pacman using deep copy
+            var clone = (Pacman)this.MemberwiseClone();
+            clone.algorithm = new DefaultAlgorithm();
+            clone.Appearance = new ImageBrush();
+            ImageBrush pacmanBrush = new ImageBrush();
+            pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacmanOp.jpg"));
+            clone.Appearance = pacmanBrush;
+            clone.Name = "Opponent";
+            return clone;
         }
     }
 }

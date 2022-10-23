@@ -1,4 +1,5 @@
-﻿using ClassLibrary.MainUnit;
+﻿using ClassLibrary.Coins;
+using ClassLibrary.MainUnit;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,6 +16,11 @@ namespace ClassLibrary.Fruits
             cherry.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/cherry.png"));
             Appearance = cherry;
             Name = "Cherry";
+        }
+
+        public override Cherry Copy()
+        {
+            return (Cherry)this.MemberwiseClone();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ClassLibrary.Coins.Interfaces
     {
 
         public int Value { get; set; }
-        public abstract Coin Copy();
+       /* public abstract Coin Copy();*/
         //protected Coin(int top, int left, ImageBrush appearance) : base(top, left, appearance) { }
 
         protected Coin() { }
