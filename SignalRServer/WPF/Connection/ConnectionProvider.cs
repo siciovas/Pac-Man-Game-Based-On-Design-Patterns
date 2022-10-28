@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Threading.Tasks;
-using WPF.Game.ViewModels;
-using ClassLibrary.Stores;
-using ClassLibrary.Observer;
 
 namespace WPF.Connection
 {
-    public class ConnectionProvider : IConnectionProvider, IObserver
+    public class ConnectionProvider : IConnectionProvider
     {
         private HubConnection _connection;
-        private NavigationStore _navigationStore;
 
-        public ConnectionProvider(NavigationStore navigationStore)
+        public ConnectionProvider()
         {
-            _navigationStore = navigationStore;
             _connection = new HubConnectionBuilder()
                 .WithUrl("https://localhost:7169/serverhub")
                 .Build();
@@ -23,17 +18,9 @@ namespace WPF.Connection
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };
-            OnStartGame();
         }
 
-        public void OnStartGame()
-        {
-            _connection.On("StartGame",
-                () =>
-                {
-                    _navigationStore.CurrentViewModel = new FirstLevelViewModel(this);
-                });
-        }
+      
 
         public HubConnection GetConnection()
         {

@@ -7,7 +7,7 @@ using WPF.Connection;
 
 namespace WPF.Game.ViewModels
 {
-    public class StartPageViewModel : ViewModelBase
+    public class StartPageViewModel : LevelViewModelBase
     {
         IConnectionProvider _connection;
         public ICommand ButtonCommand { get; set; }

@@ -18,7 +18,7 @@ using WPF.Connection;
 
 namespace WPF.Game.ViewModels
 {
-    public class SecondLevelViewModel : ViewModelBase
+    public class SecondLevelViewModel : LevelViewModelBase
     {
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;

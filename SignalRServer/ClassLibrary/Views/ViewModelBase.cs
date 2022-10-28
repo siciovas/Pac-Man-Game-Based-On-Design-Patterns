@@ -12,13 +12,5 @@ namespace ClassLibrary.Views
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public virtual void Dispose() { }
-
-        public abstract void OnRightClick();
-        public abstract void OnDownClick();
-
-        public abstract void OnUpClick();
-
-        public abstract void OnLeftClick();
-
     }
 }

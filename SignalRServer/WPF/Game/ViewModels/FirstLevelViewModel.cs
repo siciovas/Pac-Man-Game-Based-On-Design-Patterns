@@ -24,7 +24,8 @@ using ClassLibrary.Decorator;
 
 namespace WPF.Game.ViewModels
 {
-    public class FirstLevelViewModel : ViewModelBase
+    public class FirstLevelViewModel : LevelViewModelBase
+
     {
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
@@ -37,6 +38,8 @@ namespace WPF.Game.ViewModels
 
         Grid mainGrid;
         Grid opponentGrid;
+        public event Action LevelPassed;
+
         public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
@@ -203,6 +206,10 @@ namespace WPF.Game.ViewModels
             {
                 Coins.RemoveAt(index);
                 CoinsList.RemoveAt(index);
+                if(Coins.Count == 0)
+                {
+                    LevelPassed?.Invoke();
+                }
             });
 
             _connection.On<int>("CherriesIndex", (index) =>

@@ -1,40 +1,24 @@
-﻿using ClassLibrary.Stores;
-using ClassLibrary.Views;
+﻿using ClassLibrary.Views;
 using GalaSoft.MvvmLight.Command;
 using Prism.Commands;
 using System;
 using System.Windows.Input;
 using WPF.Connection;
-using WPF.Game.ViewModels;
+using WPF.Game.Stores;
 
 namespace WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        IConnectionProvider connection;
-        private readonly NavigationStore _navigationStore;
+        private readonly NavigationFacade _navigationStore;
         public ICommand NextView { get; set; }
 
-        public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+        public LevelViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
 
-        public ViewModelBase _firstLevelViewModel;
-        public ViewModelBase _secondLevelViewModel;
-        public ViewModelBase _thirdLevelViewModel;
-        public ViewModelBase _fourthLevelViewModel;
-        public ViewModelBase _fifthLevelViewModel;
-        private StartPageViewModel _startPageViewModel;
-        public MainWindowViewModel(IConnectionProvider connectionProvider, NavigationStore navigationStore)
+     
+        public MainWindowViewModel(NavigationFacade navigationStore)
         {
-            connection = connectionProvider;
-            _firstLevelViewModel = new FirstLevelViewModel(connection);
-            _secondLevelViewModel = new SecondLevelViewModel(connection);
-            _thirdLevelViewModel = new ThirdLevelViewModel(connection);
-            _fourthLevelViewModel = new FourthLevelViewModel(connection);
-            _fifthLevelViewModel = new FifthLevelViewModel(connection);
-
-            _startPageViewModel = new StartPageViewModel(connectionProvider);
             _navigationStore = navigationStore;
-            _navigationStore.CurrentViewModel = _startPageViewModel;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
             NextView = new RelayCommand(new Action(GoToNextView));
@@ -42,27 +26,7 @@ namespace WPF
 
         private void GoToNextView()
         {
-            //this button is just for testing do not use it for game purposes bc it only works for one view >:)
-            if (_navigationStore.CurrentViewModel.Equals(_startPageViewModel))
-            {
-                _navigationStore.CurrentViewModel = _firstLevelViewModel;
-            }
-            else if (_navigationStore.CurrentViewModel.Equals(_firstLevelViewModel))
-            {
-                _navigationStore.CurrentViewModel = _secondLevelViewModel;
-            }
-            else if (_navigationStore.CurrentViewModel.Equals(_secondLevelViewModel))
-            {
-                _navigationStore.CurrentViewModel = _thirdLevelViewModel;
-            }
-            else if (_navigationStore.CurrentViewModel.Equals(_thirdLevelViewModel))
-            {
-                _navigationStore.CurrentViewModel = _fourthLevelViewModel;
-            }
-            else if (_navigationStore.CurrentViewModel.Equals(_fourthLevelViewModel))
-            {
-                _navigationStore.CurrentViewModel = _fifthLevelViewModel;
-            }
+            _navigationStore.ChangeLevel();
         }
 
         private ICommand _upCommand;
@@ -127,26 +91,6 @@ namespace WPF
         private void OnCurrentViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));
-        }
-
-        public override void OnRightClick()
-        {
-            return;
-        }
-
-        public override void OnDownClick()
-        {
-            return;
-        }
-
-        public override void OnUpClick()
-        {
-            return;
-        }
-
-        public override void OnLeftClick()
-        {
-            return;
         }
     }
 }

@@ -4,11 +4,11 @@ using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using WPF.Connection;
+using WPF.Game.Stores;
 using WPF.Game.ViewModels;
 using WPF.Game.Views;
 
@@ -45,7 +45,7 @@ namespace WPF
             services.AddSingleton<FourthLevelViewModel>();
             services.AddSingleton<FifthLevelViewModel>();
 
-            services.AddSingleton<NavigationStore>();
+            services.AddSingleton<NavigationFacade>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {
