@@ -1,9 +1,11 @@
-﻿using ClassLibrary.Coins.Factories;
+﻿using ClassLibrary._Pacman;
+using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Commands;
+using ClassLibrary.Decorator;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary._Pacman;
 using ClassLibrary.Strategies;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -12,20 +14,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using WPF.Connection;
-using System.Windows.Controls;
-using System.Reflection.Metadata;
-using System.Windows.Media;
-using System.Windows.Data;
-using System.Drawing;
-using ClassLibrary.MainUnit;
-using ClassLibrary.Decorator;
 
 namespace WPF.Game.ViewModels
 {
     public class FirstLevelViewModel : LevelViewModelBase
-
     {
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
@@ -183,17 +178,26 @@ namespace WPF.Game.ViewModels
 
         private void ListenServer()
         {
-            _connection.On<string>("OponentCordinates", (serializedObject) =>
+            _connection.On<string>("OpponentCoordinates", (serializedObject) =>
             {
                 Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
                 GreenLeft = deserializedObject.Left;
                 GreenTop = deserializedObject.Top;
             });
 
-            _connection.On<int>("ApplesIndex", (index) =>
+            //_connection.On<int>("ApplesIndex", (index) =>
+            //{
+            //    Apples.RemoveAt(index);
+            //    ApplesList.RemoveAt(index);
+            //});
+
+            _connection.On<ApplesIndexCommand>("ApplesIndex", (command) =>
             {
-                Apples.RemoveAt(index);
-                ApplesList.RemoveAt(index);
+                var tempApples = Apples;
+                var tempApplesList = ApplesList;
+                command.Execute(ref tempApples, ref tempApplesList);
+                Apples = tempApples;
+                ApplesList = tempApplesList;
             });
 
             _connection.On<int>("RottenApplesIndex", (index) =>
@@ -206,7 +210,7 @@ namespace WPF.Game.ViewModels
             {
                 Coins.RemoveAt(index);
                 CoinsList.RemoveAt(index);
-                if(Coins.Count == 0)
+                if (Coins.Count == 0)
                 {
                     LevelPassed?.Invoke();
                 }
@@ -259,7 +263,7 @@ namespace WPF.Game.ViewModels
             if (oldLeft != YellowLeft || oldTop != YellowTop)
             {
                 string serializedObject = JsonSerializer.Serialize(new { Top = pacman.Top, Left = pacman.Left });
-                await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
+                await _connection.InvokeAsync("SendPacManCoordinates", serializedObject);
             }
 
             if (goDown && YellowTop + 280 > AppHeight)
@@ -293,7 +297,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
                     var index = ApplesList.FindIndex(a => a.Top == item.Top && a.Left == item.Left);
-                    await _connection.InvokeAsync("SendApplesIndex", index);
+                    await _connection.InvokeAsync("SendApplesIndex", new ApplesIndexCommand(index));
                     Apples.RemoveAt(index);
                     ApplesList.RemoveAt(index);
                     break;

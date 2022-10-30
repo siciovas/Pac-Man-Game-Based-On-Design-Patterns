@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Observer;
+﻿using ClassLibrary.Commands;
+using ClassLibrary.Observer;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SignalRServer.Hubs
@@ -38,19 +39,23 @@ namespace SignalRServer.Hubs
                 Clients.Client(client).SendAsync("StartGame");
         }
 
-        public async Task SendMessage(string connectionId, string move)
+        public async Task Send()
         {
-            await Clients.All.SendAsync("ReceiveMessage", connectionId, move);
         }
 
-        public async Task SendPacManCordinates(string serializedObject)
+        public async Task SendPacManCoordinates(string serializedObject)
         {
-            await Clients.Others.SendAsync("OponentCordinates", serializedObject);
+            await Clients.Others.SendAsync("OpponentCoordinates", serializedObject);
         }
 
-        public async Task SendApplesIndex(int index)
+        //public async Task SendApplesIndex(int index)
+        //{
+        //    await Clients.Others.SendAsync("ApplesIndex", index);
+        //}
+
+        public async Task SendApplesIndex(ApplesIndexCommand command)
         {
-            await Clients.Others.SendAsync("ApplesIndex", index);
+            await Clients.Others.SendAsync("ApplesIndex", command);
         }
 
         public async Task SendRottenApplesIndex(int index)

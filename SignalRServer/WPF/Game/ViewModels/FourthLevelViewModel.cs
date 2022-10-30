@@ -167,7 +167,7 @@ namespace WPF.Game.ViewModels
 
         private void ListenServer()
         {
-            _connection.On<string>("OponentCordinates", (serializedObject) =>
+            _connection.On<string>("OpponentCoordinates", (serializedObject) =>
             {
                 Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
                 GreenLeft = deserializedObject.Left;
@@ -235,7 +235,7 @@ namespace WPF.Game.ViewModels
             if (oldLeft != YellowLeft || oldTop != YellowTop)
             {
                 string serializedObject = JsonSerializer.Serialize(pacman);
-                await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
+                await _connection.InvokeAsync("SendPacManCoordinates", serializedObject);
             }
 
             if (goDown && YellowTop + 280 > AppHeight)
