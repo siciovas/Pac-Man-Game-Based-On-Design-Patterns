@@ -21,6 +21,9 @@ using System.Windows.Data;
 using System.Drawing;
 using ClassLibrary.MainUnit;
 using ClassLibrary.Decorator;
+using ClassLibrary.Bridge;
+using System.Windows.Shapes;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace WPF.Game.ViewModels
 {
@@ -111,6 +114,11 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<Cherry> Cherries { get; set; }
         public List<Cherry> CherriesList { get; set; }
         public ObservableCollection<Strawberry> Strawberries { get; set; }
+        public List<Wall> WallsList { get; set; }
+        public ObservableCollection<Wall> Walls { get; set; }
+        public List<Spike> SpikesList { get; set; }
+        public ObservableCollection<Spike> Spikes { get; set; }
+
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
         public int score
@@ -163,8 +171,61 @@ namespace WPF.Game.ViewModels
             Cherries = Utils.Utils.CreateCherries(ref tempCherriesList);
             CherriesList = tempCherriesList;
             Strawberries = Utils.Utils.CreateStrawberries();
+            WallsList = new List<Wall>();
+            Walls = CreateWalls();
+            SpikesList = new List<Spike>();
+            Spikes = CreateSpikes();
             GameSetup();
             ListenServer();
+        }
+
+        private ObservableCollection<Wall> CreateWalls()
+        {
+            ObservableCollection<Wall> wall = new ObservableCollection<Wall>();
+            for (int i = 200; i < 500; i += 30)
+            {
+                var temp = new Wall(new StandardFeature());
+                temp.SetDamage();
+                temp.Left = i;
+                temp.Top = 500;
+                wall.Add(temp);
+                WallsList.Add(temp);
+            }
+            for (int i = 200; i < 500; i += 30)
+            {
+                var temp = new Wall(new StandardFeature());
+                temp.SetDamage();
+                temp.Left = 200;
+                temp.Top = i;
+                wall.Add(temp);
+                WallsList.Add(temp);
+            }
+            return wall;
+        }
+
+        private ObservableCollection<Spike> CreateSpikes()
+        {
+            ObservableCollection<Spike> spikes = new ObservableCollection<Spike>();
+            for (int i = 200; i < 500; i += 30)
+            {
+                var temp = new Spike(new LethalFeature());
+                temp.SetDamage();
+                temp.Left = 700;
+                temp.Top = i;
+                spikes.Add(temp);
+                SpikesList.Add(temp);
+            }
+
+            for (int i = 500; i < 700; i += 30)
+            {
+                var temp = new Spike(new LethalFeature());
+                temp.SetDamage();
+                temp.Left = i;
+                temp.Top = 200;
+                spikes.Add(temp);
+                SpikesList.Add(temp);
+            }
+            return spikes;
         }
 
         private ObservableCollection<Mob> SpawnGhosts()
@@ -345,6 +406,35 @@ namespace WPF.Game.ViewModels
                 }
             }
 
+            foreach (var item in WallsList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    if (goRight)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowLeft -= 150;
+                    }
+                    break;
+                }
+            }
+
+            foreach (var item in SpikesList)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    pacman.Health = pacman.Health - item.GetDamage();
+                    if(pacman.Health < 0)
+                    {
+                        YellowLeft = 0;
+                        YellowTop = 0;
+                    }
+                    break;
+                }
+            }
         }
 
         public override void OnRightClick()
