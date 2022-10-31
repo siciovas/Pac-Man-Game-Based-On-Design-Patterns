@@ -169,7 +169,7 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Width="30" Height="30" Fill="Blue"/>
+                        <Rectangle Width="15" Height="15" Fill="Blue"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -190,7 +190,7 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Width="30" Height="30" Fill="DeepPink"/>
+                        <Rectangle Width="15" Height="15" Fill="DeepPink"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

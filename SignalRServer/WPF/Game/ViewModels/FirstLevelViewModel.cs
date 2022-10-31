@@ -24,6 +24,7 @@ using ClassLibrary.Decorator;
 using ClassLibrary.Bridge;
 using System.Windows.Shapes;
 using Rectangle = System.Windows.Shapes.Rectangle;
+using System.Linq;
 
 namespace WPF.Game.ViewModels
 {
@@ -171,9 +172,7 @@ namespace WPF.Game.ViewModels
             Cherries = Utils.Utils.CreateCherries(ref tempCherriesList);
             CherriesList = tempCherriesList;
             Strawberries = Utils.Utils.CreateStrawberries();
-            WallsList = new List<Wall>();
             Walls = CreateWalls();
-            SpikesList = new List<Spike>();
             Spikes = CreateSpikes();
             GameSetup();
             ListenServer();
@@ -186,10 +185,9 @@ namespace WPF.Game.ViewModels
             {
                 var temp = new Wall(new StandardFeature());
                 temp.SetDamage();
-                temp.Left = i;
-                temp.Top = 500;
+                temp.Left = 600;
+                temp.Top = i;
                 wall.Add(temp);
-                WallsList.Add(temp);
             }
             for (int i = 200; i < 500; i += 30)
             {
@@ -198,7 +196,6 @@ namespace WPF.Game.ViewModels
                 temp.Left = 200;
                 temp.Top = i;
                 wall.Add(temp);
-                WallsList.Add(temp);
             }
             return wall;
         }
@@ -206,25 +203,15 @@ namespace WPF.Game.ViewModels
         private ObservableCollection<Spike> CreateSpikes()
         {
             ObservableCollection<Spike> spikes = new ObservableCollection<Spike>();
-            for (int i = 200; i < 500; i += 30)
-            {
-                var temp = new Spike(new LethalFeature());
-                temp.SetDamage();
-                temp.Left = 700;
-                temp.Top = i;
-                spikes.Add(temp);
-                SpikesList.Add(temp);
-            }
-
-            for (int i = 500; i < 700; i += 30)
+            for (int i = 250; i < 450; i += 30)
             {
                 var temp = new Spike(new LethalFeature());
                 temp.SetDamage();
                 temp.Left = i;
-                temp.Top = 200;
+                temp.Top = 150;
                 spikes.Add(temp);
-                SpikesList.Add(temp);
             }
+            
             return spikes;
         }
 
@@ -277,6 +264,11 @@ namespace WPF.Game.ViewModels
             {
                 Cherries.RemoveAt(index);
                 CherriesList.RemoveAt(index);
+            });
+
+            _connection.On<int>("StrawberriesIndex", (index) =>
+            {
+                Strawberries.RemoveAt(index);
             });
         }
 
@@ -405,32 +397,66 @@ namespace WPF.Game.ViewModels
                     break;
                 }
             }
-
-            foreach (var item in WallsList)
+            foreach (var item in Strawberries)
             {
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    if (goRight)
+                    pacman.SetAlgorithm(new MakeGhost());
+                    pacman.Action(ref pacman);
+                    var index = Strawberries.IndexOf(Strawberries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendStrawberriesIndex", index);
+                    Strawberries.RemoveAt(index);
+                    break;
+                }
+            }
+
+            foreach (var item in Walls)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    if (goRight && !pacman.GhostMode)
                     {
                         var damage = item.GetDamage();
                         pacman.Health = pacman.Health - item.GetDamage();
-                        YellowLeft -= 150;
+                        YellowLeft = 0;
+                    }
+                    else if (goLeft && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowLeft = 800;
+                    }
+                    if (goUp && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowTop = 600;
+                    }
+                    if (goDown && !pacman.GhostMode )
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowTop = 0;
                     }
                     break;
                 }
             }
 
-            foreach (var item in SpikesList)
+            foreach (var item in Spikes)
             {
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    pacman.Health = pacman.Health - item.GetDamage();
-                    if(pacman.Health < 0)
+                    if (!pacman.GhostMode)
                     {
-                        YellowLeft = 0;
-                        YellowTop = 0;
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        if (pacman.Health < 0)
+                        {
+                            YellowLeft = 0;
+                            YellowTop = 0;
+                        }
                     }
                     break;
                 }

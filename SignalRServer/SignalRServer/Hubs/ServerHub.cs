@@ -67,5 +67,10 @@ namespace SignalRServer.Hubs
         {
             await Clients.Others.SendAsync("CherriesIndex", index);
         }
+
+        public async Task SendStrawberriesIndex(int index)
+        {
+            await Clients.Others.SendAsync("StrawberriesIndex", index);
+        }
     }
 }
