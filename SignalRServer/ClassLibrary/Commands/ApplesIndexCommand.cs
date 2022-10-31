@@ -1,22 +1,19 @@
 ﻿using ClassLibrary.Fruits;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace ClassLibrary.Commands
 {
-    public class ApplesIndexCommand : ICommand<ObservableCollection<Apple>>
+    public class ApplesIndexCommand : ICommand
     {
         public int Index { get; set; }
-        public ObservableCollection<Apple> Apples { get; set; }
-
         public ApplesIndexCommand(int index)
         {
             Index = index;
         }
-
-        public void Execute(ObservableCollection<Apple> item)
+        public override void Execute(object parameter)
         {
-            item.RemoveAt(Index);
+            var apples = (ObservableCollection<Apple>)parameter;
+            apples.RemoveAt(Index);
         }
     }
 }

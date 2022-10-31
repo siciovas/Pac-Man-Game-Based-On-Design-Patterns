@@ -1,7 +1,7 @@
 ﻿namespace ClassLibrary.Commands
 {
-    public interface ICommand<T>
+    public class ICommand
     {
-        void Execute(T item);
+        public virtual void Execute(object parameter) { }
     }
 }

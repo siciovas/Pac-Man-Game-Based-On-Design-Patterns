@@ -1,19 +1,21 @@
 ﻿using ClassLibrary.Coins.Interfaces;
-using System;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 
 namespace ClassLibrary.Commands
 {
-    internal class CoinsIndexCommand : ICommand<ObservableCollection<Coin>>
+    public class CoinsIndexCommand : ICommand
     {
-        public void Execute()
+        public int Index { get; set; }
+        [JsonConstructor]
+        public CoinsIndexCommand(int index)
         {
-            throw new NotImplementedException();
+            Index = index;
         }
-
-        public void Execute(ObservableCollection<Coin> item)
+        public override void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            var coins = (ObservableCollection<Coin>)parameter;
+            coins.RemoveAt(Index);
         }
     }
 }

@@ -1,19 +1,19 @@
 ﻿using ClassLibrary.Fruits;
-using System;
 using System.Collections.ObjectModel;
 
 namespace ClassLibrary.Commands
 {
-    internal class RottenApplesIndexCommand : ICommand<ObservableCollection<RottenApple>>
+    public class RottenApplesIndexCommand : ICommand
     {
-        public void Execute()
+        public int Index { get; set; }
+        public RottenApplesIndexCommand(int index)
         {
-            throw new NotImplementedException();
+            Index = index;
         }
-
-        public void Execute(ObservableCollection<RottenApple> item)
+        public override void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            var rottenApples = (ObservableCollection<RottenApple>)parameter;
+            rottenApples.RemoveAt(Index);
         }
     }
 }

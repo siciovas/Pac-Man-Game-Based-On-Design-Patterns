@@ -161,24 +161,29 @@ namespace WPF.Game.ViewModels
             //    GreenTop = deserializedObject.Top;
             //});
 
-            _connection.On<int>("ApplesIndex", (index) =>
+            _connection.On<ApplesIndexCommand>("ApplesIndex", (command) =>
             {
-                Apples.RemoveAt(index);
+                command.Execute(Apples);
             });
 
-            _connection.On<int>("RottenApplesIndex", (index) =>
+            _connection.On<RottenApplesIndexCommand>("RottenApplesIndex", (command) =>
             {
-                RottenApples.RemoveAt(index);
+                command.Execute(RottenApples);
             });
 
-            _connection.On<int>("CoinsIndex", (index) =>
+            _connection.On<CoinsIndexCommand>("CoinsIndex", (command) =>
             {
-                Coins.RemoveAt(index);
+                command.Execute(Coins);
+                //if (Coins.Count == 0)
+                //{
+                //    var passLevelCommand = new ChangeLevelCommand();
+                //    passLevelCommand.Execute(LevelPassed);
+                //}
             });
 
-            _connection.On<int>("CherriesIndex", (index) =>
+            _connection.On<CherriesIndexCommand>("CherriesIndex", (command) =>
             {
-                Cherries.RemoveAt(index);
+                command.Execute(Cherries);
             });
         }
 
@@ -277,7 +282,8 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendCoinsIndex", index);
+                    string serializedCommand = JsonSerializer.Serialize(new CoinsIndexCommand(index));
+                    await _connection.InvokeAsync("Send", serializedCommand);
                     Coins.RemoveAt(index);
                     pacman.Score += item.Value;
                     break;
@@ -292,7 +298,8 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new DoublePoints());
                     pacman.Action(ref pacman);
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendCherriesIndex", index);
+                    string serializedCommand = JsonSerializer.Serialize(new CherriesIndexCommand(index));
+                    await _connection.InvokeAsync("Send", serializedCommand);
                     Cherries.RemoveAt(index);
                     break;
                 }

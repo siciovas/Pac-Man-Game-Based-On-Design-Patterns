@@ -1,19 +1,19 @@
 ﻿using ClassLibrary.Fruits;
-using System;
 using System.Collections.ObjectModel;
 
 namespace ClassLibrary.Commands
 {
-    internal class CherriesIndexCommand : ICommand<ObservableCollection<Cherry>>
+    public class CherriesIndexCommand : ICommand
     {
-        public void Execute()
+        public int Index { get; set; }
+        public CherriesIndexCommand(int index)
         {
-            throw new NotImplementedException();
+            Index = index;
         }
-
-        public void Execute(ObservableCollection<Cherry> item)
+        public override void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            var cherries = (ObservableCollection<Cherry>)parameter;
+            cherries.RemoveAt(Index);
         }
     }
 }

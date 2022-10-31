@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Commands;
 using ClassLibrary.Observer;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
 
 namespace SignalRServer.Hubs
 {
@@ -15,7 +16,7 @@ namespace SignalRServer.Hubs
             Clients.Caller.SendAsync("Connected", Context.ConnectionId);
             Subscribe();
 
-            if (_clientCounter.GetCount() == 3)
+            if (_clientCounter.GetCount() == 2)
             {
                 Notify();
             }
@@ -39,8 +40,25 @@ namespace SignalRServer.Hubs
                 Clients.Client(client).SendAsync("StartGame");
         }
 
-        public async Task Send()
+        public async Task Send(string ser)
         {
+            ICommand command = JsonSerializer.Deserialize<ICommand>(ser);
+            await Clients.Others.SendAsync("CoinsIndex", command);
+            switch (command)
+            {
+                case ApplesIndexCommand _:
+                    await Clients.Others.SendAsync("ApplesIndex", command);
+                    break;
+                case RottenApplesIndexCommand _:
+                    await Clients.Others.SendAsync("RottenApplesIndex", command);
+                    break;
+                case CoinsIndexCommand _:
+                    await Clients.Others.SendAsync("CoinsIndex", command);
+                    break;
+                case CherriesIndexCommand _:
+                    await Clients.Others.SendAsync("CherriesIndex", command);
+                    break;
+            }
         }
 
         public async Task SendPacManCoordinates(string serializedObject)
@@ -48,29 +66,24 @@ namespace SignalRServer.Hubs
             await Clients.Others.SendAsync("OpponentCoordinates", serializedObject);
         }
 
-        //public async Task SendApplesIndex(int index)
-        //{
-        //    await Clients.Others.SendAsync("ApplesIndex", index);
-        //}
-
         public async Task SendApplesIndex(ApplesIndexCommand command)
         {
             await Clients.Others.SendAsync("ApplesIndex", command);
         }
 
-        public async Task SendRottenApplesIndex(int index)
+        public async Task SendRottenApplesIndex(RottenApplesIndexCommand command)
         {
-            await Clients.Others.SendAsync("RottenApplesIndex", index);
+            await Clients.Others.SendAsync("RottenApplesIndex", command);
         }
 
-        public async Task SendCoinsIndex(int index)
+        public async Task SendCoinsIndex(CoinsIndexCommand command)
         {
-            await Clients.Others.SendAsync("CoinsIndex", index);
+            await Clients.Others.SendAsync("CoinsIndex", command);
         }
 
-        public async Task SendCherriesIndex(int index)
+        public async Task SendCherriesIndex(CherriesIndexCommand command)
         {
-            await Clients.Others.SendAsync("CherriesIndex", index);
+            await Clients.Others.SendAsync("CherriesIndex", command);
         }
     }
 }
