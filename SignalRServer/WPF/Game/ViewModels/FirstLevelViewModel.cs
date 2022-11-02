@@ -1,30 +1,23 @@
-﻿using ClassLibrary.Coins.Factories;
+﻿using ClassLibrary._Pacman;
+using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.Commands;
+using ClassLibrary.Decorator;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary._Pacman;
 using ClassLibrary.Strategies;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text.Json;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using WPF.Connection;
-using System.Windows.Controls;
-using System.Reflection.Metadata;
-using System.Windows.Media;
-using System.Windows.Data;
-using System.Drawing;
-using ClassLibrary.MainUnit;
-using ClassLibrary.Decorator;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Linq;
 
 namespace WPF.Game.ViewModels
 {
@@ -105,14 +98,10 @@ namespace WPF.Game.ViewModels
             }
         }
         public ObservableCollection<Coin> Coins { get; set; }
-        public List<Coin> CoinsList { get; set; }
         public ObservableCollection<Mob> Mobs { get; set; }
         public ObservableCollection<Apple> Apples { get; set; }
-        public List<Apple> ApplesList { get; set; }
         public ObservableCollection<RottenApple> RottenApples { get; set; }
-        public List<RottenApple> RottenApplesList { get; set; }
         public ObservableCollection<Cherry> Cherries { get; set; }
-        public List<Cherry> CherriesList { get; set; }
         public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
@@ -156,28 +145,16 @@ namespace WPF.Game.ViewModels
             opponentGrid = new AddLabel(new AddHealthBar(greenPacman, greenPacman.Health)).Draw();
             LayoutRoot.Children.Add(mainGrid);
             LayoutRoot.Children.Add(opponentGrid);
-            ApplesList = new List<Apple>();
-            var tempApplesList = ApplesList;
-            RottenApplesList = new List<RottenApple>();
-            var tempRottenApplesList = RottenApplesList;
-            CherriesList = new List<Cherry>();
-            var tempCherriesList = CherriesList;
-            CoinsList = new List<Coin>();
-            var tempCoinsList = CoinsList;
             GreenTop = 20;
             GreenLeft = 20;
             YellowLeft = 20;
             YellowTop = 20;
 
             Mobs = SpawnGhosts();
-            Coins = Utils.Utils.GetCoins(_coinFactory, ref tempCoinsList);
-            CoinsList = tempCoinsList;
-            Apples = Utils.Utils.CreateApples(ref tempApplesList);
-            ApplesList = tempApplesList;
-            RottenApples = Utils.Utils.CreateRottenApples(ref tempRottenApplesList);
-            RottenApplesList = tempRottenApplesList;
-            Cherries = Utils.Utils.CreateCherries(ref tempCherriesList);
-            CherriesList = tempCherriesList;
+            Coins = Utils.Utils.GetCoins(_coinFactory);
+            Apples = Utils.Utils.CreateApples();
+            RottenApples = Utils.Utils.CreateRottenApples();
+            Cherries = Utils.Utils.CreateCherries();
             Strawberries = Utils.Utils.CreateStrawberries();
             GameSetup();
             ListenServer();
@@ -206,19 +183,19 @@ namespace WPF.Game.ViewModels
                 GreenTop = deserializedObject.Top;
             });
 
-            _connection.On<int>("ApplesIndex", (index) =>
+            _connection.On<RemoveAppleAtIndexCommand>("RemoveAppleAtIndex", (command) =>
             {
-                Apples.RemoveAt(index);
+                command.Execute(Apples);
             });
 
-            _connection.On<int>("RottenApplesIndex", (index) =>
+            _connection.On<RemoveRottenAppleAtIndexCommand>("RemoveRottenAppleAtIndex", (command) =>
             {
-                RottenApples.RemoveAt(index);
+                command.Execute(RottenApples);
             });
 
-            _connection.On<int>("CoinsIndex", async (index) =>
+            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
             {
-                Coins.RemoveAt(index);
+                command.Execute(Coins);
                 if (Coins.Count == 0)
                 {
                     LevelPassed?.Invoke();
@@ -227,13 +204,13 @@ namespace WPF.Game.ViewModels
                 }
             });
 
-            _connection.On<int>("CherriesIndex", (index) =>
+            _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
             {
-                Cherries.RemoveAt(index);
+                command.Execute(Cherries);
             });
-            _connection.On<int>("OpponentScore", (score) =>
+            _connection.On<GivePointsToOpponentCommand>("OpponentScore", (command) =>
             {
-                greenPacman.Score = score;
+                command.Execute(greenPacman);
                 opponentScore = greenPacman.Score;
             });
             _connection.On<string>("Move", (pos) =>
@@ -324,7 +301,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendApplesIndex", index);
+                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     Apples.RemoveAt(index);
                     break;
                 }
@@ -338,7 +315,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new ReduceSpeed());
                     pacman.Action(ref pacman);
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRottenApplesIndex", index);
+                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
                     RottenApples.RemoveAt(index);
                     break;
                 }
@@ -350,11 +327,11 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendCoinsIndex", index);
+                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     Coins.RemoveAt(index);
                     pacman.Score += item.Value;
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", score);
+                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     break;
                 }
             }
@@ -367,9 +344,9 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new DoublePoints());
                     pacman.Action(ref pacman);
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", score);
+                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendCherriesIndex", index);
+                    await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
                     Cherries.RemoveAt(index);
                     break;
                 }

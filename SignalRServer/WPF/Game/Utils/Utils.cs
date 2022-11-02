@@ -8,7 +8,7 @@ namespace WPF.Game.Utils
 {
     public class Utils
     {
-        public static ObservableCollection<Coin> GetCoins(CoinFactory _coinFactory, ref List<Coin> coinsList)
+        public static ObservableCollection<Coin> GetCoins(CoinFactory _coinFactory)
         {
             ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
@@ -17,14 +17,13 @@ namespace WPF.Game.Utils
                 {
                     if (i == 10 && j == 50) continue;
                     var coin = _coinFactory.GetCoin(i, j);
-                    coinsList.Add(coin);
                     result.Add(coin);
                 }
             }
             return result;
         }
 
-        public static ObservableCollection<Coin> GetFirstHalfCoins(CoinFactory _coinFactory, ref List<Coin> coinsList)
+        public static ObservableCollection<Coin> GetFirstHalfCoins(CoinFactory _coinFactory)
         {
             ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
@@ -34,13 +33,12 @@ namespace WPF.Game.Utils
                     if (i == 10 && j == 50) continue;
                     var coin = _coinFactory.GetCoin(i, j);
                     result.Add(coin);
-                    coinsList.Add(coin);
                 }
             }
             return result;
         }
 
-        public static ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<Coin> Coins, ref List<Coin> coinsList)
+        public static ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory _coinFactory, ObservableCollection<Coin> Coins)
         {
             //ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = 10; i < 800; i = i + 50)
@@ -49,45 +47,38 @@ namespace WPF.Game.Utils
                 {
                     var coin = _coinFactory.GetCoin(i, j);
                     Coins.Add(coin);
-                    coinsList.Add(coin);
                 }
             }
             return Coins;
         }
 
-        public static ObservableCollection<Apple> CreateApples(ref List<Apple> ApplesList)
+        public static ObservableCollection<Apple> CreateApples()
         {
             ObservableCollection<Apple> result = new ObservableCollection<Apple>();
             var firstApple = new Apple(100, 300);
             var secondApple = new Apple(60, 450);
             result.Add(firstApple);
             result.Add(secondApple);
-            ApplesList.Add(firstApple);
-            ApplesList.Add(secondApple);
             return result;
         }
 
-        public static ObservableCollection<RottenApple> CreateRottenApples(ref List<RottenApple> RottenApplesList)
+        public static ObservableCollection<RottenApple> CreateRottenApples()
         {
             ObservableCollection<RottenApple> result = new ObservableCollection<RottenApple>();
             var firstRottenApple = new RottenApple(150, 330);
             var secondRottenApple = new RottenApple(340, 110);
             result.Add(firstRottenApple);
             result.Add(secondRottenApple);
-            RottenApplesList.Add(firstRottenApple);
-            RottenApplesList.Add(secondRottenApple);
             return result;
         }
 
-        public static ObservableCollection<Cherry> CreateCherries(ref List<Cherry> CherriesList)
+        public static ObservableCollection<Cherry> CreateCherries()
         {
             ObservableCollection<Cherry> result = new ObservableCollection<Cherry>();
             var firstCherry = new Cherry(30, 300);
             var secondCherry = new Cherry(390, 110);
             result.Add(firstCherry);
             result.Add(secondCherry);
-            CherriesList.Add(firstCherry);
-            CherriesList.Add(secondCherry);
             return result;
         }
 
