@@ -11,6 +11,7 @@ namespace ClassLibrary._Pacman
     {
         public int Speed { get; set; }
         public int Score { get; set; }
+        public int Health { get; set; }
 
         private Algorithm algorithm;
 
@@ -29,6 +30,7 @@ namespace ClassLibrary._Pacman
             Speed = 8;
             Score = 0;
             Name = name;
+            Health = 100;
             ImageBrush pacmanBrush = new ImageBrush();
             pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
             Appearance = pacmanBrush;

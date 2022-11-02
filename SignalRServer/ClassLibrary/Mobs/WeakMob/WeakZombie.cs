@@ -13,6 +13,7 @@ namespace ClassLibrary.Mobs.WeakMob
         {
             Top = top;
             Left = left;
+            GoLeft = true;
             ImageBrush zombie = new ImageBrush();
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakZombie.png"));
             Appearance = zombie;

@@ -13,6 +13,7 @@ namespace ClassLibrary.Mobs.StrongMob
         {
             Top = top;
             Left = left;
+            GoLeft = true;
             ImageBrush demo = new ImageBrush();
             demo.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/StrongDemo.png"));
             Appearance = demo;

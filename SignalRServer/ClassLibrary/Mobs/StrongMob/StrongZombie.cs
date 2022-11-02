@@ -13,6 +13,7 @@ namespace ClassLibrary.Mobs.StrongMob
         {
             Top = top;
             Left = left;
+            GoLeft = true;
             ImageBrush zombie = new ImageBrush();
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/StrongZombie.png"));
             Appearance = zombie;

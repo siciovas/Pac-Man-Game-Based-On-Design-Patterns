@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Observer;
+﻿using ClassLibrary.Mobs;
+using ClassLibrary.Observer;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SignalRServer.Hubs
@@ -34,8 +35,8 @@ namespace SignalRServer.Hubs
 
         public void Notify()
         {
-            foreach (var client in _clientCounter.GetClients())
-                Clients.Client(client).SendAsync("StartGame");
+            //foreach (var client in _clientCounter.GetClients())
+            Clients.All.SendAsync("StartGame");
         }
 
         public async Task SendMessage(string connectionId, string move)
@@ -66,6 +67,22 @@ namespace SignalRServer.Hubs
         public async Task SendCherriesIndex(int index)
         {
             await Clients.Others.SendAsync("CherriesIndex", index);
+        }
+        public async Task GivePointsToOpponent(int score)
+        {
+            await Clients.Others.SendAsync("OpponentScore", score);
+        }
+        public async Task PacmanDamage(int damage)
+        {
+            await Clients.Others.SendAsync("PacmanDamage", damage);
+        }
+        public async Task Move(string pos)
+        {
+            await Clients.All.SendAsync("Move", pos);
+        }
+        public async Task LevelUp(int level)
+        {
+            await Clients.All.SendAsync("LevelUp", level);
         }
     }
 }
