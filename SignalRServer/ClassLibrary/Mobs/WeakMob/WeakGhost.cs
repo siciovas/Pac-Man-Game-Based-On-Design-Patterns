@@ -13,6 +13,7 @@ namespace ClassLibrary.Mobs.WeakMob
         {
             Top = top;
             Left = left;
+            GoLeft = true;
             ImageBrush ghost = new ImageBrush();
             ghost.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/red.jpg"));
             Appearance = ghost;
