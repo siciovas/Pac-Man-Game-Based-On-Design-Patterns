@@ -44,6 +44,7 @@ namespace WPF
             services.AddSingleton<FourthLevelViewModel>();
             services.AddSingleton<FifthLevelViewModel>();
             services.AddSingleton<GameFinishedViewModel>();
+            services.AddSingleton<ChangeButtonViewModel>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {
@@ -72,6 +73,9 @@ namespace WPF
             services.AddSingleton<FifthLevelView>(s => new FifthLevelView()
             {
                 DataContext = s.GetRequiredService<FifthLevelViewModel>()
+            }); services.AddSingleton<ChangeButtonView>(s => new ChangeButtonView()
+            {
+                DataContext = s.GetRequiredService<ChangeButtonViewModel>()
             });
             services.AddSingleton<GameFinishedView>(s => new GameFinishedView()
             {

@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Game\Views\ChangeButtonView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Game\Views\CoinView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -27,6 +30,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Game\Views\ChangeButtonView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Game\Views\FifthLevelView.xaml">
       <SubType>Designer</SubType>
     </Page>

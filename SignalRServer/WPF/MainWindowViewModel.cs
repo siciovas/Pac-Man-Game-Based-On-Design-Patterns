@@ -5,14 +5,14 @@ using System;
 using System.Windows.Input;
 using WPF.Connection;
 using WPF.Game.Stores;
+using WPF.Game.ViewModels;
 
 namespace WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly LevelsFacade _navigationStore;
-        public ICommand NextView { get; set; }
-
+        public ChangeButtonViewModel ChangeButton { get; set; }
         public LevelViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
 
         public MainWindowViewModel(LevelsFacade navigationStore)
@@ -20,12 +20,7 @@ namespace WPF
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
 
-            NextView = new RelayCommand(new Action(GoToNextView));
-        }
-
-        private void GoToNextView()
-        {
-            _navigationStore.ChangeLevel();
+            ChangeButton = new ChangeButtonViewModel(navigationStore);
         }
 
         private ICommand _upCommand;

@@ -54,14 +54,13 @@
             <ContentControl Content="{Binding CurrentViewModel}" />
         </Grid>
         <Grid>
-            <Button HorizontalAlignment="Center"
-                    Command="{Binding NextView}" 
-                    Background="LightPink">Next View</Button>
+            <Grid.Resources>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+               <DataTemplate DataType="{x:Type vm:ChangeButtonViewModel}">
+                <v:ChangeButtonView />
+            </DataTemplate>
+                </Grid.Resources>
+            <ContentControl Content="{Binding ChangeButton}" />
         </Grid>
     </StackPanel>
 
