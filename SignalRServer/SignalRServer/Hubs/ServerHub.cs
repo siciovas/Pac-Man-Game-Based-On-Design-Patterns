@@ -1,4 +1,6 @@
-﻿using ClassLibrary.Observer;
+﻿using ClassLibrary.Mobs;
+using ClassLibrary.Commands;
+using ClassLibrary.Observer;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SignalRServer.Hubs
@@ -34,8 +36,8 @@ namespace SignalRServer.Hubs
 
         public void Notify()
         {
-            foreach (var client in _clientCounter.GetClients())
-                Clients.Client(client).SendAsync("StartGame");
+            //foreach (var client in _clientCounter.GetClients())
+            Clients.All.SendAsync("StartGame");
         }
 
         public async Task SendMessage(string connectionId, string move)
@@ -48,24 +50,40 @@ namespace SignalRServer.Hubs
             await Clients.Others.SendAsync("OponentCordinates", serializedObject);
         }
 
-        public async Task SendApplesIndex(int index)
+        public async Task SendRemoveAppleAtIndex(RemoveAppleAtIndexCommand command)
         {
-            await Clients.Others.SendAsync("ApplesIndex", index);
+            await Clients.Others.SendAsync("RemoveAppleAtIndex", command);
         }
 
-        public async Task SendRottenApplesIndex(int index)
+        public async Task SendRemoveRottenAppleAtIndex(RemoveRottenAppleAtIndexCommand command)
         {
-            await Clients.Others.SendAsync("RottenApplesIndex", index);
+            await Clients.Others.SendAsync("RemoveRottenAppleAtIndex", command);
         }
 
-        public async Task SendCoinsIndex(int index)
+        public async Task SendRemoveCoinAtIndex(RemoveCoinAtIndexCommand command)
         {
-            await Clients.Others.SendAsync("CoinsIndex", index);
+            await Clients.Others.SendAsync("RemoveCoinAtIndex", command);
         }
 
-        public async Task SendCherriesIndex(int index)
+        public async Task SendRemoveCherryAtIndex(RemoveCherryAtIndexCommand command)
         {
-            await Clients.Others.SendAsync("CherriesIndex", index);
+            await Clients.Others.SendAsync("RemoveCherryAtIndex", command);
+        }
+        public async Task GivePointsToOpponent(GivePointsToOpponentCommand command)
+        {
+            await Clients.Others.SendAsync("OpponentScore", command);
+        }
+        public async Task PacmanDamage(int damage)
+        {
+            await Clients.Others.SendAsync("PacmanDamage", damage);
+        }
+        public async Task Move(string pos)
+        {
+            await Clients.All.SendAsync("Move", pos);
+        }
+        public async Task LevelUp(int level)
+        {
+            await Clients.All.SendAsync("LevelUp", level);
         }
 
         public async Task SendStrawberriesIndex(int index)

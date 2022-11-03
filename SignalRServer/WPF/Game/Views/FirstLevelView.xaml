@@ -12,9 +12,11 @@
                     Focusable="True"
                     Background="Black">
             <ContentPresenter Content="{Binding Path=LayoutRoot}" />
+            <Label FontSize="20" Foreground="White" Content="Your score:"></Label>
             <Label FontSize="20"
                        Name="txtScore"
                        Foreground="White"
+                       Canvas.Left="100"
                        Content="{Binding RelativeSource={x:Static RelativeSource.Self},
                                          Path=DataContext.score}"></Label>
             <Label FontSize="20"
@@ -22,10 +24,15 @@
                        Canvas.Left="325"
                        Content="LEVEL 1"></Label>
             <Label FontSize="20"
-                       Name="oponentTxtScore"
                        Foreground="White"
-                       Canvas.Left="600"
-                       Content="Oponent Score: 0"></Label>
+                       Canvas.Left="550"
+                       Content="Opponent Score:"></Label>
+            <Label FontSize="20"
+                       Name="opponentScore"
+                       Foreground="White"
+                       Canvas.Left="705"
+                       Content="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.opponentScore}"></Label>
 
             <ItemsControl ItemsSource="{Binding Coins}">
                 <ItemsControl.ItemsPanel>

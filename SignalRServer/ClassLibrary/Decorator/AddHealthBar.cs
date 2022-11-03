@@ -12,15 +12,18 @@ namespace ClassLibrary.Decorator
 {
     public class AddHealthBar : Decorator
     {
-        public AddHealthBar(IDecorator decoratedShape) : base(decoratedShape)
+        private int Health;
+        public AddHealthBar(IDecorator decoratedShape, int health) : base(decoratedShape)
         {
+            Health = health;
         }
 
         public override Grid Draw()
         {
             Grid grid = decoratedShape.Draw();
             Rectangle rect = new Rectangle();
-            rect.Width = 30;
+            var temp = Health * 30 / 100;
+            rect.Width = temp > 0 ? temp : 1;
             rect.Height = 10;
             rect.Fill = new SolidColorBrush(Colors.Red);
             rect.VerticalAlignment = VerticalAlignment.Top;

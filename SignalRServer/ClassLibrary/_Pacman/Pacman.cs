@@ -33,6 +33,7 @@ namespace ClassLibrary._Pacman
             Health = 100;
             GhostMode = false;
             Name = name;
+            Health = 100;
             ImageBrush pacmanBrush = new ImageBrush();
             pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
             Appearance = pacmanBrush;

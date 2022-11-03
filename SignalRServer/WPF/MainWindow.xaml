@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:WPF.Game.ViewModels"
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
-        Title="PAC MAN MULTIPLAYER" Height="800" Width="800">
+        Title="PAC MAN MULTIPLAYER" Height="625" Width="800">
     <Window.InputBindings>
         <KeyBinding 
                     Key="Up" 
@@ -46,19 +46,21 @@
                 <DataTemplate DataType="{x:Type vm:FifthLevelViewModel}">
                     <v:FifthLevelView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:GameFinishedViewModel}">
+                    <v:GameFinishedView />
+                </DataTemplate>
             </Grid.Resources>
            
             <ContentControl Content="{Binding CurrentViewModel}" />
         </Grid>
         <Grid>
-            <Button HorizontalAlignment="Center"
-                    Command="{Binding NextView}" 
-                    Background="LightPink">Next View</Button>
+            <Grid.Resources>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+               <DataTemplate DataType="{x:Type vm:ChangeButtonViewModel}">
+                <v:ChangeButtonView />
+            </DataTemplate>
+                </Grid.Resources>
+            <ContentControl Content="{Binding ChangeButton}" />
         </Grid>
     </StackPanel>
 
