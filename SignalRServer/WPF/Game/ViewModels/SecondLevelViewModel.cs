@@ -301,8 +301,8 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     Apples.RemoveAt(index);
+                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     break;
                 }
             }
@@ -315,8 +315,8 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new ReduceSpeed());
                     pacman.Action(ref pacman);
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
                     RottenApples.RemoveAt(index);
+                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
                     break;
                 }
             }
@@ -327,8 +327,8 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     Coins.RemoveAt(index);
+                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     pacman.Score += item.Value;
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
@@ -348,8 +348,8 @@ namespace WPF.Game.ViewModels
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     if(index != -1)
                     {
-                        await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
                         Cherries.RemoveAt(index);
+                        await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
                     }
                     break;
                 }
@@ -363,8 +363,8 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new MakeGhost());
                     pacman.Action(ref pacman);
                     var index = Strawberries.IndexOf(Strawberries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveStrawberryAtIndex", new RemoveStrawberryAtIndexCommand(index));
                     Strawberries.RemoveAt(index);
+                    await _connection.InvokeAsync("SendRemoveStrawberryAtIndex", new RemoveStrawberryAtIndexCommand(index));
                     break;
                 }
             }
