@@ -13,6 +13,9 @@
     <Compile Update="Game\Views\FirstLevelView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Game\Views\GameFinishedView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Game\Views\SecondLevelView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Game\Views\FifthLevelView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Game\Views\GameFinishedView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Game\Views\MobView.xaml">

@@ -1,7 +1,6 @@
 ﻿using ClassLibrary.Coins;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,8 +43,7 @@ namespace WPF
             services.AddSingleton<ThirdLevelViewModel>();
             services.AddSingleton<FourthLevelViewModel>();
             services.AddSingleton<FifthLevelViewModel>();
-
-            services.AddSingleton<NavigationFacade>();
+            services.AddSingleton<GameFinishedViewModel>();
 
             services.AddSingleton<MainWindow>(s => new MainWindow()
             {
@@ -75,19 +73,24 @@ namespace WPF
             {
                 DataContext = s.GetRequiredService<FifthLevelViewModel>()
             });
+            services.AddSingleton<GameFinishedView>(s => new GameFinishedView()
+            {
+                DataContext = s.GetRequiredService<GameFinishedViewModel>()
+            });
             services.AddTransient<CoinView>(s => new CoinView()
             {
                 DataContext = s.GetRequiredService<Coin>()
             });
+
+            services.AddSingleton<LevelsFacade>();
+
             _serviceProvider = services.BuildServiceProvider();
+
 
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-           /* INavigationService initialNavigationService = _serviceProvider.GetRequiredService<INavigationService>();
-            initialNavigationService.Navigate();
-*/
             MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
 

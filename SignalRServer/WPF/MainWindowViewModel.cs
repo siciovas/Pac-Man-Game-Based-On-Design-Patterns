@@ -10,13 +10,12 @@ namespace WPF
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private readonly NavigationFacade _navigationStore;
+        private readonly LevelsFacade _navigationStore;
         public ICommand NextView { get; set; }
 
         public LevelViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
 
-     
-        public MainWindowViewModel(NavigationFacade navigationStore)
+        public MainWindowViewModel(LevelsFacade navigationStore)
         {
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;

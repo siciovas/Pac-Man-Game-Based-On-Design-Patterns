@@ -13,10 +13,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using WPF.Connection;
+using static System.Net.Mime.MediaTypeNames;
+using Application = System.Windows.Application;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WPF.Game.ViewModels
@@ -32,7 +35,7 @@ namespace WPF.Game.ViewModels
         WeakMobFactory _mobFactory;
         Pacman pacman;
         Pacman greenPacman;
-
+        private bool _levelPassed;
         Grid mainGrid;
         Grid opponentGrid;
         public event Action LevelPassed;
@@ -105,26 +108,26 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<Strawberry> Strawberries { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
-        public int score
+        public override int score
         {
             get
             {
                 return pacman.Score;
             }
-            private set
+            set
             {
                 pacman.Score = value;
                 OnPropertyChanged("score");
             }
         }
 
-        public int opponentScore
+        public override int opponentScore
         {
             get
             {
                 return greenPacman.Score;
             }
-            private set
+            set
             {
                 greenPacman.Score = value;
                 OnPropertyChanged("opponentScore");
@@ -149,6 +152,7 @@ namespace WPF.Game.ViewModels
             GreenLeft = 20;
             YellowLeft = 20;
             YellowTop = 20;
+            _levelPassed = false;
 
             Mobs = SpawnGhosts();
             Coins = Utils.Utils.GetCoins(_coinFactory);
@@ -157,7 +161,6 @@ namespace WPF.Game.ViewModels
             Cherries = Utils.Utils.CreateCherries();
             Strawberries = Utils.Utils.CreateStrawberries();
             GameSetup();
-            ListenServer();
         }
 
         private ObservableCollection<Mob> SpawnGhosts()
@@ -174,71 +177,77 @@ namespace WPF.Game.ViewModels
             return result;
         }
 
-        private void ListenServer()
+        public override void SendOponmentCoordinates(string serializedObject)
         {
-            _connection.On<string>("OponentCordinates", (serializedObject) =>
-            {
-                Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
-                GreenLeft = deserializedObject.Left;
-                GreenTop = deserializedObject.Top;
-            });
+            Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
+            GreenLeft = deserializedObject.Left;
+            GreenTop = deserializedObject.Top;
+        }
 
-            _connection.On<RemoveAppleAtIndexCommand>("RemoveAppleAtIndex", (command) =>
-            {
-                command.Execute(Apples);
-            });
+        public override void RemoveApple(RemoveAppleAtIndexCommand command)
+        {
+            command.Execute(Apples);
+        }
 
-            _connection.On<RemoveRottenAppleAtIndexCommand>("RemoveRottenAppleAtIndex", (command) =>
-            {
-                command.Execute(RottenApples);
-            });
+        public override void RottenApple(RemoveRottenAppleAtIndexCommand command)
+        {
+            command.Execute(RottenApples);
 
-            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
-            {
-                command.Execute(Coins);
-                if (Coins.Count == 0)
-                {
-                    LevelPassed?.Invoke();
-                    gameTimer.Stop();
-                    await _connection.InvokeAsync("LevelUp", 2);
-                }
-            });
+        }
 
-            _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
+        public override async Task RemoveCoin(RemoveCoinAtIndexCommand command)
+        {
+            command.Execute(Coins);
+            if (Coins.Count == 0)
             {
-                command.Execute(Cherries);
-            });
-            _connection.On<GivePointsToOpponentCommand>("OpponentScore", (command) =>
-            {
-                command.Execute(greenPacman);
-                opponentScore = greenPacman.Score;
-            });
-            _connection.On<string>("Move", (pos) =>
-            {
-                var serializedObject = JsonConvert.DeserializeObject<dynamic>(pos);
-                Mobs[(int)serializedObject.Index].GoLeft = (bool)serializedObject.GoLeft;
-                Mobs[(int)serializedObject.Index].Left = (int)serializedObject.Position;
-            });
-            _connection.On<int>("PacmanDamage", (damage) =>
-            {
-                IDecorator grid = new AddLabel(new AddHealthBar(greenPacman, damage));
-                opponentGrid = grid.Draw();
-                LayoutRoot.Children.Remove(LayoutRoot.Children[1]);
-                LayoutRoot.Children.Insert(1, opponentGrid);
-                Canvas.SetLeft(opponentGrid, GreenLeft);
-                Canvas.SetTop(opponentGrid, GreenTop);
-            });
+                gameTimer.Stop();
+                _levelPassed = true;
+                await _connection.InvokeAsync("LevelUp", 2);
+            }
+        }
+
+        public override void RemoveCherry(RemoveCherryAtIndexCommand command)
+        {
+            command.Execute(Cherries);
+        }
+
+        public override void UpdateOpScore(GivePointsToOpponentCommand command)
+        {
+            command.Execute(greenPacman);
+            opponentScore = greenPacman.Score;
+        }
+
+        public override void Move(string pos)
+        {
+            var serializedObject = JsonConvert.DeserializeObject<dynamic>(pos);
+            Mobs[(int)serializedObject.Index].GoLeft = (bool)serializedObject.GoLeft;
+            Mobs[(int)serializedObject.Index].Left = (int)serializedObject.Position;
+        }
+
+        public override void DamagePacman(int damage)
+        {
+            IDecorator grid = new AddLabel(new AddHealthBar(greenPacman, damage));
+            opponentGrid = grid.Draw();
+            LayoutRoot.Children.Remove(LayoutRoot.Children[1]);
+            LayoutRoot.Children.Insert(1, opponentGrid);
+            Canvas.SetLeft(opponentGrid, GreenLeft);
+            Canvas.SetTop(opponentGrid, GreenTop);
         }
 
         private async void GameSetup()
         {
             gameTimer.Tick += GameLoop;
             gameTimer.Interval = TimeSpan.FromMilliseconds(30); ///will tick every 20ms
+          
             gameTimer.Start();
         }
 
         private async void GameLoop(object? sender, EventArgs e)
         {
+            if (Coins.Count == 0) 
+            {
+                return;
+            }
             Canvas.SetLeft(mainGrid, YellowLeft);
             Canvas.SetTop(mainGrid, YellowTop);
             Canvas.SetLeft(opponentGrid, GreenLeft);
