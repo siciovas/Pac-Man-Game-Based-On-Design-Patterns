@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Observer;
+﻿using ClassLibrary.Commands;
+using ClassLibrary.Observer;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
@@ -7,7 +8,7 @@ using WPF.Game.ViewModels;
 
 namespace WPF.Game.Stores
 {
-    public class NavigationFacade : IObserver
+    public class LevelsFacade : IObserver
     {
         private LevelViewModelBase _currentViewModel;
         public FirstLevelViewModel _firstLevelViewModel;
@@ -19,7 +20,7 @@ namespace WPF.Game.Stores
         private HubConnection _connection;
         private IConnectionProvider _connectionProvider;
 
-        public NavigationFacade(IConnectionProvider connection)
+        public LevelsFacade(IConnectionProvider connection)
         {
             _connectionProvider = connection;
             _startPageViewModel = new StartPageViewModel(connection);
@@ -29,7 +30,7 @@ namespace WPF.Game.Stores
             {
                 LevelUp(Level);
             });
-
+            ListenServer();
             OnStartGame();
         }
 
@@ -53,6 +54,46 @@ namespace WPF.Game.Stores
             CurrentViewModelChanged?.Invoke();
         }
 
+        private void ListenServer()
+        {
+            _connection.On<string>("OponentCordinates", (serializedObject) =>
+            {
+                _currentViewModel.SendOponmentCoordinates(serializedObject);
+            });
+
+            _connection.On<RemoveAppleAtIndexCommand>("RemoveAppleAtIndex", (command) =>
+            {
+                _currentViewModel.RemoveApple(command);
+            });
+
+            _connection.On<RemoveRottenAppleAtIndexCommand>("RemoveRottenAppleAtIndex", (command) =>
+            {
+                _currentViewModel.RottenApple(command);
+            });
+
+            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
+            {
+                await _currentViewModel.RemoveCoin(command);
+            });
+
+            _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
+            {
+                _currentViewModel.RemoveCherry(command);
+            });
+            _connection.On<GivePointsToOpponentCommand>("OpponentScore", (command) =>
+            {
+                _currentViewModel.UpdateOpScore(command);
+            });
+            _connection.On<string>("Move", (pos) =>
+            {
+                _currentViewModel.Move(pos);
+            });
+            _connection.On<int>("PacmanDamage", (damage) =>
+            {
+                _currentViewModel.DamagePacman(damage);
+            });
+        }
+
         /// <summary>
         /// testing method not used in real game 
         /// </summary>
@@ -65,27 +106,27 @@ namespace WPF.Game.Stores
             }
             else if (this.CurrentViewModel.Equals(_firstLevelViewModel))
             {
-                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider);
+                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, 20,20);
                 this.CurrentViewModel = _secondLevelViewModel;
             }
             else if (this.CurrentViewModel.Equals(_secondLevelViewModel))
             {
-                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider);
+                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider,20,20);
                 this.CurrentViewModel = _thirdLevelViewModel;
             }
             else if (this.CurrentViewModel.Equals(_thirdLevelViewModel))
             {
-                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider);
+                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider,20,20);
                 this.CurrentViewModel = _fourthLevelViewModel;
             }
             else if (this.CurrentViewModel.Equals(_fourthLevelViewModel))
             {
-                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider);
+                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider,20,20);
                 this.CurrentViewModel = _fifthLevelViewModel;
             }
             else if (this.CurrentViewModel.Equals(_fifthLevelViewModel))
             {
-                _gameFinishedViewModel = new GameFinishedViewModel();
+                _gameFinishedViewModel = new GameFinishedViewModel(450,685);
                 this.CurrentViewModel = _gameFinishedViewModel;
             }
         }
@@ -94,27 +135,28 @@ namespace WPF.Game.Stores
         {
             if (Level == 2) 
             {
-                _firstLevelViewModel.Dispose();
-                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider);
+                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, _firstLevelViewModel.score, _firstLevelViewModel.opponentScore);
                 this.CurrentViewModel = _secondLevelViewModel;
             }
             if (Level == 3)
             {
-                _secondLevelViewModel.Dispose();
-                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider);
+                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider, _secondLevelViewModel.score, _secondLevelViewModel.opponentScore);
                 this.CurrentViewModel = _thirdLevelViewModel;
             }
             if (Level == 4)
             {
-                _thirdLevelViewModel.Dispose();
-                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider);
+                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider, _thirdLevelViewModel.score, _thirdLevelViewModel.opponentScore);
                 this.CurrentViewModel = _fourthLevelViewModel;
             }
             if (Level == 5)
             {
-                _fourthLevelViewModel.Dispose();
-                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider);
+                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider, _fourthLevelViewModel.score, _fourthLevelViewModel.opponentScore);
                 this.CurrentViewModel = _fifthLevelViewModel;
+            }
+            if (Level == -1)
+            {
+                _gameFinishedViewModel = new GameFinishedViewModel(_fifthLevelViewModel.score, _fifthLevelViewModel.opponentScore);
+                this.CurrentViewModel = _gameFinishedViewModel;
             }
         }
 

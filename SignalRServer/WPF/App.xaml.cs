@@ -36,44 +36,44 @@ namespace WPF
 
             services.AddSingleton<IConnectionProvider, ConnectionProvider>();
 
-            services.AddTransient<MainWindowViewModel>();
-            services.AddTransient<StartPageViewModel>();
-            services.AddTransient<FirstLevelViewModel>();
-            services.AddTransient<SecondLevelViewModel>();
-            services.AddTransient<ThirdLevelViewModel>();
-            services.AddTransient<FourthLevelViewModel>();
-            services.AddTransient<FifthLevelViewModel>();
-            services.AddTransient<GameFinishedViewModel>();
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<StartPageViewModel>();
+            services.AddSingleton<FirstLevelViewModel>();
+            services.AddSingleton<SecondLevelViewModel>();
+            services.AddSingleton<ThirdLevelViewModel>();
+            services.AddSingleton<FourthLevelViewModel>();
+            services.AddSingleton<FifthLevelViewModel>();
+            services.AddSingleton<GameFinishedViewModel>();
 
-            services.AddTransient<MainWindow>(s => new MainWindow()
+            services.AddSingleton<MainWindow>(s => new MainWindow()
             {
                 DataContext = s.GetRequiredService<MainWindowViewModel>()
             });
-            services.AddTransient<StartPageView>(s => new StartPageView()
+            services.AddSingleton<StartPageView>(s => new StartPageView()
             {
                 DataContext = s.GetRequiredService<StartPageViewModel>()
             });
-            services.AddTransient<FirstLevelView>(s => new FirstLevelView()
+            services.AddSingleton<FirstLevelView>(s => new FirstLevelView()
             {
                 DataContext = s.GetRequiredService<FirstLevelViewModel>()
             });
-            services.AddTransient<SecondLevelView>(s => new SecondLevelView()
+            services.AddSingleton<SecondLevelView>(s => new SecondLevelView()
             {
                 DataContext = s.GetRequiredService<SecondLevelViewModel>()
             });
-            services.AddTransient<ThirdLevelView>(s => new ThirdLevelView()
+            services.AddSingleton<ThirdLevelView>(s => new ThirdLevelView()
             {
                 DataContext = s.GetRequiredService<ThirdLevelViewModel>()
             });
-            services.AddTransient<FourthLevelView>(s => new FourthLevelView()
+            services.AddSingleton<FourthLevelView>(s => new FourthLevelView()
             {
                 DataContext = s.GetRequiredService<FourthLevelViewModel>()
             });
-            services.AddTransient<FifthLevelView>(s => new FifthLevelView()
+            services.AddSingleton<FifthLevelView>(s => new FifthLevelView()
             {
                 DataContext = s.GetRequiredService<FifthLevelViewModel>()
             });
-            services.AddTransient<GameFinishedView>(s => new GameFinishedView()
+            services.AddSingleton<GameFinishedView>(s => new GameFinishedView()
             {
                 DataContext = s.GetRequiredService<GameFinishedViewModel>()
             });
@@ -82,7 +82,7 @@ namespace WPF
                 DataContext = s.GetRequiredService<Coin>()
             });
 
-            services.AddSingleton<NavigationFacade>();
+            services.AddSingleton<LevelsFacade>();
 
             _serviceProvider = services.BuildServiceProvider();
 

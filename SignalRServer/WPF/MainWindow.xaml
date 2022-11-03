@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:WPF.Game.ViewModels"
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
-        Title="PAC MAN MULTIPLAYER" Height="800" Width="800">
+        Title="PAC MAN MULTIPLAYER" Height="625" Width="800">
     <Window.InputBindings>
         <KeyBinding 
                     Key="Up" 

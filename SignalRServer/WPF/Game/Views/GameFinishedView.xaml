@@ -7,11 +7,36 @@
              mc:Ignorable="d" 
              Background="Black"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Height="50"
-                Width="300"
+    <Grid Height="100"
+                Width="600"
                 Background="Blue">
         <TextBlock FontSize="25"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center">THANKS FOR PLAYING</TextBlock>
+
+        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Left"
+              VerticalAlignment="Bottom">
+            <Label Content="Your score:"
+                   FontSize="20"
+                   Foreground="White"></Label>
+            <Label FontSize="20"
+               Foreground="White"
+               Content="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.Score}"></Label>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Right"
+              VerticalAlignment="Bottom">
+            <Label Content="Opponent score:"
+                   FontSize="20"
+                   Foreground="White"></Label>
+            <Label FontSize="20"
+               Foreground="White"
+               Content="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                         Path=DataContext.OpScore}"></Label>
+        </StackPanel>
+
     </Grid>
 </UserControl>
