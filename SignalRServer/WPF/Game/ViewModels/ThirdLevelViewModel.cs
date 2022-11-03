@@ -324,11 +324,15 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
-                    Coins.RemoveAt(index);
-                    pacman.Score += item.Value;
-                    score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    if (index != -1)
+                    {
+                        await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
+                        Coins.RemoveAt(index);
+                        pacman.Score += item.Value;
+                        score = pacman.Score;
+                        await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    }
+                   
                     break;
                 }
             }
@@ -343,8 +347,11 @@ namespace WPF.Game.ViewModels
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
-                    Cherries.RemoveAt(index);
+                    if(index != -1)
+                    {
+                        await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
+                        Cherries.RemoveAt(index);
+                    }
                     break;
                 }
             }

@@ -15,7 +15,6 @@ namespace WPF
 
         public LevelViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
 
-     
         public MainWindowViewModel(NavigationFacade navigationStore)
         {
             _navigationStore = navigationStore;

@@ -1,7 +1,6 @@
 ﻿using ClassLibrary.Coins;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.Interfaces;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,57 +36,61 @@ namespace WPF
 
             services.AddSingleton<IConnectionProvider, ConnectionProvider>();
 
-            services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<StartPageViewModel>();
-            services.AddSingleton<FirstLevelViewModel>();
-            services.AddSingleton<SecondLevelViewModel>();
-            services.AddSingleton<ThirdLevelViewModel>();
-            services.AddSingleton<FourthLevelViewModel>();
-            services.AddSingleton<FifthLevelViewModel>();
+            services.AddTransient<MainWindowViewModel>();
+            services.AddTransient<StartPageViewModel>();
+            services.AddTransient<FirstLevelViewModel>();
+            services.AddTransient<SecondLevelViewModel>();
+            services.AddTransient<ThirdLevelViewModel>();
+            services.AddTransient<FourthLevelViewModel>();
+            services.AddTransient<FifthLevelViewModel>();
+            services.AddTransient<GameFinishedViewModel>();
 
-            services.AddSingleton<NavigationFacade>();
-
-            services.AddSingleton<MainWindow>(s => new MainWindow()
+            services.AddTransient<MainWindow>(s => new MainWindow()
             {
                 DataContext = s.GetRequiredService<MainWindowViewModel>()
             });
-            services.AddSingleton<StartPageView>(s => new StartPageView()
+            services.AddTransient<StartPageView>(s => new StartPageView()
             {
                 DataContext = s.GetRequiredService<StartPageViewModel>()
             });
-            services.AddSingleton<FirstLevelView>(s => new FirstLevelView()
+            services.AddTransient<FirstLevelView>(s => new FirstLevelView()
             {
                 DataContext = s.GetRequiredService<FirstLevelViewModel>()
             });
-            services.AddSingleton<SecondLevelView>(s => new SecondLevelView()
+            services.AddTransient<SecondLevelView>(s => new SecondLevelView()
             {
                 DataContext = s.GetRequiredService<SecondLevelViewModel>()
             });
-            services.AddSingleton<ThirdLevelView>(s => new ThirdLevelView()
+            services.AddTransient<ThirdLevelView>(s => new ThirdLevelView()
             {
                 DataContext = s.GetRequiredService<ThirdLevelViewModel>()
             });
-            services.AddSingleton<FourthLevelView>(s => new FourthLevelView()
+            services.AddTransient<FourthLevelView>(s => new FourthLevelView()
             {
                 DataContext = s.GetRequiredService<FourthLevelViewModel>()
             });
-            services.AddSingleton<FifthLevelView>(s => new FifthLevelView()
+            services.AddTransient<FifthLevelView>(s => new FifthLevelView()
             {
                 DataContext = s.GetRequiredService<FifthLevelViewModel>()
+            });
+            services.AddTransient<GameFinishedView>(s => new GameFinishedView()
+            {
+                DataContext = s.GetRequiredService<GameFinishedViewModel>()
             });
             services.AddTransient<CoinView>(s => new CoinView()
             {
                 DataContext = s.GetRequiredService<Coin>()
             });
+
+            services.AddSingleton<NavigationFacade>();
+
             _serviceProvider = services.BuildServiceProvider();
+
 
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-           /* INavigationService initialNavigationService = _serviceProvider.GetRequiredService<INavigationService>();
-            initialNavigationService.Navigate();
-*/
             MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             MainWindow.Show();
 

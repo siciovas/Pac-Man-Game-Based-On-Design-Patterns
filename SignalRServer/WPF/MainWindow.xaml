@@ -46,6 +46,9 @@
                 <DataTemplate DataType="{x:Type vm:FifthLevelViewModel}">
                     <v:FifthLevelView />
                 </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:GameFinishedViewModel}">
+                    <v:GameFinishedView />
+                </DataTemplate>
             </Grid.Resources>
            
             <ContentControl Content="{Binding CurrentViewModel}" />

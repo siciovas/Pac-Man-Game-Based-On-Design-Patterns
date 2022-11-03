@@ -33,6 +33,8 @@ namespace WPF.Game.Stores
             OnStartGame();
         }
 
+        private GameFinishedViewModel _gameFinishedViewModel;
+
         public LevelViewModelBase CurrentViewModel
         {
             get => _currentViewModel;
@@ -80,6 +82,11 @@ namespace WPF.Game.Stores
             {
                 _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider);
                 this.CurrentViewModel = _fifthLevelViewModel;
+            }
+            else if (this.CurrentViewModel.Equals(_fifthLevelViewModel))
+            {
+                _gameFinishedViewModel = new GameFinishedViewModel();
+                this.CurrentViewModel = _gameFinishedViewModel;
             }
         }
 
