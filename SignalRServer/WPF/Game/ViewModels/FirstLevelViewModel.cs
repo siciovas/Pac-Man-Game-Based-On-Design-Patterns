@@ -279,7 +279,7 @@ namespace WPF.Game.ViewModels
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
-            if (goDown && YellowTop + 280 > AppHeight)
+            if (goDown && YellowTop + 105 > AppHeight)
             {
                 noDown = true;
                 goDown = false;
@@ -294,7 +294,7 @@ namespace WPF.Game.ViewModels
                 noLeft = true;
                 goLeft = false;
             }
-            if (goRight && YellowLeft + 40 > AppWidth)
+            if (goRight && YellowLeft + 60 > AppWidth)
             {
                 noRight = true;
                 goRight = false;

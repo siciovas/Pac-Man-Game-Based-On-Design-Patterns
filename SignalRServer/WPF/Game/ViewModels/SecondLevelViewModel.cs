@@ -228,7 +228,7 @@ namespace WPF.Game.ViewModels
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
-            if (goDown && YellowTop + 280 > AppHeight)
+            if (goDown && YellowTop + 105 > AppHeight)
             {
                 noDown = true;
                 goDown = false;
@@ -243,7 +243,7 @@ namespace WPF.Game.ViewModels
                 noLeft = true;
                 goLeft = false;
             }
-            if (goRight && YellowLeft + 40 > AppWidth)
+            if (goRight && YellowLeft + 60 > AppWidth)
             {
                 noRight = true;
                 goRight = false;
@@ -259,6 +259,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     Apples.RemoveAt(index);
                     break;
                 }
@@ -272,6 +273,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new ReduceSpeed());
                     pacman.Action(ref pacman);
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
                     RottenApples.RemoveAt(index);
                     break;
                 }
