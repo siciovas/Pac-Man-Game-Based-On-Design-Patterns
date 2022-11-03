@@ -153,6 +153,8 @@ namespace WPF.Game.ViewModels
             YellowLeft = 20;
             YellowTop = 20;
 
+            goLeft = goRight = goUp = goDown = false;
+
             Coins = Utils.Utils.GetFirstHalfCoins(_BronzeCoinFactory);
             Coins = Utils.Utils.GetSecondHalfCoins(_SilverCoinFactory, Coins);
             Mobs = SpawnGhosts();
@@ -234,7 +236,7 @@ namespace WPF.Game.ViewModels
             });
         }
 
-        private void GameSetup()
+        private async void GameSetup()
         {
             gameTimer.Tick += GameLoop;
             gameTimer.Interval = TimeSpan.FromMilliseconds(30); ///will tick every 20ms
@@ -334,7 +336,7 @@ namespace WPF.Game.ViewModels
                     Coins.RemoveAt(index);
                     pacman.Score += item.Value;
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", score);
+                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     break;
                 }
             }
@@ -349,8 +351,11 @@ namespace WPF.Game.ViewModels
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
-                    Cherries.RemoveAt(index);
+                    if(index != -1)
+                    {
+                        await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
+                        Cherries.RemoveAt(index);
+                    }
                     break;
                 }
             }

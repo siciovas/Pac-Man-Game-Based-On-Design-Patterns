@@ -86,22 +86,26 @@ namespace WPF.Game.Stores
         public void LevelUp(int Level)
         {
             if (Level == 2) 
-            { 
+            {
+                _firstLevelViewModel.Dispose();
                 _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider);
                 this.CurrentViewModel = _secondLevelViewModel;
             }
             if (Level == 3)
             {
+                _secondLevelViewModel.Dispose();
                 _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider);
                 this.CurrentViewModel = _thirdLevelViewModel;
             }
             if (Level == 4)
             {
+                _thirdLevelViewModel.Dispose();
                 _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider);
                 this.CurrentViewModel = _fourthLevelViewModel;
             }
             if (Level == 5)
             {
+                _fourthLevelViewModel.Dispose();
                 _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider);
                 this.CurrentViewModel = _fifthLevelViewModel;
             }
