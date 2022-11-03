@@ -10,6 +10,7 @@ namespace ClassLibrary.Bridge
     public abstract class DynamicObstacle : Unit
     {
         protected IFeature Feature;
+        public bool GoLeft;
 
         protected DynamicObstacle(IFeature feature)
         {

@@ -11,6 +11,7 @@ namespace ClassLibrary.Bridge
     {
         public Spike(IFeature feature) : base(feature)
         {
+            GoLeft = true;
         }
 
         public override Unit Copy()

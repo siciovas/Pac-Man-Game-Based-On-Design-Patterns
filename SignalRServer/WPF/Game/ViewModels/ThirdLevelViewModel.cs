@@ -1,4 +1,5 @@
 ﻿using ClassLibrary._Pacman;
+using ClassLibrary.Bridge;
 using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
@@ -105,6 +106,8 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<RottenApple> RottenApples { get; set; }
         public ObservableCollection<Cherry> Cherries { get; set; }
         public ObservableCollection<Strawberry> Strawberries { get; set; }
+        public ObservableCollection<Wall> Walls { get; set; }
+        public ObservableCollection<Spike> Spikes { get; set; }
 
         PacmanHitbox myPacmanHitBox = PacmanHitbox.GetInstance;
         public override int score
@@ -160,7 +163,46 @@ namespace WPF.Game.ViewModels
             RottenApples = Utils.Utils.CreateRottenApples();
             Cherries = Utils.Utils.CreateCherries();
             Strawberries = Utils.Utils.CreateStrawberries();
+            Walls = CreateWalls();
+            Spikes = CreateSpikes();
             GameSetup();
+        }
+
+        private ObservableCollection<Wall> CreateWalls()
+        {
+            ObservableCollection<Wall> wall = new ObservableCollection<Wall>();
+            for (int i = 200; i < 500; i += 30)
+            {
+                var temp = new Wall(new StandardFeature());
+                temp.SetDamage();
+                temp.Left = 600;
+                temp.Top = i;
+                wall.Add(temp);
+            }
+            for (int i = 200; i < 500; i += 30)
+            {
+                var temp = new Wall(new StandardFeature());
+                temp.SetDamage();
+                temp.Left = 200;
+                temp.Top = i;
+                wall.Add(temp);
+            }
+            return wall;
+        }
+
+        private ObservableCollection<Spike> CreateSpikes()
+        {
+            ObservableCollection<Spike> spikes = new ObservableCollection<Spike>();
+            for (int i = 250; i < 450; i += 30)
+            {
+                var temp = new Spike(new LethalFeature());
+                temp.SetDamage();
+                temp.Left = i;
+                temp.Top = 150;
+                spikes.Add(temp);
+            }
+
+            return spikes;
         }
         private ObservableCollection<Mob> SpawnMobs()
         {
@@ -313,6 +355,20 @@ namespace WPF.Game.ViewModels
                 }
             }
 
+            foreach (var item in Strawberries)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    pacman.SetAlgorithm(new MakeGhost());
+                    pacman.Action(ref pacman);
+                    var index = Strawberries.IndexOf(Strawberries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendRemoveStrawberryAtIndex", new RemoveStrawberryAtIndexCommand(index));
+                    Strawberries.RemoveAt(index);
+                    break;
+                }
+            }
+
             int mobIndex = 0;
             foreach (var item in Mobs)
             {
@@ -352,6 +408,79 @@ namespace WPF.Game.ViewModels
                     }
                     mobIndex++;
                 }
+            }
+
+            foreach (var item in Walls)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    if (goRight && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowLeft = 0;
+                    }
+                    else if (goLeft && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowLeft = 800;
+                    }
+                    if (goUp && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowTop = 600;
+                    }
+                    if (goDown && !pacman.GhostMode)
+                    {
+                        var damage = item.GetDamage();
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        YellowTop = 0;
+                    }
+                    break;
+                }
+            }
+
+            int spikeIndex = 0;
+            foreach (var item in Spikes)
+            {
+                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                if (pacmanHitBox.IntersectsWith(hitBox))
+                {
+                    if (!pacman.GhostMode)
+                    {
+                        pacman.Health = pacman.Health - item.GetDamage();
+                        if (pacman.Health < 0)
+                        {
+                            YellowLeft = 0;
+                            YellowTop = 0;
+                        }
+                    }
+                    break;
+                }
+                if (item.GoLeft && item.Left + 40 > AppWidth)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = false });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                else if (!item.GoLeft && item.Left - 5 < 1)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = true });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                if (item.GoLeft)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left + 3, Index = spikeIndex, GoLeft = true });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                else
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left - 3, Index = spikeIndex, GoLeft = false });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                spikeIndex++;
             }
 
         }
@@ -453,6 +582,17 @@ namespace WPF.Game.ViewModels
             LayoutRoot.Children.Insert(1, opponentGrid);
             Canvas.SetLeft(opponentGrid, GreenLeft);
             Canvas.SetTop(opponentGrid, GreenTop);
+        }
+
+        public override void MoveObstacle(string serializedObject)
+        {
+            var serObject = JsonConvert.DeserializeObject<dynamic>(serializedObject);
+            Spikes[(int)serObject.Index].GoLeft = (bool)serObject.GoLeft;
+            Spikes[(int)serObject.Index].Left = (int)serObject.Position;
+        }
+        public override void RemoveStrawberry(RemoveStrawberryAtIndexCommand command)
+        {
+            command.Execute(Strawberries);
         }
     }
 }

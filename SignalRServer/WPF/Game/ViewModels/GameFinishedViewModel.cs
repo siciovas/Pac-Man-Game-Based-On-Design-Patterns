@@ -32,6 +32,11 @@ namespace WPF.Game.ViewModels
             return;
         }
 
+        public override void MoveObstacle(string serializedObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void OnDownClick()
         {
             return;
@@ -65,6 +70,11 @@ namespace WPF.Game.ViewModels
         public override Task RemoveCoin(RemoveCoinAtIndexCommand command)
         {
             return Task.CompletedTask;
+        }
+
+        public override void RemoveStrawberry(RemoveStrawberryAtIndexCommand command)
+        {
+            throw new NotImplementedException();
         }
 
         public override void RottenApple(RemoveRottenAppleAtIndexCommand command)

@@ -117,9 +117,7 @@ namespace WPF.Game.ViewModels
         public ObservableCollection<RottenApple> RottenApples { get; set; }
         public ObservableCollection<Cherry> Cherries { get; set; }
         public ObservableCollection<Strawberry> Strawberries { get; set; }
-        public List<Wall> WallsList { get; set; }
         public ObservableCollection<Wall> Walls { get; set; }
-        public List<Spike> SpikesList { get; set; }
         public ObservableCollection<Spike> Spikes { get; set; }
 
 
@@ -287,16 +285,18 @@ namespace WPF.Game.ViewModels
             LayoutRoot.Children.Insert(1, opponentGrid);
             Canvas.SetLeft(opponentGrid, GreenLeft);
             Canvas.SetTop(opponentGrid, GreenTop);
-            _connection.On<int>("CherriesIndex", (index) =>
-            {
-                Cherries.RemoveAt(index);
-                CherriesList.RemoveAt(index);
-            });
+        }
 
-            _connection.On<int>("StrawberriesIndex", (index) =>
-            {
-                Strawberries.RemoveAt(index);
-            });
+        public override void MoveObstacle(string serializedObject)
+        {
+            var serObject = JsonConvert.DeserializeObject<dynamic>(serializedObject);
+            Spikes[(int)serObject.Index].GoLeft = (bool)serObject.GoLeft;
+            Spikes[(int)serObject.Index].Left = (int)serObject.Position;
+        }
+
+        public override void RemoveStrawberry(RemoveStrawberryAtIndexCommand command)
+        {
+            command.Execute(Strawberries);
         }
 
         private async void GameSetup()
@@ -433,7 +433,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new MakeGhost());
                     pacman.Action(ref pacman);
                     var index = Strawberries.IndexOf(Strawberries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendStrawberriesIndex", index);
+                    await _connection.InvokeAsync("SendRemoveStrawberryAtIndex", new RemoveStrawberryAtIndexCommand(index));
                     Strawberries.RemoveAt(index);
                     break;
                 }
@@ -513,6 +513,7 @@ namespace WPF.Game.ViewModels
                 }
             }
 
+            int spikeIndex = 0;
             foreach (var item in Spikes)
             {
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
@@ -529,6 +530,27 @@ namespace WPF.Game.ViewModels
                     }
                     break;
                 }
+                if (item.GoLeft && item.Left + 40 > AppWidth)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = false });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                else if (!item.GoLeft && item.Left - 5 < 1)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = true });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                if (item.GoLeft)
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left + 3, Index = spikeIndex, GoLeft = true });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                else
+                {
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left - 3, Index = spikeIndex, GoLeft = false });
+                    await _connection.InvokeAsync("MoveObstacle", a);
+                }
+                spikeIndex++;
             }
         }
 

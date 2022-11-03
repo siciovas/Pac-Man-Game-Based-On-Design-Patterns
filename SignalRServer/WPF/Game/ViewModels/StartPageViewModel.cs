@@ -107,5 +107,15 @@ namespace WPF.Game.ViewModels
         {
             throw new NotImplementedException();
         }
+
+        public override void MoveObstacle(string serializedObject)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveStrawberry(ClassLibrary.Commands.RemoveStrawberryAtIndexCommand command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
