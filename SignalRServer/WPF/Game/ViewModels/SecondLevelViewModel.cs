@@ -36,6 +36,7 @@ namespace WPF.Game.ViewModels
         Pacman greenPacman;
         Grid mainGrid;
         Grid opponentGrid;
+        public event Action LevelPassed;
         public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
@@ -160,6 +161,7 @@ namespace WPF.Game.ViewModels
             Cherries = Utils.Utils.CreateCherries();
             Strawberries = Utils.Utils.CreateStrawberries();
             ListenServer();
+            GameSetup();
         }
 
         private ObservableCollection<Mob> SpawnGhosts()
@@ -195,9 +197,15 @@ namespace WPF.Game.ViewModels
                 command.Execute(RottenApples);
             });
 
-            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", (command) =>
+            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
             {
                 command.Execute(Coins);
+                if (Coins.Count == 0)
+                {
+                    LevelPassed?.Invoke();
+                    gameTimer.Stop();
+                    await _connection.InvokeAsync("LevelUp", 3);
+                }
             });
 
             _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
@@ -223,13 +231,6 @@ namespace WPF.Game.ViewModels
                 LayoutRoot.Children.Insert(1, opponentGrid);
                 Canvas.SetLeft(opponentGrid, GreenLeft);
                 Canvas.SetTop(opponentGrid, GreenTop);
-            });
-            _connection.On<int>("LevelUp", (Level) =>
-            {
-                if (Level == 2)
-                {
-                    GameSetup();
-                }
             });
         }
 

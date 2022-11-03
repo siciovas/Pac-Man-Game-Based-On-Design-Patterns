@@ -161,6 +161,7 @@ namespace WPF.Game.ViewModels
             Cherries = Utils.Utils.CreateCherries();
             Strawberries = Utils.Utils.CreateStrawberries();
             ListenServer();
+            GameSetup();
         }
 
         private ObservableCollection<Mob> SpawnMobs()
@@ -196,9 +197,14 @@ namespace WPF.Game.ViewModels
                 command.Execute(RottenApples);
             });
 
-            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", (command) =>
+            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
             {
                 command.Execute(Coins);
+                if (Coins.Count == 0)
+                {
+                    gameTimer.Stop();
+                    await _connection.InvokeAsync("LevelUp", 4);
+                }
             });
 
             _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
@@ -224,13 +230,6 @@ namespace WPF.Game.ViewModels
                 LayoutRoot.Children.Insert(1, opponentGrid);
                 Canvas.SetLeft(opponentGrid, GreenLeft);
                 Canvas.SetTop(opponentGrid, GreenTop);
-            });
-            _connection.On<int>("LevelUp", (Level) =>
-            {
-                if (Level == 4)
-                {
-                    GameSetup();
-                }
             });
         }
 
