@@ -1,4 +1,5 @@
 ﻿using ClassLibrary._Pacman;
+using ClassLibrary.Adapter;
 using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
@@ -28,6 +29,7 @@ namespace WPF.Game.ViewModels
 
     {
         DispatcherTimer gameTimer = new DispatcherTimer();
+        ConnectionAdapter _connectionAdapter;
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
         CoinFactory _coinFactory;
@@ -202,7 +204,7 @@ namespace WPF.Game.ViewModels
             {
                 gameTimer.Stop();
                 _levelPassed = true;
-                await _connection.InvokeAsync("LevelUp", 2);
+                await _connectionAdapter.Invoke("LevelUp", 2);
             }
         }
 
@@ -276,7 +278,7 @@ namespace WPF.Game.ViewModels
             if (oldLeft != YellowLeft || oldTop != YellowTop)
             {
                 string serializedObject = JsonSerializer.Serialize(new { Top = pacman.Top, Left = pacman.Left });
-                await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
+                await _connectionAdapter.Invoke("SendPacManCordinates", serializedObject);
             }
 
             if (goDown && YellowTop + 105 > AppHeight)
@@ -310,7 +312,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
+                    await _connectionAdapter.Invoke("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     Apples.RemoveAt(index);
                     break;
                 }
@@ -324,7 +326,7 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new ReduceSpeed());
                     pacman.Action(ref pacman);
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
+                    await _connectionAdapter.Invoke("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
                     RottenApples.RemoveAt(index);
                     break;
                 }
@@ -337,10 +339,12 @@ namespace WPF.Game.ViewModels
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
+                    await _connectionAdapter.Invoke("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     Coins.RemoveAt(index);
                     pacman.Score += item.Value;
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    await _connectionAdapter.Invoke("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+
                     break;
                 }
             }
@@ -353,9 +357,9 @@ namespace WPF.Game.ViewModels
                     pacman.SetAlgorithm(new DoublePoints());
                     pacman.Action(ref pacman);
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    await _connectionAdapter.Invoke("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
+                    await _connectionAdapter.Invoke("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
                     Cherries.RemoveAt(index);
                     break;
                 }
@@ -368,7 +372,7 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     pacman.Health -= item.GetDamage();
-                    await _connection.InvokeAsync("PacmanDamage", pacman.Health);
+                    await _connectionAdapter.Invoke("PacmanDamage", pacman.Health);
                     IDecorator grid = new AddLabel(new AddHealthBar(pacman, pacman.Health));
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
@@ -381,22 +385,25 @@ namespace WPF.Game.ViewModels
                     if (item.GoLeft && item.Left + 40 > AppWidth)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connectionAdapter.Invoke("Move", a);
                     }
                     else if (!item.GoLeft && item.Left - 5 < 1)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connectionAdapter.Invoke("Move", a);
+
                     }
                     if (item.GoLeft)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left + item.GetSpeed(), Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connectionAdapter.Invoke("Move", a);
+
                     }
                     else
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left - item.GetSpeed(), Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connectionAdapter.Invoke("Move", a);
+
                     }
                     mobIndex++;
                 }
