@@ -11,21 +11,19 @@ namespace ClassLibrary.CoinMapping
 {
     public class CoinMapProvider
     {
-        private CoinFactory _coinFactory;
 
-        public CoinMapProvider(CoinFactory coinFactory)
+        public CoinMapProvider()
         {
-            _coinFactory = coinFactory;
         }
 
-        public ObservableCollection<Coin> GetCoins(int iFrom, int iTo, int jFrom, int jTo)
+        public ObservableCollection<Coin> GetCoins(int iFrom, int iTo, int jFrom, int jTo, CoinFactory _coinFactory)
         {
             ObservableCollection<Coin> result = new ObservableCollection<Coin>();
             for (int i = iFrom; i < iTo; i = i + 50)
             {
                 for (int j = jFrom; j < jTo; j = j + 50)
                 {
-                    if (i == iFrom && j == jFrom) continue;
+                    if (i == 10 && j == 50) continue;
                     var coin = _coinFactory.GetCoin(i, j);
                     result.Add(coin);
                 }

@@ -143,7 +143,7 @@ namespace WPF.Game.ViewModels
         {
             _BronzeCoinFactory = new BronzeCoinCreator();
             _SilverCoinFactory = new SilverCoinCreator();
-            _coinMapProvider = new CoinMapProvider(_BronzeCoinFactory);
+            _coinMapProvider = new CoinMapProvider();
             CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
@@ -165,8 +165,8 @@ namespace WPF.Game.ViewModels
             YellowTop = 20;
 
             goLeft = goRight = goUp = goDown = false;
-
-            Coins = coinMapProviderAdapter.GetCoins(_SilverCoinFactory);
+            var firstHalf = coinMapProviderAdapter.GetFirstHalfCoins(_BronzeCoinFactory);
+            Coins = coinMapProviderAdapter.GetSecondHalfCoins(_SilverCoinFactory, firstHalf);
             Mobs = SpawnGhosts();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();

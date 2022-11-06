@@ -144,7 +144,7 @@ namespace WPF.Game.ViewModels
         {
             _GoldCoinFactory = new GoldCoinCreator();
             _SilverCoinFactory = new SilverCoinCreator();
-            _coinMapProvider = new CoinMapProvider(_SilverCoinFactory);
+            _coinMapProvider = new CoinMapProvider();
             CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
@@ -165,7 +165,8 @@ namespace WPF.Game.ViewModels
             pacman.Score = score;
             greenPacman.Score = opScore;
 
-            Coins = coinMapProviderAdapter.GetCoins(_GoldCoinFactory);
+            var firstHalf = coinMapProviderAdapter.GetFirstHalfCoins(_SilverCoinFactory);
+            Coins = coinMapProviderAdapter.GetSecondHalfCoins(_GoldCoinFactory, firstHalf);
             Mobs = SpawnMobs();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();

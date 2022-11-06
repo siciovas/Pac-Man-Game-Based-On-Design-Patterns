@@ -13,7 +13,7 @@ namespace ClassLibrary.Adapter.Interfaces
     {
         public ObservableCollection<Coin> GetFirstHalfCoins(CoinFactory coinFactory);
 
-        public ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory coinFactory);
+        public ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory coinFactory, ObservableCollection<Coin> Coins);
 
     }
 }

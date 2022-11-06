@@ -140,7 +140,7 @@ namespace WPF.Game.ViewModels
         public FifthLevelViewModel(IConnectionProvider connectionProvider, int score, int opScore)
         {
             _coinFactory = new GoldCoinCreator();
-            _coinMapProvider = new CoinMapProvider(_coinFactory);
+            _coinMapProvider = new CoinMapProvider();
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
@@ -160,7 +160,7 @@ namespace WPF.Game.ViewModels
             pacman.Score = score;
             greenPacman.Score = opScore;
 
-            Coins = _coinMapProvider.GetCoins();
+            Coins = _coinMapProvider.GetCoins(10, 800, 50, 600, _coinFactory);
             Mobs = SpawnMobs();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();

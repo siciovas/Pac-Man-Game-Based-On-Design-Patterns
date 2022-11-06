@@ -33,6 +33,7 @@ using System.Windows.Shapes;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using System.Linq;
 using ClassLibrary.CoinMapping;
+using ClassLibrary.Adapter;
 
 namespace WPF.Game.ViewModels
 {
@@ -153,7 +154,7 @@ namespace WPF.Game.ViewModels
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new BronzeCoinCreator();
-            _coinMapProvider = new CoinMapProvider(_coinFactory);
+            _coinMapProvider = new CoinMapProvider();
             _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman("Pacman");
@@ -172,7 +173,7 @@ namespace WPF.Game.ViewModels
             _levelPassed = false;
 
             Mobs = SpawnGhosts();
-            Coins = _coinMapProvider.GetCoins();
+            Coins = _coinMapProvider.GetCoins(10, 800, 50, 600, _coinFactory);
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();
             Cherries = Utils.Utils.CreateCherries();
