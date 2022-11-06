@@ -1,5 +1,7 @@
 ﻿using ClassLibrary._Pacman;
+using ClassLibrary.Adapter;
 using ClassLibrary.Bridge;
+using ClassLibrary.CoinMapping;
 using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
@@ -31,6 +33,7 @@ namespace WPF.Game.ViewModels
         bool noLeft, noRight, noUp, noDown;
         CoinFactory _BronzeCoinFactory;
         CoinFactory _SilverCoinFactory;
+        CoinMapProvider _coinMapProvider;
         HubConnection _connection;
         WeakMobFactory _mobFactory;
         StrongMobFactory _strongMobFactory;
@@ -140,6 +143,8 @@ namespace WPF.Game.ViewModels
         {
             _BronzeCoinFactory = new BronzeCoinCreator();
             _SilverCoinFactory = new SilverCoinCreator();
+            _coinMapProvider = new CoinMapProvider();
+            CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
@@ -160,9 +165,8 @@ namespace WPF.Game.ViewModels
             YellowTop = 20;
 
             goLeft = goRight = goUp = goDown = false;
-
-            Coins = Utils.Utils.GetFirstHalfCoins(_BronzeCoinFactory);
-            Coins = Utils.Utils.GetSecondHalfCoins(_SilverCoinFactory, Coins);
+            var firstHalf = coinMapProviderAdapter.GetFirstHalfCoins(_BronzeCoinFactory);
+            Coins = coinMapProviderAdapter.GetSecondHalfCoins(_SilverCoinFactory, firstHalf);
             Mobs = SpawnGhosts();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();

@@ -1,5 +1,6 @@
 ﻿using ClassLibrary._Pacman;
 using ClassLibrary.Bridge;
+using ClassLibrary.CoinMapping;
 using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
@@ -34,6 +35,7 @@ namespace WPF.Game.ViewModels
         HubConnection _connection;
         WeakMobFactory _mobFactory;
         StrongMobFactory _strongMobFactory;
+        CoinMapProvider _coinMapProvider;
         Pacman pacman;
         Pacman greenPacman;
         Grid mainGrid;
@@ -138,6 +140,7 @@ namespace WPF.Game.ViewModels
         public ThirdLevelViewModel(IConnectionProvider connectionProvider, int score, int opScore)
         {
             _coinFactory = new SilverCoinCreator();
+            _coinMapProvider = new CoinMapProvider();
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
@@ -157,7 +160,7 @@ namespace WPF.Game.ViewModels
             pacman.Score = score;
             greenPacman.Score = opScore;
 
-            Coins = Utils.Utils.GetCoins(_coinFactory);
+            Coins = _coinMapProvider.GetCoins(10, 800, 50, 600, _coinFactory);
             Mobs = SpawnMobs();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();
