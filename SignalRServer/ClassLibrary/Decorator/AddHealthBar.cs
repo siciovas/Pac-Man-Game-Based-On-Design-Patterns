@@ -37,5 +37,6 @@ namespace ClassLibrary.Decorator
             grid.Children.Add(rect);
             return grid;
         }
+        
     }
 }

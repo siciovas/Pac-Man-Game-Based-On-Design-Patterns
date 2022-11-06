@@ -85,5 +85,15 @@ namespace SignalRServer.Hubs
         {
             await Clients.All.SendAsync("LevelUp", level);
         }
+
+        public async Task SendRemoveStrawberryAtIndex(RemoveStrawberryAtIndexCommand command)
+        {
+            await Clients.Others.SendAsync("RemoveStrawberryAtIndex", command);
+        }
+
+        public async Task MoveObstacle(string serializedObject)
+        {
+            await Clients.All.SendAsync("MoveObstacle", serializedObject);
+        }
     }
 }

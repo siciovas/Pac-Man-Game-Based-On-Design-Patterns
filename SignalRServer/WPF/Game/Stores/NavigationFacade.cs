@@ -92,6 +92,14 @@ namespace WPF.Game.Stores
             {
                 _currentViewModel.DamagePacman(damage);
             });
+            _connection.On<string>("MoveObstacle", (serializedObject) =>
+            {
+                _currentViewModel.MoveObstacle(serializedObject);
+            });
+            _connection.On<RemoveStrawberryAtIndexCommand>("RemoveStrawberryAtIndex", (command) =>
+            {
+                _currentViewModel.RemoveStrawberry(command);
+            });
         }
 
         /// <summary>
