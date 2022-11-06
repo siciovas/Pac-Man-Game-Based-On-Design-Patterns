@@ -387,6 +387,19 @@ namespace WPF.Game.ViewModels
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
+                    if (pacman.Health < 0)
+                    {
+                        YellowLeft = 0;
+                        YellowTop = 0;
+                        pacman.Health = 100;
+                        grid = new AddLabel(new AddHealthBar(pacman, 100));
+                        mainGrid = grid.Draw();
+                        LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
+                        LayoutRoot.Children.Insert(0, mainGrid);
+                        Canvas.SetLeft(mainGrid, YellowLeft);
+                        Canvas.SetTop(mainGrid, YellowTop);
+                        await _connection.InvokeAsync("PacmanDamage", pacman.Health);
+                    }
                 }
                 if (_connection.State.HasFlag(HubConnectionState.Connected))
                 {
