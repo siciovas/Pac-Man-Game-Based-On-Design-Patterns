@@ -11,6 +11,9 @@ namespace ClassLibrary.Adapter.Interfaces
 {
     public interface ICoinMapProvider
     {
-        public ObservableCollection<Coin> GetCoins(CoinFactory coinFactory);
+        public ObservableCollection<Coin> GetFirstHalfCoins(CoinFactory coinFactory);
+
+        public ObservableCollection<Coin> GetSecondHalfCoins(CoinFactory coinFactory);
+
     }
 }
