@@ -32,6 +32,7 @@ using ClassLibrary.Bridge;
 using System.Windows.Shapes;
 using Rectangle = System.Windows.Shapes.Rectangle;
 using System.Linq;
+using ClassLibrary.CoinMapping;
 
 namespace WPF.Game.ViewModels
 {
@@ -44,6 +45,7 @@ namespace WPF.Game.ViewModels
         CoinFactory _coinFactory;
         HubConnection _connection;
         WeakMobFactory _mobFactory;
+        CoinMapProvider _coinMapProvider;
         Pacman pacman;
         Pacman greenPacman;
         private bool _levelPassed;
@@ -151,6 +153,7 @@ namespace WPF.Game.ViewModels
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
             _coinFactory = new BronzeCoinCreator();
+            _coinMapProvider = new CoinMapProvider(_coinFactory);
             _mobFactory = new WeakMobFactory();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman("Pacman");
@@ -169,7 +172,7 @@ namespace WPF.Game.ViewModels
             _levelPassed = false;
 
             Mobs = SpawnGhosts();
-            Coins = Utils.Utils.GetCoins(_coinFactory);
+            Coins = _coinMapProvider.GetCoins();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();
             Cherries = Utils.Utils.CreateCherries();
@@ -406,6 +409,7 @@ namespace WPF.Game.ViewModels
                     pacman.Score += item.Value;
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+
                     break;
                 }
             }

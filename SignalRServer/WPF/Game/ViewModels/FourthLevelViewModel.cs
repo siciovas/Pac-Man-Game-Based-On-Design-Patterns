@@ -1,5 +1,7 @@
 ﻿using ClassLibrary._Pacman;
+using ClassLibrary.Adapter;
 using ClassLibrary.Bridge;
+using ClassLibrary.CoinMapping;
 using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
@@ -35,6 +37,7 @@ namespace WPF.Game.ViewModels
         HubConnection _connection;
         WeakMobFactory _mobFactory;
         StrongMobFactory _strongMobFactory;
+        CoinMapProvider _coinMapProvider;
         Pacman pacman;
         Pacman greenPacman;
         Grid mainGrid;
@@ -141,6 +144,8 @@ namespace WPF.Game.ViewModels
         {
             _GoldCoinFactory = new GoldCoinCreator();
             _SilverCoinFactory = new SilverCoinCreator();
+            _coinMapProvider = new CoinMapProvider(_SilverCoinFactory);
+            CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
             _mobFactory = new WeakMobFactory();
             _strongMobFactory = new StrongMobFactory();
             _connection = connectionProvider.GetConnection();
@@ -160,8 +165,7 @@ namespace WPF.Game.ViewModels
             pacman.Score = score;
             greenPacman.Score = opScore;
 
-            Coins = Utils.Utils.GetFirstHalfCoins(_SilverCoinFactory);
-            Coins = Utils.Utils.GetSecondHalfCoins(_GoldCoinFactory, Coins);
+            Coins = coinMapProviderAdapter.GetCoins(_GoldCoinFactory);
             Mobs = SpawnMobs();
             Apples = Utils.Utils.CreateApples();
             RottenApples = Utils.Utils.CreateRottenApples();
