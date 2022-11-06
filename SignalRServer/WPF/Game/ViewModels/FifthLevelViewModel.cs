@@ -323,11 +323,11 @@ namespace WPF.Game.ViewModels
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
-                    Coins.RemoveAt(index);
-                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     pacman.Score += item.Value;
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    Coins.RemoveAt(index);
+                    await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     break;
                 }
             }
