@@ -95,5 +95,9 @@ namespace SignalRServer.Hubs
         {
             await Clients.All.SendAsync("MoveObstacle", serializedObject);
         }
+        public async Task ChangeSpeedLabel(string speed)
+        {
+            await Clients.Others.SendAsync("ChangeSpeed", speed);
+        }
     }
 }
