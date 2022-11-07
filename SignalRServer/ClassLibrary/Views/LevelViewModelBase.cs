@@ -27,6 +27,7 @@ namespace ClassLibrary.Views
         public abstract void DamagePacman(int damage);
         public abstract void MoveObstacle(string serializedObject);
         public abstract void RemoveStrawberry(RemoveStrawberryAtIndexCommand command);
+        public abstract void ChangeSpeed(string speed);
 
     }
 }

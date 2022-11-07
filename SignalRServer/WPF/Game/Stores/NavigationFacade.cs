@@ -100,6 +100,10 @@ namespace WPF.Game.Stores
             {
                 _currentViewModel.RemoveStrawberry(command);
             });
+            _connection.On<string>("ChangeSpeed", (speed) =>
+            {
+                _currentViewModel.ChangeSpeed(speed);
+            });
         }
 
         /// <summary>

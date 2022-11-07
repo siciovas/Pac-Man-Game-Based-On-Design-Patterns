@@ -22,6 +22,11 @@ namespace WPF.Game.ViewModels
         public int OpScore { get; }
         public override int opponentScore { get => 1; set { } }
 
+        public override void ChangeSpeed(string speed)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void DamagePacman(int damage)
         {
             return;

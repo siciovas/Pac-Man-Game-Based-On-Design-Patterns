@@ -21,10 +21,10 @@ namespace ClassLibrary.Decorator
         {
             Grid grid = decoratedShape.Draw();
             TextBlock textBlock = new TextBlock();
-            textBlock.Text = "Speed";
-            textBlock.VerticalAlignment = VerticalAlignment.Bottom;
+            textBlock.Text = "Speed" + Speed;
+            textBlock.VerticalAlignment = VerticalAlignment.Top;
             textBlock.Margin = new Thickness(
-                top: 60,
+                top: 10,
                 left: 0,
                 right: 0,
                 bottom: 0

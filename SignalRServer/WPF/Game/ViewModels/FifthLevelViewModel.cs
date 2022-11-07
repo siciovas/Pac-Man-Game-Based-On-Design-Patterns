@@ -148,9 +148,9 @@ namespace WPF.Game.ViewModels
             greenPacman = pacman.Copy();
             LayoutRoot = new Canvas();
             LayoutRoot.Name = "MyCanvas";
-            IDecorator grid = new AddLabel(new AddHealthBar(pacman, 100));
+            IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
             mainGrid = grid.Draw();
-            opponentGrid = new AddLabel(new AddHealthBar(greenPacman, 100)).Draw();
+            opponentGrid = new ShowSpeed(new AddLabel(new AddHealthBar(greenPacman, greenPacman.Health)), greenPacman.Speed.ToString()).Draw();
             LayoutRoot.Children.Add(mainGrid);
             LayoutRoot.Children.Add(opponentGrid);
             GreenTop = 20;
@@ -296,6 +296,11 @@ namespace WPF.Game.ViewModels
                 {
                     pacman.SetAlgorithm(new GiveSpeed());
                     pacman.Action(ref pacman);
+                    IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
+                    mainGrid = grid.Draw();
+                    LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
+                    LayoutRoot.Children.Insert(0, mainGrid);
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Apples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
@@ -310,6 +315,11 @@ namespace WPF.Game.ViewModels
                 {
                     pacman.SetAlgorithm(new ReduceSpeed());
                     pacman.Action(ref pacman);
+                    IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
+                    mainGrid = grid.Draw();
+                    LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
+                    LayoutRoot.Children.Insert(0, mainGrid);
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     RottenApples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
@@ -370,24 +380,26 @@ namespace WPF.Game.ViewModels
                 {
                     pacman.Health -= item.GetDamage();
                     await _connection.InvokeAsync("PacmanDamage", pacman.Health);
-                    IDecorator grid = new AddLabel(new AddHealthBar(pacman, pacman.Health));
+                    IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     if (pacman.Health < 0)
                     {
                         YellowLeft = 0;
                         YellowTop = 0;
                         pacman.Health = 100;
-                        grid = new AddLabel(new AddHealthBar(pacman, 100));
+                        grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
                         mainGrid = grid.Draw();
                         LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                         LayoutRoot.Children.Insert(0, mainGrid);
                         Canvas.SetLeft(mainGrid, YellowLeft);
                         Canvas.SetTop(mainGrid, YellowTop);
                         await _connection.InvokeAsync("PacmanDamage", pacman.Health);
+                        await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     }
                 }
                 if (_connection.State.HasFlag(HubConnectionState.Connected))
@@ -582,6 +594,7 @@ namespace WPF.Game.ViewModels
 
         public override void DamagePacman(int damage)
         {
+            greenPacman.Health = damage;
             IDecorator grid = new AddLabel(new AddHealthBar(greenPacman, damage));
             opponentGrid = grid.Draw();
             LayoutRoot.Children.Remove(LayoutRoot.Children[1]);
@@ -599,6 +612,13 @@ namespace WPF.Game.ViewModels
         public override void RemoveStrawberry(RemoveStrawberryAtIndexCommand command)
         {
             command.Execute(Strawberries);
+        }
+        public override void ChangeSpeed(string speed)
+        {
+            IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(greenPacman, greenPacman.Health)), speed);
+            opponentGrid = grid.Draw();
+            LayoutRoot.Children.Remove(LayoutRoot.Children[1]);
+            LayoutRoot.Children.Insert(1, opponentGrid);
         }
     }
 }

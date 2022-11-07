@@ -117,5 +117,10 @@ namespace WPF.Game.ViewModels
         {
             throw new NotImplementedException();
         }
+
+        public override void ChangeSpeed(string speed)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
