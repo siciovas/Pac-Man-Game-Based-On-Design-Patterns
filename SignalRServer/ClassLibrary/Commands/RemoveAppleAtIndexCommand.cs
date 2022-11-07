@@ -17,10 +17,5 @@ namespace ClassLibrary.Commands
             var apples = (ObservableCollection<Apple>)parameter;
             apples.RemoveAt(Index);
         }
-
-        public void Undo(object parameter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

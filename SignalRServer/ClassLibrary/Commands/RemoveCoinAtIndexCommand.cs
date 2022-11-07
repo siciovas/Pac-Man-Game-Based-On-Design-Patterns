@@ -17,10 +17,5 @@ namespace ClassLibrary.Commands
             var coins = (ObservableCollection<Coin>)parameter;
             coins.RemoveAt(Index);
         }
-
-        public void Undo(object parameter)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

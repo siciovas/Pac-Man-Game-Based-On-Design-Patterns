@@ -18,10 +18,5 @@ namespace ClassLibrary.Commands
             var cherries = (ObservableCollection<Cherry>)parameter;
             cherries.RemoveAt(Index);
         }
-
-        public void Undo(object parameter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

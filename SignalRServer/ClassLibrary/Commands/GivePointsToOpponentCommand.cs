@@ -17,10 +17,5 @@ namespace ClassLibrary.Commands
             var pacman = (Pacman)parameter;
             pacman.Score = Score;
         }
-
-        public void Undo(object parameter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

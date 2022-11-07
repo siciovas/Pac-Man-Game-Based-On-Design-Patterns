@@ -18,10 +18,5 @@ namespace ClassLibrary.Commands
             var rottenApples = (ObservableCollection<RottenApple>)parameter;
             rottenApples.RemoveAt(Index);
         }
-
-        public void Undo(object parameter)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
