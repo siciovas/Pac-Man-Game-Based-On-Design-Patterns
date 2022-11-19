@@ -11,6 +11,7 @@ using ClassLibrary.Mobs;
 using ClassLibrary.Mobs.StrongMob;
 using ClassLibrary.Mobs.WeakMob;
 using ClassLibrary.Strategies;
+using ClassLibrary.TemplateMethod;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -32,12 +33,7 @@ namespace WPF.Game.ViewModels
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
-        CoinFactory _SilverCoinFactory;
-        CoinFactory _GoldCoinFactory;
         HubConnection _connection;
-        WeakMobFactory _mobFactory;
-        StrongMobFactory _strongMobFactory;
-        CoinMapProvider _coinMapProvider;
         Pacman pacman;
         Pacman greenPacman;
         Grid mainGrid;
@@ -142,12 +138,10 @@ namespace WPF.Game.ViewModels
         }
         public FourthLevelViewModel(IConnectionProvider connectionProvider, int score, int opScore)
         {
-            _GoldCoinFactory = new GoldCoinCreator();
-            _SilverCoinFactory = new SilverCoinCreator();
-            _coinMapProvider = new CoinMapProvider();
-            CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
-            _mobFactory = new WeakMobFactory();
-            _strongMobFactory = new StrongMobFactory();
+            Coins = new ObservableCollection<Coin>();
+            Mobs = new ObservableCollection<Mob>();
+            Spikes = new ObservableCollection<Spike>();
+            Walls = new ObservableCollection<Wall>();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman("Pacman");
             greenPacman = pacman.Copy();
@@ -165,69 +159,26 @@ namespace WPF.Game.ViewModels
             pacman.Score = score;
             greenPacman.Score = opScore;
 
-            var firstHalf = coinMapProviderAdapter.GetFirstHalfCoins(_SilverCoinFactory);
-            Coins = coinMapProviderAdapter.GetSecondHalfCoins(_GoldCoinFactory, firstHalf);
-            Mobs = SpawnMobs();
-            Apples = Utils.Utils.CreateApples();
-            RottenApples = Utils.Utils.CreateRottenApples();
-            Cherries = Utils.Utils.CreateCherries();
-            Strawberries = Utils.Utils.CreateStrawberries();
-            Walls = CreateWalls();
-            Spikes = CreateSpikes();
+            MapLoader mapLoader = new FourthLevelLoader();
+            var ApplesCopy = Apples;
+            var RottenApplesCopy = RottenApples;
+            var CherriesCopy = Cherries;
+            var StrawberriesCopy = Strawberries;
+            var SpikesCopy = Spikes;
+            var WallsCopy = Walls;
+            var MobsCopy = Mobs;
+            var CoinsCopy = Coins;
+            mapLoader.LoadMap(ref ApplesCopy, ref RottenApplesCopy, ref CherriesCopy, ref StrawberriesCopy, ref SpikesCopy, ref MobsCopy, ref CoinsCopy, ref WallsCopy);
+            Apples = ApplesCopy;
+            RottenApples = RottenApplesCopy;
+            Cherries = CherriesCopy;
+            Strawberries = StrawberriesCopy;
+            Spikes = SpikesCopy;
+            Walls = WallsCopy;
+            Mobs = MobsCopy;
+            Coins = CoinsCopy;
             GameSetup();
         }
-
-        private ObservableCollection<Wall> CreateWalls()
-        {
-            ObservableCollection<Wall> wall = new ObservableCollection<Wall>();
-            for (int i = 200; i < 500; i += 30)
-            {
-                var temp = new Wall(new StandardFeature());
-                temp.SetDamage();
-                temp.Left = 600;
-                temp.Top = i;
-                wall.Add(temp);
-            }
-            for (int i = 200; i < 500; i += 30)
-            {
-                var temp = new Wall(new StandardFeature());
-                temp.SetDamage();
-                temp.Left = 200;
-                temp.Top = i;
-                wall.Add(temp);
-            }
-            return wall;
-        }
-
-        private ObservableCollection<Spike> CreateSpikes()
-        {
-            ObservableCollection<Spike> spikes = new ObservableCollection<Spike>();
-            for (int i = 250; i < 450; i += 30)
-            {
-                var temp = new Spike(new LethalFeature());
-                temp.SetDamage();
-                temp.Left = i;
-                temp.Top = 150;
-                spikes.Add(temp);
-            }
-
-            return spikes;
-        }
-
-        private ObservableCollection<Mob> SpawnMobs()
-        {
-            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
-            var secondZombie = _strongMobFactory.CreateZombie(50, 750);
-            var thirdZombie = _mobFactory.CreateZombie(500, 50);
-            var fourthZombie = _mobFactory.CreateZombie(300, 300);
-            var firstDemo = _mobFactory.CreateDemogorgon(500, 600);
-            result.Add(secondZombie);
-            result.Add(thirdZombie);
-            result.Add(fourthZombie);
-            result.Add(firstDemo);
-            return result;
-        }
-
         private void GameSetup()
         {
             gameTimer.Tick += GameLoop;
