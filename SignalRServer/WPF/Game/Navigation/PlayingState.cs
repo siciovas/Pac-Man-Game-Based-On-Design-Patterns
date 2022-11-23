@@ -36,11 +36,9 @@ namespace WPF.Game.Navigation
             }
             if (_level == 2)
             {
-                _context.TransitionTo(new GameFinishedState(_firstLevelViewModel.score, _firstLevelViewModel.opponentScore, _context));
+                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, _firstLevelViewModel.score, _firstLevelViewModel.opponentScore);
+                _context.CurrentViewModel = _secondLevelViewModel;
                 return;
-                /* _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, _firstLevelViewModel.score, _firstLevelViewModel.opponentScore);
-                                 _context.CurrentViewModel = _secondLevelViewModel;
-                return;*/
             }
             if (_level == 3)
             {
