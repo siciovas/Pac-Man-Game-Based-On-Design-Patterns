@@ -4,6 +4,7 @@ using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using WPF.Connection;
+using WPF.Game.Navigation;
 using WPF.Game.ViewModels;
 
 namespace WPF.Game.Stores
@@ -11,20 +12,16 @@ namespace WPF.Game.Stores
     public class LevelsFacade : IObserver
     {
         private LevelViewModelBase _currentViewModel;
-        public FirstLevelViewModel _firstLevelViewModel;
-        public LevelViewModelBase _secondLevelViewModel;
-        public LevelViewModelBase _thirdLevelViewModel;
-        public LevelViewModelBase _fourthLevelViewModel;
-        public LevelViewModelBase _fifthLevelViewModel;
-        private StartPageViewModel _startPageViewModel;
+        private State _state;
         private HubConnection _connection;
         private IConnectionProvider _connectionProvider;
+        private bool _gameFinished;
 
         public LevelsFacade(IConnectionProvider connection)
         {
             _connectionProvider = connection;
-            _startPageViewModel = new StartPageViewModel(connection);
-            CurrentViewModel = _startPageViewModel;
+            _state = new ConnectingState(connection, this);
+            _state.GoToView();
             _connection = connection.GetConnection();
             _connection.On<int>("LevelUp", (Level) =>
             {
@@ -32,6 +29,14 @@ namespace WPF.Game.Stores
             });
             ListenServer();
             OnStartGame();
+        }
+
+        public void TransitionTo(State state)
+        {
+            Console.WriteLine($"Context: Transition to {state.GetType().Name}.");
+            this._state = state;
+            this._state.SetContext(this);
+            _state.GoToView();
         }
 
         private GameFinishedViewModel _gameFinishedViewModel;
@@ -111,65 +116,16 @@ namespace WPF.Game.Stores
         /// </summary>
         public void ChangeLevel()
         {
-            if (this.CurrentViewModel.Equals(_startPageViewModel))
+            if(_state.GetType() != typeof(PlayingState))
             {
-                _firstLevelViewModel = new FirstLevelViewModel(_connectionProvider);
-                this.CurrentViewModel = _firstLevelViewModel;
+                _state = new PlayingState(_connectionProvider, this);
             }
-            else if (this.CurrentViewModel.Equals(_firstLevelViewModel))
-            {
-                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, 20,20);
-                this.CurrentViewModel = _secondLevelViewModel;
-            }
-            else if (this.CurrentViewModel.Equals(_secondLevelViewModel))
-            {
-                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider,20,20);
-                this.CurrentViewModel = _thirdLevelViewModel;
-            }
-            else if (this.CurrentViewModel.Equals(_thirdLevelViewModel))
-            {
-                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider,20,20);
-                this.CurrentViewModel = _fourthLevelViewModel;
-            }
-            else if (this.CurrentViewModel.Equals(_fourthLevelViewModel))
-            {
-                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider,20,20);
-                this.CurrentViewModel = _fifthLevelViewModel;
-            }
-            else if (this.CurrentViewModel.Equals(_fifthLevelViewModel))
-            {
-                _gameFinishedViewModel = new GameFinishedViewModel(450,685);
-                this.CurrentViewModel = _gameFinishedViewModel;
-            }
+            _state.GoToView();
         }
 
         public void LevelUp(int Level)
         {
-            if (Level == 2) 
-            {
-                _secondLevelViewModel = new SecondLevelViewModel(_connectionProvider, _firstLevelViewModel.score, _firstLevelViewModel.opponentScore);
-                this.CurrentViewModel = _secondLevelViewModel;
-            }
-            if (Level == 3)
-            {
-                _thirdLevelViewModel = new ThirdLevelViewModel(_connectionProvider, _secondLevelViewModel.score, _secondLevelViewModel.opponentScore);
-                this.CurrentViewModel = _thirdLevelViewModel;
-            }
-            if (Level == 4)
-            {
-                _fourthLevelViewModel = new FourthLevelViewModel(_connectionProvider, _thirdLevelViewModel.score, _thirdLevelViewModel.opponentScore);
-                this.CurrentViewModel = _fourthLevelViewModel;
-            }
-            if (Level == 5)
-            {
-                _fifthLevelViewModel = new FifthLevelViewModel(_connectionProvider, _fourthLevelViewModel.score, _fourthLevelViewModel.opponentScore);
-                this.CurrentViewModel = _fifthLevelViewModel;
-            }
-            if (Level == -1)
-            {
-                _gameFinishedViewModel = new GameFinishedViewModel(_fifthLevelViewModel.score, _fifthLevelViewModel.opponentScore);
-                this.CurrentViewModel = _gameFinishedViewModel;
-            }
+            _state.GoToView();        
         }
 
         public void OnStartGame()
@@ -177,8 +133,8 @@ namespace WPF.Game.Stores
             _connection.On("StartGame",
                 () =>
                 {
-                    _firstLevelViewModel = new FirstLevelViewModel(_connectionProvider);
-                    CurrentViewModel = _firstLevelViewModel;
+                    _state = new PlayingState(_connectionProvider, this);
+                    _state.GoToView();
                 });
         }
     }
