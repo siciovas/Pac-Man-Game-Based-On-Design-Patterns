@@ -7,19 +7,21 @@
              mc:Ignorable="d" 
              Background="Black"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel VerticalAlignment="Center">
+    <StackPanel VerticalAlignment="Center" Height="309">
+        <Label Foreground="White" FontSize="25" HorizontalAlignment="Center" Content="Enter your name"/>
+        <TextBox Width="250" Margin="10" Name="UserName" Text="{Binding UserName}"></TextBox>
         <Button Height="50"
                 Width="250"
                 FontSize="25"
                 Command="{Binding ButtonCommand}" 
-                Background="Blue">CONNECT TO PLAY</Button>
-        
-        <TextBlock HorizontalAlignment="Center"
-                   Visibility="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                Path=DataContext.IsTextVisible}"
+                Background="Blue" Content="CONNECT TO PLAY"/>
+        <TextBlock
+                   Visibility="{Binding DataContext.IsTextVisible, RelativeSource={x:Static RelativeSource.Self}}"
                    FontSize="25"
-                   Foreground="White">
-            Waiting for other player to connect....
-        </TextBlock>
+                   Foreground="White" Height="42" Width="420"><Run Text="Waiting for other player to connect...."/></TextBlock>
+        <TextBlock
+                   Visibility="{Binding DataContext.IsUserAllowed, RelativeSource={x:Static RelativeSource.Self}}"
+                   FontSize="25"
+                   Foreground="Red" Height="42" Width="420" HorizontalAlignment="Center"  Text="&#x9;   User not allowed"  />
     </StackPanel>
 </UserControl>
