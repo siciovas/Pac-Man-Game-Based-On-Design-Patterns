@@ -34,7 +34,9 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 using System.Linq;
 using ClassLibrary.CoinMapping;
 using ClassLibrary.Adapter;
+using ClassLibrary.ChainOfResponsibility;
 using ClassLibrary.TemplateMethod;
+
 
 namespace WPF.Game.ViewModels
 {
@@ -51,6 +53,7 @@ namespace WPF.Game.ViewModels
         Grid mainGrid;
         Grid opponentGrid;
         public event Action LevelPassed;
+        AbstractHandler handler = new AppleHandler();
         public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
@@ -151,6 +154,10 @@ namespace WPF.Game.ViewModels
 
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
+            handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
+            _coinFactory = new BronzeCoinCreator();
+            _coinMapProvider = new CoinMapProvider();
+            _mobFactory = new WeakMobFactory();
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
             Spikes = new ObservableCollection<Spike>();
@@ -343,8 +350,7 @@ namespace WPF.Game.ViewModels
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    pacman.SetAlgorithm(new GiveSpeed());
-                    pacman.Action(ref pacman);
+                    handler.Handle(ref pacman, item);
                     IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
@@ -364,8 +370,7 @@ namespace WPF.Game.ViewModels
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    pacman.SetAlgorithm(new ReduceSpeed());
-                    pacman.Action(ref pacman);
+                    handler.Handle(ref pacman, item);
                     IDecorator grid = new ShowSpeed(new AddLabel(new AddHealthBar(pacman, pacman.Health)), pacman.Speed.ToString());
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
@@ -401,8 +406,7 @@ namespace WPF.Game.ViewModels
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    pacman.SetAlgorithm(new DoublePoints());
-                    pacman.Action(ref pacman);
+                    handler.Handle(ref pacman, item);
                     score = pacman.Score;
                     await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
@@ -416,8 +420,7 @@ namespace WPF.Game.ViewModels
                 Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
-                    pacman.SetAlgorithm(new MakeGhost());
-                    pacman.Action(ref pacman);
+                    handler.Handle(ref pacman, item);
                     var index = Strawberries.IndexOf(Strawberries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Strawberries.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveStrawberryAtIndex", new RemoveStrawberryAtIndexCommand(index));
