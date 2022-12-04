@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
 using WPF.Connection;
+using WPF.Game.Navigation;
 using WPF.Game.Stores;
 using WPF.Game.ViewModels;
 using WPF.Game.Views;

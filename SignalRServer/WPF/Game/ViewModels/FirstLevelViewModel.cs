@@ -35,6 +35,8 @@ using System.Linq;
 using ClassLibrary.CoinMapping;
 using ClassLibrary.Adapter;
 using ClassLibrary.ChainOfResponsibility;
+using ClassLibrary.TemplateMethod;
+
 
 namespace WPF.Game.ViewModels
 {
@@ -44,10 +46,7 @@ namespace WPF.Game.ViewModels
         DispatcherTimer gameTimer = new DispatcherTimer();
         bool goLeft, goRight, goUp, goDown;
         bool noLeft, noRight, noUp, noDown;
-        CoinFactory _coinFactory;
         HubConnection _connection;
-        WeakMobFactory _mobFactory;
-        CoinMapProvider _coinMapProvider;
         Pacman pacman;
         Pacman greenPacman;
         private bool _levelPassed;
@@ -159,6 +158,10 @@ namespace WPF.Game.ViewModels
             _coinFactory = new BronzeCoinCreator();
             _coinMapProvider = new CoinMapProvider();
             _mobFactory = new WeakMobFactory();
+            Coins = new ObservableCollection<Coin>();
+            Mobs = new ObservableCollection<Mob>();
+            Spikes = new ObservableCollection<Spike>();
+            Walls = new ObservableCollection<Wall>();
             _connection = connectionProvider.GetConnection();
             pacman = new Pacman("Pacman");
             greenPacman = pacman.Copy();
@@ -175,68 +178,26 @@ namespace WPF.Game.ViewModels
             YellowTop = 20;
             _levelPassed = false;
 
-            Mobs = SpawnGhosts();
-            Coins = _coinMapProvider.GetCoins(10, 800, 50, 600, _coinFactory);
-            Apples = Utils.Utils.CreateApples();
-            RottenApples = Utils.Utils.CreateRottenApples();
-            Cherries = Utils.Utils.CreateCherries();
-            Strawberries = Utils.Utils.CreateStrawberries();
-            Walls = CreateWalls();
-            Spikes = CreateSpikes();
+            MapLoader mapLoader = new FirstLevelLoader();
+            var ApplesCopy = Apples;
+            var RottenApplesCopy = RottenApples;
+            var CherriesCopy = Cherries;
+            var StrawberriesCopy = Strawberries;
+            var SpikesCopy = Spikes;
+            var WallsCopy = Walls;
+            var MobsCopy = Mobs;
+            var CoinsCopy = Coins;
+            mapLoader.LoadMap(ref ApplesCopy, ref RottenApplesCopy, ref CherriesCopy, ref StrawberriesCopy, ref SpikesCopy, ref MobsCopy, ref CoinsCopy, ref WallsCopy);
+            Apples = ApplesCopy;
+            RottenApples = RottenApplesCopy;
+            Cherries = CherriesCopy;
+            Strawberries = StrawberriesCopy;
+            Spikes = SpikesCopy;
+            Walls = WallsCopy;
+            Mobs = MobsCopy;
+            Coins = CoinsCopy;
             GameSetup();
         }
-
-        private ObservableCollection<Wall> CreateWalls()
-        {
-            ObservableCollection<Wall> wall = new ObservableCollection<Wall>();
-            for (int i = 200; i < 500; i += 30)
-            {
-                var temp = new Wall(new StandardFeature());
-                temp.SetDamage();
-                temp.Left = 600;
-                temp.Top = i;
-                wall.Add(temp);
-            }
-            for (int i = 200; i < 500; i += 30)
-            {
-                var temp = new Wall(new StandardFeature());
-                temp.SetDamage();
-                temp.Left = 200;
-                temp.Top = i;
-                wall.Add(temp);
-            }
-            return wall;
-        }
-
-        private ObservableCollection<Spike> CreateSpikes()
-        {
-            ObservableCollection<Spike> spikes = new ObservableCollection<Spike>();
-            for (int i = 250; i < 450; i += 30)
-            {
-                var temp = new Spike(new LethalFeature());
-                temp.SetDamage();
-                temp.Left = i;
-                temp.Top = 150;
-                spikes.Add(temp);
-            }
-            
-            return spikes;
-        }
-
-        private ObservableCollection<Mob> SpawnGhosts()
-        {
-            ObservableCollection<Mob> result = new ObservableCollection<Mob>();
-            var firstGhost = _mobFactory.CreateGhost(500, 600);
-            var secondGhost = _mobFactory.CreateGhost(50, 750);
-            var thirdGhost = _mobFactory.CreateGhost(500, 50);
-            var fourthGhost = _mobFactory.CreateGhost(300, 300);
-            result.Add(firstGhost);
-            result.Add(secondGhost);
-            result.Add(thirdGhost);
-            result.Add(fourthGhost);
-            return result;
-        }
-
         public override void SendOponmentCoordinates(string serializedObject)
         {
             Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);

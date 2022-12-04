@@ -4,7 +4,7 @@ using ClassLibrary.Fruits;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace WPF.Game.Utils
+namespace ClassLibrary.Utils
 {
     public class Utils
     {
