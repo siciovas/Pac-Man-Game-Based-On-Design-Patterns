@@ -139,10 +139,6 @@ namespace WPF.Game.ViewModels
         public FifthLevelViewModel(IConnectionProvider connectionProvider, int score, int opScore)
         {
             handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
-            _coinFactory = new GoldCoinCreator();
-            _coinMapProvider = new CoinMapProvider();
-            _mobFactory = new WeakMobFactory();
-            _strongMobFactory = new StrongMobFactory();
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
             Spikes = new ObservableCollection<Spike>();

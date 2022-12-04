@@ -155,9 +155,6 @@ namespace WPF.Game.ViewModels
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
             handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
-            _coinFactory = new BronzeCoinCreator();
-            _coinMapProvider = new CoinMapProvider();
-            _mobFactory = new WeakMobFactory();
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
             Spikes = new ObservableCollection<Spike>();

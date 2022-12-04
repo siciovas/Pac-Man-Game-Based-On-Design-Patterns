@@ -140,12 +140,6 @@ namespace WPF.Game.ViewModels
         public SecondLevelViewModel(IConnectionProvider connectionProvider, int score, int opScore)
         {
             handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
-            _BronzeCoinFactory = new BronzeCoinCreator();
-            _SilverCoinFactory = new SilverCoinCreator();
-            _coinMapProvider = new CoinMapProvider();
-            CoinMapProviderAdapter coinMapProviderAdapter = new CoinMapProviderAdapter(_coinMapProvider);
-            _mobFactory = new WeakMobFactory();
-            _strongMobFactory = new StrongMobFactory();
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
             Spikes = new ObservableCollection<Spike>();
