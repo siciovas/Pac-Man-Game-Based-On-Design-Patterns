@@ -1,6 +1,7 @@
 ﻿using ClassLibrary.Views;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -8,6 +9,57 @@ using WPF.Connection;
 
 namespace WPF.Game.ViewModels
 {
+    public class ButtonClickHandler : IButtonClickHandler
+    {
+        private readonly IConnectionProvider _connection;
+
+        public ButtonClickHandler(IConnectionProvider connection)
+        {
+            _connection = connection;
+        }
+
+        public void HandleMainButtonClick(string input, ref Visibility IsTextVisible, ref Visibility IsUserAllowed)
+        {
+            _connection.Connect();
+            IsTextVisible = Visibility.Visible;
+            IsUserAllowed = Visibility.Collapsed;
+        }
+    }
+
+    public class ButtonClickHandlerProxy : IButtonClickHandler
+    {
+        private readonly List<string> blackList = new List<string> { null, "", "NotAllowed", "Rokas" };
+        private readonly ButtonClickHandler realButtonClickHandler;
+
+        public ButtonClickHandlerProxy(IConnectionProvider connection)
+        {
+            realButtonClickHandler = new ButtonClickHandler(connection);
+        }
+
+        public void HandleMainButtonClick(string input, ref Visibility IsTextVisible, ref Visibility IsUserAllowed)
+        {
+            if (CheckAccess(input))
+            {
+                realButtonClickHandler.HandleMainButtonClick(input, ref IsTextVisible, ref IsUserAllowed);
+            }
+            else
+            {
+                IsTextVisible = Visibility.Collapsed;
+                IsUserAllowed = Visibility.Visible;
+            }
+        }
+
+        public bool CheckAccess(string input)
+        {
+            return !blackList.Contains(input);
+        }
+    }
+
+    public interface IButtonClickHandler
+    {
+        void HandleMainButtonClick(string input, ref Visibility textBlock, ref Visibility isUserAllowed);
+    }
+
     public class StartPageViewModel : LevelViewModelBase
     {
         IConnectionProvider _connection;
@@ -29,23 +81,49 @@ namespace WPF.Game.ViewModels
                 }
             }
         }
+        private Visibility _userNotAllowedText = Visibility.Collapsed;
+        public Visibility IsUserAllowed
+        {
+            get
+            {
+                return _userNotAllowedText;
+            }
+            private set
+            {
+                if (value != _userNotAllowedText)
+                {
+                    _userNotAllowedText = value;
+                    OnPropertyChanged("IsUserAllowed");
+                }
+            }
+        }
 
-        public override int score { get => 1; set
+        public override int score
+        {
+            get => 1; set
             {
 
             }
         }
         public override int opponentScore { get => 1; set { } }
 
+        public string UserName { get; set; }
+
+        public ButtonClickHandlerProxy buttonClickHandler { get; set; }
+
         public StartPageViewModel(IConnectionProvider connectionProvider)
         {
             _connection = connectionProvider;
             ButtonCommand = new RelayCommand(new Action(MainButtonClick));
+            buttonClickHandler = new ButtonClickHandlerProxy(_connection);
         }
         private void MainButtonClick()
         {
-            _connection.Connect();
-            IsTextVisible = Visibility.Visible;
+            Visibility isTextVisible = IsTextVisible;
+            Visibility isUserAllowed = IsUserAllowed;
+            buttonClickHandler.HandleMainButtonClick(UserName, ref isTextVisible, ref isUserAllowed);
+            IsTextVisible = isTextVisible;
+            IsUserAllowed = isUserAllowed;
         }
 
         public override void OnRightClick()
