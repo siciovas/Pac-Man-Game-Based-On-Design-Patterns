@@ -1,12 +1,9 @@
 ﻿using ClassLibrary._Pacman;
-using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
 using ClassLibrary.Decorator;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary.Strategies;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -18,22 +15,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using WPF.Connection;
-using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Windows.Controls;
-using System.Reflection.Metadata;
-using System.Windows.Media;
-using System.Windows.Data;
-using System.Drawing;
-using ClassLibrary.MainUnit;
-using ClassLibrary.Decorator;
 using ClassLibrary.Bridge;
-using System.Windows.Shapes;
-using Rectangle = System.Windows.Shapes.Rectangle;
-using System.Linq;
-using ClassLibrary.CoinMapping;
-using ClassLibrary.Adapter;
 using ClassLibrary.ChainOfResponsibility;
 using ClassLibrary.TemplateMethod;
 
@@ -355,7 +339,10 @@ namespace WPF.Game.ViewModels
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
                     await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
-                    var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    var index = Apples.IndexOf(Apples
+                        .Where(a => a.Top == item.Top 
+                                && a.Left == item.Left)
+                        .FirstOrDefault());
                     Apples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     break;

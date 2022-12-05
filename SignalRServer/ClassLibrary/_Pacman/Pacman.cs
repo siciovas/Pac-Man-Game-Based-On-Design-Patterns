@@ -4,6 +4,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System;
 using ClassLibrary.Fruits;
+using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace ClassLibrary._Pacman
 {
@@ -50,6 +51,8 @@ namespace ClassLibrary._Pacman
         {
             //creates a green copy of pacman using deep copy
             var clone = (Pacman)this.MemberwiseClone();
+            UnitType unt = new UnitType();
+            clone.UnitType = unt;
             clone.algorithm = new DefaultAlgorithm();
             clone.UnitType.Appearance = new ImageBrush();
             ImageBrush pacmanBrush = new ImageBrush();

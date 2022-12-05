@@ -50,7 +50,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="15" Height="15" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="15" Height="15" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -70,7 +70,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="50" Height="50" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="50" Height="50" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -91,7 +91,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -112,7 +112,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -133,7 +133,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -154,7 +154,7 @@
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="30" Height="30" Fill="{Binding Appearance}"/>
+                            <Rectangle Width="30" Height="30" Fill="{Binding UnitType.Appearance}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
