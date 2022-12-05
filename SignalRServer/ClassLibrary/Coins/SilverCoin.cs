@@ -10,15 +10,11 @@ namespace ClassLibrary.Coins
     {
         public SilverCoin() : base()
         {
-            UnitType = new UnitType();
-
             Value = 3;
             Top = 50;
             Left = 50;
-            ImageBrush silverCoin = new ImageBrush();
-            silverCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/silverCoin.png"));
-            UnitType.Appearance = silverCoin;
-            UnitType.Name = "Silver coin";
+            var factory = new UnitFactory();
+            UnitType = factory.GetFlyweight("silverCoin");
         }
 
         public override Coin Copy()

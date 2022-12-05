@@ -15,10 +15,8 @@ namespace ClassLibrary.Coins
             Value = 2;
             Top = 50;
             Left = 50;
-            ImageBrush bronzeCoin = new ImageBrush();
-            bronzeCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/bronzeCoin.png"));
-            UnitType.Appearance = bronzeCoin;
-            UnitType.Name = "Bronze coin";
+            var unitFactory = new UnitFactory();
+            UnitType = unitFactory.GetFlyweight("bronzeCoin");
         }
 
   

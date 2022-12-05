@@ -15,10 +15,8 @@ namespace ClassLibrary.Coins
             Value = 5;
             Top = 50;
             Left = 50;
-            ImageBrush goldCoin = new ImageBrush();
-            goldCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/goldCoin.png"));
-            UnitType.Appearance = goldCoin;
-            UnitType.Name = "Gold coin";
+            var unitFactory = new UnitFactory();
+            UnitType = unitFactory.GetFlyweight("goldCoin");
         }
 
         public override Coin Copy() //shallow copy

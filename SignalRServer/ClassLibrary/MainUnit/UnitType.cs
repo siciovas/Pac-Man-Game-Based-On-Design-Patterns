@@ -11,5 +11,16 @@ namespace ClassLibrary.MainUnit
     {
         public ImageBrush Appearance { get; set; }
         public string Name { get; set; }
+
+        public UnitType()
+        {
+
+        }
+
+        public UnitType(ImageBrush brush, string name)
+        {
+            Name = name;
+            Appearance = brush;
+        }
     }
 }
