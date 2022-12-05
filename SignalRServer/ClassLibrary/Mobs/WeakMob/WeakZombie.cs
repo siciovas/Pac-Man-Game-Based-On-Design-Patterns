@@ -11,13 +11,15 @@ namespace ClassLibrary.Mobs.WeakMob
     {
         public WeakZombie(int top, int left)
         {
+            UnitType = new UnitType();
+
             Top = top;
             Left = left;
             GoLeft = true;
             ImageBrush zombie = new ImageBrush();
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakZombie.png"));
-            Appearance = zombie;
-            Name = "Weak zombie";
+            UnitType.Appearance = zombie;
+            UnitType.Name = "Weak zombie";
         }
 
         public override WeakZombie Copy()

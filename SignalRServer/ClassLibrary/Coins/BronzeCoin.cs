@@ -10,13 +10,13 @@ namespace ClassLibrary.Coins
     {
         public BronzeCoin() : base()
         {
+            UnitType = new UnitType();
+
             Value = 2;
             Top = 50;
             Left = 50;
-            ImageBrush bronzeCoin = new ImageBrush();
-            bronzeCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/bronzeCoin.png"));
-            Appearance = bronzeCoin;
-            Name = "Bronze coin";
+            var unitFactory = new UnitFactory();
+            UnitType = unitFactory.GetFlyweight("bronzeCoin");
         }
 
   

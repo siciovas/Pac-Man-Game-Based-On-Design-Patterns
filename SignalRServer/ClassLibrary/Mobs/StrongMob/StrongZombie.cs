@@ -11,13 +11,15 @@ namespace ClassLibrary.Mobs.StrongMob
     {
         public StrongZombie(int top, int left)
         {
+            UnitType = new UnitType();
+
             Top = top;
             Left = left;
             GoLeft = true;
             ImageBrush zombie = new ImageBrush();
             zombie.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/StrongZombie.png"));
-            Appearance = zombie;
-            Name = "Strong zombie";
+            UnitType.Appearance = zombie;
+            UnitType.Name = "Strong zombie";
         }
 
         public override StrongZombie Copy()
