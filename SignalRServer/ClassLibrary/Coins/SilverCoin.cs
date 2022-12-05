@@ -1,4 +1,5 @@
 ﻿using ClassLibrary.Coins.Interfaces;
+using ClassLibrary.MainUnit;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -9,13 +10,15 @@ namespace ClassLibrary.Coins
     {
         public SilverCoin() : base()
         {
+            UnitType = new UnitType();
+
             Value = 3;
             Top = 50;
             Left = 50;
             ImageBrush silverCoin = new ImageBrush();
             silverCoin.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/silverCoin.png"));
-            Appearance = silverCoin;
-            Name = "Silver coin";
+            UnitType.Appearance = silverCoin;
+            UnitType.Name = "Silver coin";
         }
 
         public override Coin Copy()

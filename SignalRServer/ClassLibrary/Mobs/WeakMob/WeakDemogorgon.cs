@@ -11,13 +11,15 @@ namespace ClassLibrary.Mobs.WeakMob
     {
         public WeakDemogorgon(int top, int left)
         {
+            UnitType = new UnitType();
+
             Top = top;
             Left = left;
             GoLeft = true;
             ImageBrush demo = new ImageBrush();
             demo.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/WeakDemo.png"));
-            Appearance = demo;
-            Name = "Weak demogorgon";
+            UnitType.Appearance = demo;
+            UnitType.Name = "Weak demogorgon";
         }
 
         public override WeakDemogorgon Copy()

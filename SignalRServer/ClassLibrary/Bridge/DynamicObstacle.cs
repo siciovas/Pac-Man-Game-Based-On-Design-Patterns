@@ -14,6 +14,8 @@ namespace ClassLibrary.Bridge
 
         protected DynamicObstacle(IFeature feature)
         {
+            UnitType = new UnitType();
+
             Feature = feature;
         }
         public abstract void SetDamage();
