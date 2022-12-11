@@ -16,7 +16,6 @@ namespace ClassLibrary._Pacman
         public int Health { get; set; }
         public bool GhostMode { get; set; }
 
-        private (int, int) _state;
 
         private Algorithm algorithm;
 
@@ -42,7 +41,6 @@ namespace ClassLibrary._Pacman
             ImageBrush pacmanBrush = new ImageBrush();
             pacmanBrush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/pacman.jpg"));
             UnitType.Appearance = pacmanBrush;
-            _state = (Top, Left);
         }
 
         public void Action(ref Pacman pacman)

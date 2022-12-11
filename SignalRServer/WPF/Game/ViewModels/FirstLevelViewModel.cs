@@ -213,7 +213,7 @@ namespace WPF.Game.ViewModels
         }
         public override void SendOponmentCoordinates(string serializedObject)
         {
-            Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
+            Coordinates deserializedObject = JsonSerializer.Deserialize<Coordinates>(serializedObject);
             GreenLeft = deserializedObject.Left;
             GreenTop = deserializedObject.Top;
         }
@@ -309,8 +309,8 @@ namespace WPF.Game.ViewModels
             Canvas.SetLeft(opponentGrid, GreenLeft);
             Canvas.SetTop(opponentGrid, GreenTop);
 
-            int AppHeight = (int)Application.Current.MainWindow.Height;
-            int AppWidth = (int)Application.Current.MainWindow.Width;
+            int AppHeight = 600;
+            int AppWidth = 800;
             int oldLeft = YellowLeft;
             int oldTop = YellowTop;
             if (goRight)
@@ -335,7 +335,7 @@ namespace WPF.Game.ViewModels
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
-            if (goDown && YellowTop + 105 > AppHeight)
+            if (goDown && YellowTop + 30 > AppHeight)
             {
                 noDown = true;
                 goDown = false;
