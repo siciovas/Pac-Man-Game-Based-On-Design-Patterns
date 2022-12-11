@@ -20,7 +20,9 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using ClassLibrary.Bridge;
 using ClassLibrary.ChainOfResponsibility;
 using ClassLibrary.TemplateMethod;
-
+using ClassLibrary.Memento;
+using System.Collections.Generic;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace WPF.Game.ViewModels
 {
@@ -38,6 +40,10 @@ namespace WPF.Game.ViewModels
         Grid opponentGrid;
         public event Action LevelPassed;
         AbstractHandler handler = new AppleHandler();
+        private List<IMemento> _mementos = new List<IMemento>();
+        public System.Windows.Input.ICommand SaveState { get; set; }
+        public System.Windows.Input.ICommand RestoreLastState { get; set; }
+
         public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
@@ -136,8 +142,34 @@ namespace WPF.Game.ViewModels
             }
         }
 
+        private void SavePacmanState()
+        {
+            _mementos.Add(pacman.Save());
+        }
+
+        private void RecoverLastPacmanState()
+        {
+            if (this._mementos.Count == 0)
+            {
+                return;
+            }
+
+            var memento = this._mementos.Last();
+            this._mementos.Remove(memento);
+
+            try
+            {
+                this.pacman.Restore(memento);
+            }
+            catch (Exception)
+            {
+            }
+        }
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
+            SaveState = new RelayCommand(new Action(SavePacmanState));
+            RestoreLastState = new RelayCommand(new Action(RecoverLastPacmanState));
+
             handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
