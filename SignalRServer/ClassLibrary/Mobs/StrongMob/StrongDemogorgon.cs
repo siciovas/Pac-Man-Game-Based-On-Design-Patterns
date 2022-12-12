@@ -11,13 +11,15 @@ namespace ClassLibrary.Mobs.StrongMob
     {
         public StrongDemogorgon(int top, int left)
         {
+            UnitType = new UnitType();
+
             Top = top;
             Left = left;
             GoLeft = true;
             ImageBrush demo = new ImageBrush();
             demo.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/StrongDemo.png"));
-            Appearance = demo;
-            Name = "Strong demogorgon";
+            UnitType.Appearance = demo;
+            UnitType.Name = "Strong demogorgon";
         }
 
         public override StrongDemogorgon Copy()

@@ -14,6 +14,8 @@ namespace ClassLibrary.Bridge
 
         protected StaticObstacle(IFeature feature)
         {
+            UnitType = new UnitType();
+
             Feature = feature;
         }
 

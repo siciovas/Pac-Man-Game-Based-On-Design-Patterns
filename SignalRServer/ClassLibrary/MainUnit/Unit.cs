@@ -1,14 +1,7 @@
 ﻿using ClassLibrary.Decorator;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace ClassLibrary.MainUnit
@@ -41,8 +34,10 @@ namespace ClassLibrary.MainUnit
                 NotifyPropertyChanged("Left");
             }
         }
-        public ImageBrush Appearance { get; set; }
-        public string Name { get; set; }
+        /*public ImageBrush Appearance { get; set; }
+        public string Name { get; set; }*/
+
+        public UnitType UnitType { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -53,13 +48,13 @@ namespace ClassLibrary.MainUnit
         public override Grid Draw()
         {
             Grid grid = new Grid();
-            grid.Name = Name;
+            grid.Name = UnitType.Name;
             Rectangle rect = new Rectangle();
             rect.Width = 30;
             rect.Height = 30;
-            if (Appearance != null)
+            if (UnitType.Appearance != null)
             {
-                rect.Fill = Appearance;
+                rect.Fill = UnitType.Appearance;
             }
             grid.Children.Add(rect);
             return grid;

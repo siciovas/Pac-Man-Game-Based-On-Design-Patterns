@@ -10,12 +10,14 @@ namespace ClassLibrary.Fruits
     {
         public Apple(int top, int left)
         {
+            UnitType = new UnitType();
+
             Top = top;
             Left = left;
             ImageBrush apple = new ImageBrush();
             apple.ImageSource = new BitmapImage(new Uri("pack://application:,,,/images/apple.png"));
-            Appearance = apple;
-            Name = "Apple";
+            UnitType.Appearance = apple;
+            UnitType.Name = "Apple";
         }
 
         public override Apple Copy()

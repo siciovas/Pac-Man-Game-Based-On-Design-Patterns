@@ -1,12 +1,9 @@
 ﻿using ClassLibrary._Pacman;
-using ClassLibrary.Coins.Factories;
 using ClassLibrary.Coins.Interfaces;
 using ClassLibrary.Commands;
 using ClassLibrary.Decorator;
 using ClassLibrary.Fruits;
 using ClassLibrary.Mobs;
-using ClassLibrary.Mobs.WeakMob;
-using ClassLibrary.Strategies;
 using ClassLibrary.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
@@ -18,26 +15,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using WPF.Connection;
-using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using System.Windows.Controls;
-using System.Reflection.Metadata;
-using System.Windows.Media;
-using System.Windows.Data;
-using System.Drawing;
-using ClassLibrary.MainUnit;
-using ClassLibrary.Decorator;
 using ClassLibrary.Bridge;
-using System.Windows.Shapes;
-using Rectangle = System.Windows.Shapes.Rectangle;
-using System.Linq;
-using ClassLibrary.CoinMapping;
-using ClassLibrary.Adapter;
 using ClassLibrary.ChainOfResponsibility;
 using ClassLibrary.TemplateMethod;
-using ClassLibrary.Interpreter;
+using ClassLibrary.Memento;
 using System.Collections.Generic;
+using GalaSoft.MvvmLight.CommandWpf;
+
+using ClassLibrary.Interpreter;
 using System.Linq.Expressions;
 
 namespace WPF.Game.ViewModels
@@ -56,6 +43,10 @@ namespace WPF.Game.ViewModels
         Grid opponentGrid;
         public event Action LevelPassed;
         AbstractHandler handler = new AppleHandler();
+        private List<IMemento> _mementos = new List<IMemento>();
+        public System.Windows.Input.ICommand SaveState { get; set; }
+        public System.Windows.Input.ICommand RestoreLastState { get; set; }
+
         ClassLibrary.Interpreter.Expression ApplesExpression;
         ClassLibrary.Interpreter.Expression RottenApplesExpression;
         ClassLibrary.Interpreter.Expression CherriesExpression;
@@ -169,8 +160,34 @@ namespace WPF.Game.ViewModels
             }
         }
 
+        private void SavePacmanState()
+        {
+            _mementos.Add(pacman.Save());
+        }
+
+        private void RecoverLastPacmanState()
+        {
+            if (this._mementos.Count == 0)
+            {
+                return;
+            }
+
+            var memento = this._mementos.Last();
+            this._mementos.Remove(memento);
+
+            try
+            {
+                this.pacman.Restore(memento);
+            }
+            catch (Exception)
+            {
+            }
+        }
         public FirstLevelViewModel(IConnectionProvider connectionProvider)
         {
+            SaveState = new RelayCommand(new Action(SavePacmanState));
+            RestoreLastState = new RelayCommand(new Action(RecoverLastPacmanState));
+
             handler.SetNext(new CherryHandler()).SetNext(new RottenAppleHandler()).SetNext(new StrawberryHandler());
             Coins = new ObservableCollection<Coin>();
             Mobs = new ObservableCollection<Mob>();
@@ -222,7 +239,7 @@ namespace WPF.Game.ViewModels
         }
         public override void SendOponmentCoordinates(string serializedObject)
         {
-            Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
+            Coordinates deserializedObject = JsonSerializer.Deserialize<Coordinates>(serializedObject);
             GreenLeft = deserializedObject.Left;
             GreenTop = deserializedObject.Top;
         }
@@ -341,8 +358,8 @@ namespace WPF.Game.ViewModels
             Canvas.SetLeft(opponentGrid, GreenLeft);
             Canvas.SetTop(opponentGrid, GreenTop);
 
-            int AppHeight = (int)Application.Current.MainWindow.Height;
-            int AppWidth = (int)Application.Current.MainWindow.Width;
+            int AppHeight = 600;
+            int AppWidth = 800;
             int oldLeft = YellowLeft;
             int oldTop = YellowTop;
             if (goRight)
@@ -367,7 +384,7 @@ namespace WPF.Game.ViewModels
                 await _connection.InvokeAsync("SendPacManCordinates", serializedObject);
             }
 
-            if (goDown && YellowTop + 105 > AppHeight)
+            if (goDown && YellowTop + 30 > AppHeight)
             {
                 noDown = true;
                 goDown = false;
@@ -403,7 +420,10 @@ namespace WPF.Game.ViewModels
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
                     await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
-                    var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    var index = Apples.IndexOf(Apples
+                        .Where(a => a.Top == item.Top 
+                                && a.Left == item.Left)
+                        .FirstOrDefault());
                     Apples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
                     break;
