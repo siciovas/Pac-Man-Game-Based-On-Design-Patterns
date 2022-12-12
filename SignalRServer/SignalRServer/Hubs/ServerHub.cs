@@ -99,5 +99,21 @@ namespace SignalRServer.Hubs
         {
             await Clients.Others.SendAsync("ChangeSpeed", speed);
         }
+        public async Task SendAddApple(AddAppleCommand command)
+        {
+            await Clients.Others.SendAsync("SendAddApple", command);
+        }
+        public async Task SendAddRottenApple(AddRottenAppleCommand command)
+        {
+            await Clients.Others.SendAsync("SendAddRottenApple", command);
+        }
+        public async Task SendAddCherry(AddCherryCommand command)
+        {
+            await Clients.Others.SendAsync("SendAddCherry", command);
+        }
+        public async Task SendAddStrawberry(AddStrawberyCommand command)
+        {
+            await Clients.Others.SendAsync("SendAddStrawberry", command);
+        }
     }
 }

@@ -10,8 +10,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Canvas Name="MyCanvas"
-                Height="600"
+        <Canvas Height="700" Name="MyCanvas"
                     Focusable="True"
                     Background="Black">
             <ContentPresenter Content="{Binding Path=LayoutRoot}" />
@@ -206,8 +205,7 @@
             </ItemsControl>
 
         </Canvas>
-        <StackPanel Orientation="Horizontal"
-                                    Grid.Row="1"
+        <StackPanel Orientation="Horizontal" Grid.Row="1"
 >
             <Button HorizontalAlignment="Center"
                 Command="{Binding SaveState}" 
@@ -218,6 +216,7 @@
 
                 Command="{Binding RestoreLastState}" 
                 Background="Blue">Restore last pacman coordinates</Button>
+            <TextBox Text="{Binding CmdName}" Width="100" Height="22" />
         </StackPanel>
         
     </Grid>

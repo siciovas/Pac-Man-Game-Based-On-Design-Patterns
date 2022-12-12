@@ -24,6 +24,9 @@ using ClassLibrary.Memento;
 using System.Collections.Generic;
 using GalaSoft.MvvmLight.CommandWpf;
 
+using ClassLibrary.Interpreter;
+using System.Linq.Expressions;
+
 namespace WPF.Game.ViewModels
 {
     public class FirstLevelViewModel : LevelViewModelBase
@@ -44,6 +47,14 @@ namespace WPF.Game.ViewModels
         public System.Windows.Input.ICommand SaveState { get; set; }
         public System.Windows.Input.ICommand RestoreLastState { get; set; }
 
+        ClassLibrary.Interpreter.Expression ApplesExpression;
+        ClassLibrary.Interpreter.Expression RottenApplesExpression;
+        ClassLibrary.Interpreter.Expression CherriesExpression;
+        ClassLibrary.Interpreter.Expression StrawberriesExpression;
+        List<Apple> copyApples;
+        List<RottenApple> copyRottenApples;
+        List<Cherry> copyCherries;
+        List<Strawberry> copyStrawberries;
         public Canvas LayoutRoot { get; private set; }
         public int YellowLeft
         {
@@ -59,6 +70,13 @@ namespace WPF.Game.ViewModels
                     OnPropertyChanged("YellowLeft");
                 }
             }
+        }
+
+        private string _name = string.Empty;
+        public string CmdName
+        {
+            get { return _name; }
+            set { _name = value; OnPropertyChanged("CmdName"); }
         }
         public int YellowTop
         {
@@ -209,6 +227,14 @@ namespace WPF.Game.ViewModels
             Walls = WallsCopy;
             Mobs = MobsCopy;
             Coins = CoinsCopy;
+            copyApples = Apples.ToList();
+            copyRottenApples = RottenApples.ToList();
+            copyCherries = Cherries.ToList();
+            copyStrawberries = Strawberries.ToList();
+            ApplesExpression = new ApplesRestoreExpression(Apples.ToList());
+            RottenApplesExpression = new RottenApplesRestoreExpression(RottenApples.ToList());
+            CherriesExpression = new CherriesRestoreExpression(Cherries.ToList());
+            StrawberriesExpression = new StrawberriesRestoreExpression(Strawberries.ToList());
             GameSetup();
         }
         public override void SendOponmentCoordinates(string serializedObject)
@@ -303,6 +329,29 @@ namespace WPF.Game.ViewModels
             if (Coins.Count == 0) 
             {
                 return;
+            }
+            if(_name.Length > 0)
+            {
+                if (_name.ToString() == "Apple.")
+                {
+                    ApplesExpression.Interpret(Apples, _connection);
+                    _name = string.Empty;
+                }
+                else if (_name.ToString() == "RottenApple.")
+                {
+                    RottenApplesExpression.Interpret(RottenApples, _connection);
+                    _name = string.Empty;
+                }
+                else if (_name.ToString() == "Cherry.")
+                {
+                    CherriesExpression.Interpret(Cherries, _connection);
+                    _name = string.Empty;
+                }
+                else if (_name.ToString() == "Strawberry.")
+                {
+                    StrawberriesExpression.Interpret(Strawberries, _connection);
+                    _name = string.Empty;
+                }
             }
             Canvas.SetLeft(mainGrid, YellowLeft);
             Canvas.SetTop(mainGrid, YellowTop);
@@ -616,6 +665,30 @@ namespace WPF.Game.ViewModels
 
                 goLeft = true;
             }
+        }
+
+        public override void AddApple(AddAppleCommand cmd)
+        {
+            cmd.SetApplesListCopy(copyApples);
+            cmd.Execute(Apples);
+        }
+
+        public override void AddRottenApple(AddRottenAppleCommand command)
+        {
+            command.SetRottenApplesListCopy(copyRottenApples);
+            command.Execute(RottenApples);
+        }
+
+        public override void AddCherry(AddCherryCommand command)
+        {
+            command.SetCherriesListCopy(copyCherries);
+            command.Execute(Cherries);
+        }
+
+        public override void AddStrawberry(AddStrawberyCommand command)
+        {
+            command.SetStrawberriesListCopy(copyStrawberries);
+            command.Execute(Strawberries);
         }
     }
 }
