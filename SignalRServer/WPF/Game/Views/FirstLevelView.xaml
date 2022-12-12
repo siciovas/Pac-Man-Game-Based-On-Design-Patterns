@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
     <Grid>
-        <Canvas Name="MyCanvas"
+        <Canvas Height="700" Name="MyCanvas"
                     Focusable="True"
                     Background="Black">
             <ContentPresenter Content="{Binding Path=LayoutRoot}" />
@@ -203,5 +203,6 @@
             </ItemsControl>
 
         </Canvas>
+        <TextBox Text="{Binding Path=CmdName}" Width="100" Height="50" Margin="0,621,700,-71"/>
     </Grid>
 </UserControl>

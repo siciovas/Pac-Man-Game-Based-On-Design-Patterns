@@ -576,5 +576,25 @@ namespace WPF.Game.ViewModels
             LayoutRoot.Children.Remove(LayoutRoot.Children[1]);
             LayoutRoot.Children.Insert(1, opponentGrid);
         }
+
+        public override void AddApple(AddAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddRottenApple(AddRottenAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddCherry(AddCherryCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddStrawberry(AddStrawberyCommand command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

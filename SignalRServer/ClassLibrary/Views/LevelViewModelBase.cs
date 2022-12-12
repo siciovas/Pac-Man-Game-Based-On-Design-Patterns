@@ -28,6 +28,10 @@ namespace ClassLibrary.Views
         public abstract void MoveObstacle(string serializedObject);
         public abstract void RemoveStrawberry(RemoveStrawberryAtIndexCommand command);
         public abstract void ChangeSpeed(string speed);
+        public abstract void AddApple(AddAppleCommand command);
+        public abstract void AddRottenApple(AddRottenAppleCommand command);
+        public abstract void AddCherry(AddCherryCommand command);
+        public abstract void AddStrawberry(AddStrawberyCommand command);
 
     }
 }

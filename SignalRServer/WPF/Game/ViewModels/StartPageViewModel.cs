@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Views;
+﻿using ClassLibrary.Commands;
+using ClassLibrary.Views;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WPF.Connection;
+using ICommand = System.Windows.Input.ICommand;
 
 namespace WPF.Game.ViewModels
 {
@@ -197,6 +199,26 @@ namespace WPF.Game.ViewModels
         }
 
         public override void ChangeSpeed(string speed)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddApple(AddAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddRottenApple(AddRottenAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddCherry(AddCherryCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddStrawberry(AddStrawberyCommand command)
         {
             throw new NotImplementedException();
         }
