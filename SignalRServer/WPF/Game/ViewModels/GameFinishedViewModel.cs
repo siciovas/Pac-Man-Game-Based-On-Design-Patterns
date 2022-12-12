@@ -22,6 +22,26 @@ namespace WPF.Game.ViewModels
         public int OpScore { get; }
         public override int opponentScore { get => 1; set { } }
 
+        public override void AddApple(AddAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddCherry(AddCherryCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddRottenApple(AddRottenAppleCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void AddStrawberry(AddStrawberyCommand command)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void ChangeSpeed(string speed)
         {
             throw new NotImplementedException();

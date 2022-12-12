@@ -109,6 +109,22 @@ namespace WPF.Game.Stores
             {
                 _currentViewModel.ChangeSpeed(speed);
             });
+            _connection.On<AddAppleCommand>("SendAddApple", (command) =>
+            {
+                _currentViewModel.AddApple(command);
+            });
+            _connection.On<AddRottenAppleCommand>("SendAddRottenApple", (command) =>
+            {
+                _currentViewModel.AddRottenApple(command);
+            });
+            _connection.On<AddCherryCommand>("SendAddCherry", (command) =>
+            {
+                _currentViewModel.AddCherry(command);
+            });
+            _connection.On<AddStrawberyCommand>("SendAddStrawberry", (command) =>
+            {
+                _currentViewModel.AddStrawberry(command);
+            });
         }
 
         /// <summary>
