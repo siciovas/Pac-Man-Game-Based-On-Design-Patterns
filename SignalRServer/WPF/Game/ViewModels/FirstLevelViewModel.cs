@@ -326,10 +326,10 @@ namespace WPF.Game.ViewModels
 
         private async void GameLoop(object? sender, EventArgs e)
         {
-            if (Coins.Count == 0) 
+            /*if (Coins.Count == 0) 
             {
                 return;
-            }
+            }*/
             if(_name.Length > 0)
             {
                 if (_name.ToString() == "Apple.")
@@ -611,12 +611,12 @@ namespace WPF.Game.ViewModels
                 }
                 if (item.GoLeft)
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left + 3, Index = spikeIndex, GoLeft = true });
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left + 5, Index = spikeIndex, GoLeft = true });
                     await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 else
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left - 3, Index = spikeIndex, GoLeft = false });
+                    string a = JsonConvert.SerializeObject(new { Position = item.Left - 5, Index = spikeIndex, GoLeft = false });
                     await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 spikeIndex++;
