@@ -326,10 +326,10 @@ namespace WPF.Game.ViewModels
 
         private async void GameLoop(object? sender, EventArgs e)
         {
-            /*if (Coins.Count == 0) 
+            if (Coins.Count == 0) 
             {
                 return;
-            }*/
+            }
             if(_name.Length > 0)
             {
                 if (_name.ToString() == "Apple.")
