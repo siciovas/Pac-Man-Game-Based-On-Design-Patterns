@@ -11,7 +11,7 @@ namespace WPF.Connection
         public ConnectionProvider()
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7169/serverhub")
+                .WithUrl("https://pacmanopp.azurewebsites.net/serverhub")
                 .Build();
             _connection.Closed += async (error) =>
             {

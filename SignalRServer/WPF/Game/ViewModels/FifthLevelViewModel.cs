@@ -260,10 +260,10 @@ namespace WPF.Game.ViewModels
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                     LayoutRoot.Children.Insert(0, mainGrid);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Apples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     break;
                 }
             }
@@ -278,10 +278,10 @@ namespace WPF.Game.ViewModels
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                     LayoutRoot.Children.Insert(0, mainGrid);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     RottenApples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     break;
                 }
             }
@@ -308,10 +308,10 @@ namespace WPF.Game.ViewModels
                 {
                     handler.Handle(ref pacman, item);
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Cherries.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
+                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     break;
                 }
             }

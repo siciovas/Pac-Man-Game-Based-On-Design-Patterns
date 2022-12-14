@@ -15,7 +15,7 @@ namespace SignalRServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR("Endpoint=https://pacmanopp.service.signalr.net;AccessKey=KAWVD/s2jrsE1azP8pcrjxmmp9jKy4+d+J9mK9XH8a4=;Version=1.0;");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +42,9 @@ namespace SignalRServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+            });
+            app.UseAzureSignalR(endpoints =>
+            {
                 endpoints.MapHub<ServerHub>("/serverhub");
             });
         }

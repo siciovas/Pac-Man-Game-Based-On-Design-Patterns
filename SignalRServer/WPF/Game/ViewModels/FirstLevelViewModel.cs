@@ -319,7 +319,7 @@ namespace WPF.Game.ViewModels
         private async void GameSetup()
         {
             gameTimer.Tick += GameLoop;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(30); ///will tick every 20ms
+            gameTimer.Interval = TimeSpan.FromMilliseconds(20); ///will tick every 20ms
           
             gameTimer.Start();
         }
@@ -419,20 +419,20 @@ namespace WPF.Game.ViewModels
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = Apples.IndexOf(Apples
                         .Where(a => a.Top == item.Top 
                                 && a.Left == item.Left)
                         .FirstOrDefault());
                     Apples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     break;
                 }
             }
 
             foreach (var item in RottenApples)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     handler.Handle(ref pacman, item);
@@ -442,10 +442,10 @@ namespace WPF.Game.ViewModels
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     RottenApples.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     break;
                 }
             }
@@ -468,21 +468,21 @@ namespace WPF.Game.ViewModels
 
             foreach (var item in Cherries)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     handler.Handle(ref pacman, item);
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Cherries.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
+                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
                     break;
                 }
             }
             foreach (var item in Strawberries)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     handler.Handle(ref pacman, item);
@@ -495,7 +495,7 @@ namespace WPF.Game.ViewModels
 
             foreach (var item in Walls)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     if (goRight && !pacman.GhostMode)
@@ -529,7 +529,7 @@ namespace WPF.Game.ViewModels
             int mobIndex = 0;
             foreach (var item in Mobs)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     pacman.Health -= item.GetDamage();
@@ -585,7 +585,7 @@ namespace WPF.Game.ViewModels
             int spikeIndex = 0;
             foreach (var item in Spikes)
             {
-                Rect hitBox = new Rect(item.Left, item.Top, 30, 30);
+                Rect hitBox = new Rect(item.Left, item.Top, 10, 10);
                 if (pacmanHitBox.IntersectsWith(hitBox))
                 {
                     if (!pacman.GhostMode)
