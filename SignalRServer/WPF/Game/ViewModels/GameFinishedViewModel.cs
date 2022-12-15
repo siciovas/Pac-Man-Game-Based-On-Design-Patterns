@@ -116,5 +116,20 @@ namespace WPF.Game.ViewModels
         {
             return;
         }
+
+        public override void VisitMob(string command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitSpike(string command)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void VisitWall(string command)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

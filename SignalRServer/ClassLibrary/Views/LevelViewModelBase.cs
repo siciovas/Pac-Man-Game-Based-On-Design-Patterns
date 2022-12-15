@@ -32,6 +32,9 @@ namespace ClassLibrary.Views
         public abstract void AddRottenApple(AddRottenAppleCommand command);
         public abstract void AddCherry(AddCherryCommand command);
         public abstract void AddStrawberry(AddStrawberyCommand command);
+        public abstract void VisitWall(string command);
+        public abstract void VisitSpike(string command);
+        public abstract void VisitMob(string command);
 
     }
 }

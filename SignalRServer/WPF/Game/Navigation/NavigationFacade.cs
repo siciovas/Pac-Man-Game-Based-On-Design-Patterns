@@ -125,6 +125,18 @@ namespace WPF.Game.Stores
             {
                 _currentViewModel.AddStrawberry(command);
             });
+            _connection.On<string>("VisitWall", (command) =>
+            {
+                _currentViewModel.VisitWall(command);
+            });
+            _connection.On<string>("VisitSpike", (command) =>
+            {
+                _currentViewModel.VisitSpike(command);
+            });
+            _connection.On<string>("VisitMob", (command) =>
+            {
+                _currentViewModel.VisitMob(command);
+            });
         }
 
         /// <summary>

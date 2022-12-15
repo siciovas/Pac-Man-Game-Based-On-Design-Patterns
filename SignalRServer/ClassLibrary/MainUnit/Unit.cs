@@ -1,12 +1,14 @@
 ﻿using ClassLibrary.Decorator;
+using ClassLibrary.Visitor;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace ClassLibrary.MainUnit
 {
-    public abstract class Unit : IDecorator, INotifyPropertyChanged
+    public abstract class Unit : IDecorator, Element, INotifyPropertyChanged
     {
         public int _Top;
         public int _Left;
@@ -34,10 +36,23 @@ namespace ClassLibrary.MainUnit
                 NotifyPropertyChanged("Left");
             }
         }
+
+        public UnitType _UnitType { get; set; }
+        public UnitType UnitType
+        {
+            get
+            {
+                return _UnitType;
+            }
+            set
+            {
+                _UnitType = value;
+                NotifyPropertyChanged("UnitType");
+            }
+        }
         /*public ImageBrush Appearance { get; set; }
         public string Name { get; set; }*/
 
-        public UnitType UnitType { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -61,5 +76,10 @@ namespace ClassLibrary.MainUnit
         }
 
         public abstract Unit Copy();
+
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }
