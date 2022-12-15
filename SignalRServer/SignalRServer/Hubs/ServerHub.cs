@@ -115,5 +115,17 @@ namespace SignalRServer.Hubs
         {
             await Clients.Others.SendAsync("SendAddStrawberry", command);
         }
+        public async Task SendMakeVisitWallCommand(string command)
+        {
+            await Clients.Others.SendAsync("VisitWall", command);
+        }
+        public async Task SendMakeVisitSpikeCommand(string command)
+        {
+            await Clients.Others.SendAsync("VisitSpike", command);
+        }
+        public async Task SendMakeVisitMobCommand(string command)
+        {
+            await Clients.Others.SendAsync("VisitMob", command);
+        }
     }
 }
