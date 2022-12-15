@@ -13,6 +13,7 @@ using ClassLibrary.Mobs.WeakMob;
 using ClassLibrary.Strategies;
 using ClassLibrary.TemplateMethod;
 using ClassLibrary.Views;
+using ClassLibrary.Visitor;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 using System;
@@ -358,6 +359,9 @@ namespace WPF.Game.ViewModels
                         await _connection.InvokeAsync("PacmanDamage", pacman.Health);
                         await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     }
+                    int index = Mobs.IndexOf(Mobs.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendMakeVisitMobCommand", index.ToString());
+                    item.Accept(new MobVisitor());
                 }
                 if (_connection.State.HasFlag(HubConnectionState.Connected))
                 {
@@ -414,6 +418,9 @@ namespace WPF.Game.ViewModels
                         pacman.Health = pacman.Health - item.GetDamage();
                         YellowTop = 0;
                     }
+                    int index = Walls.IndexOf(Walls.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendMakeVisitWallCommand", index.ToString());
+                    item.Accept(new WallVisitor());
                     break;
                 }
             }
@@ -433,6 +440,9 @@ namespace WPF.Game.ViewModels
                             YellowTop = 0;
                         }
                     }
+                    int index = Spikes.IndexOf(Spikes.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
+                    await _connection.InvokeAsync("SendMakeVisitSpikeCommand", index.ToString());
+                    item.Accept(new SpikeVisitor());
                     break;
                 }
                 if (item.GoLeft && item.Left + 40 > AppWidth)
@@ -596,6 +606,24 @@ namespace WPF.Game.ViewModels
         public override void AddStrawberry(AddStrawberyCommand command)
         {
             throw new NotImplementedException();
+        }
+
+        public override void VisitWall(string command)
+        {
+            MakeVisitWallCommand commanda = new MakeVisitWallCommand(command);
+            commanda.Execute(Walls);
+        }
+
+        public override void VisitSpike(string command)
+        {
+            MakeVisitSpikeCommand commanda = new MakeVisitSpikeCommand(command);
+            commanda.Execute(Spikes);
+        }
+
+        public override void VisitMob(string command)
+        {
+            MakeVisitMobCommand commanda = new MakeVisitMobCommand(command);
+            commanda.Execute(Mobs);
         }
     }
 }
