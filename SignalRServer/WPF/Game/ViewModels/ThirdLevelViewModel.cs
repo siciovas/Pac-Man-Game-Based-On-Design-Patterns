@@ -523,7 +523,7 @@ namespace WPF.Game.ViewModels
 
         public override void SendOponmentCoordinates(string serializedObject)
         {
-            Pacman deserializedObject = JsonSerializer.Deserialize<Pacman>(serializedObject);
+            Coordinates deserializedObject = JsonSerializer.Deserialize<Coordinates>(serializedObject);
             GreenLeft = deserializedObject.Left;
             GreenTop = deserializedObject.Top;
         }
