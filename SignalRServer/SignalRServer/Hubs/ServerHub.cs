@@ -1,11 +1,11 @@
-﻿using ClassLibrary.Mobs;
-using ClassLibrary.Commands;
+﻿using ClassLibrary.Commands;
+using ClassLibrary.Mediator;
 using ClassLibrary.Observer;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SignalRServer.Hubs
 {
-    public class ServerHub : Hub, ISubject
+    public class ServerHub : Hub, ISubject, IMediator
     {
         private ClientCounter _clientCounter = ClientCounter.Instance;
         public ServerHub()
