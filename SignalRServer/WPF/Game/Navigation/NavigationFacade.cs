@@ -66,26 +66,26 @@ namespace WPF.Game.Stores
                 _currentViewModel.SendOponmentCoordinates(serializedObject);
             });
 
-            _connection.On<RemoveAppleAtIndexCommand>("RemoveAppleAtIndex", (command) =>
+            _connection.On<string>("RemoveAppleAtIndex", (command) =>
             {
                 _currentViewModel.RemoveApple(command);
             });
 
-            _connection.On<RemoveRottenAppleAtIndexCommand>("RemoveRottenAppleAtIndex", (command) =>
+            _connection.On<string>("RemoveRottenAppleAtIndex", (command) =>
             {
                 _currentViewModel.RottenApple(command);
             });
 
-            _connection.On<RemoveCoinAtIndexCommand>("RemoveCoinAtIndex", async (command) =>
+            _connection.On<string>("RemoveCoinAtIndex", async (command) =>
             {
                 await _currentViewModel.RemoveCoin(command);
             });
 
-            _connection.On<RemoveCherryAtIndexCommand>("RemoveCherryAtIndex", (command) =>
+            _connection.On<string>("RemoveCherryAtIndex", (command) =>
             {
                 _currentViewModel.RemoveCherry(command);
             });
-            _connection.On<GivePointsToOpponentCommand>("OpponentScore", (command) =>
+            _connection.On<string>("OpponentScore", (command) =>
             {
                 _currentViewModel.UpdateOpScore(command);
             });

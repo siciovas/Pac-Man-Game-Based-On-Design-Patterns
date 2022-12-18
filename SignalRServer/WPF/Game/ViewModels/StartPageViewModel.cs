@@ -153,27 +153,27 @@ namespace WPF.Game.ViewModels
             throw new NotImplementedException();
         }
 
-        public override void RemoveApple(ClassLibrary.Commands.RemoveAppleAtIndexCommand command)
+        public override void RemoveApple(string command)
         {
             throw new NotImplementedException();
         }
 
-        public override void RottenApple(ClassLibrary.Commands.RemoveRottenAppleAtIndexCommand command)
+        public override void RottenApple(string command)
         {
             throw new NotImplementedException();
         }
 
-        public override Task RemoveCoin(ClassLibrary.Commands.RemoveCoinAtIndexCommand command)
+        public override Task RemoveCoin(string command)
         {
             throw new NotImplementedException();
         }
 
-        public override void RemoveCherry(ClassLibrary.Commands.RemoveCherryAtIndexCommand command)
+        public override void RemoveCherry(string command)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateOpScore(ClassLibrary.Commands.GivePointsToOpponentCommand command)
+        public override void UpdateOpScore(string command)
         {
             throw new NotImplementedException();
         }

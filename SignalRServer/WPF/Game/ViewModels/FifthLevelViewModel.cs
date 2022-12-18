@@ -261,10 +261,14 @@ namespace WPF.Game.ViewModels
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                     LayoutRoot.Children.Insert(0, mainGrid);
+                    await _connection.InvokeAsync("SendCommand", pacman.Speed.ToString(), "ChangeSpeedLabel");
                     var index = Apples.IndexOf(Apples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Apples.RemoveAt(index);
-                    await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+
+
+                    string serializedRemoveAppleAtIndexCommand = JsonSerializer.Serialize(new RemoveAppleAtIndexCommand(index));
+                    //await _connection.InvokeAsync("SendRemoveAppleAtIndex", new RemoveAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("SendCommand", serializedRemoveAppleAtIndexCommand, "RemoveAppleAtIndex");
                     break;
                 }
             }
@@ -279,10 +283,12 @@ namespace WPF.Game.ViewModels
                     mainGrid = grid.Draw();
                     LayoutRoot.Children.Remove(LayoutRoot.Children[0]);
                     LayoutRoot.Children.Insert(0, mainGrid);
+                    await _connection.InvokeAsync("SendCommand", pacman.Speed.ToString(), "ChangeSpeedLabel");
                     var index = RottenApples.IndexOf(RottenApples.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     RottenApples.RemoveAt(index);
-                    await _connection.InvokeAsync("SendRemoveRottenAppleAtIndex", new RemoveRottenAppleAtIndexCommand(index));
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+
+                    string serializedRemoveRottenAppleAtIndexCommand = JsonSerializer.Serialize(new RemoveRottenAppleAtIndexCommand(index));
+                    await _connection.InvokeAsync("SendCommand", serializedRemoveRottenAppleAtIndexCommand, "RemoveRottenAppleAtIndex");
                     break;
                 }
             }
@@ -295,7 +301,8 @@ namespace WPF.Game.ViewModels
                     var index = Coins.IndexOf(Coins.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     pacman.Score += item.Value;
                     score = pacman.Score;
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    string serializedRemoveCoinAtIndexCommand = JsonSerializer.Serialize(new RemoveCoinAtIndexCommand(index));
+                    await _connection.InvokeAsync("SendCommand", serializedRemoveCoinAtIndexCommand, "RemoveCoinAtIndex");
                     Coins.RemoveAt(index);
                     await _connection.InvokeAsync("SendRemoveCoinAtIndex", new RemoveCoinAtIndexCommand(index));
                     break;
@@ -309,10 +316,11 @@ namespace WPF.Game.ViewModels
                 {
                     handler.Handle(ref pacman, item);
                     score = pacman.Score;
+                    await _connection.InvokeAsync("SendCommand", JsonSerializer.Serialize(new GivePointsToOpponentCommand(score)), "GivePointsToOpponent");
                     var index = Cherries.IndexOf(Cherries.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     Cherries.RemoveAt(index);
-                    await _connection.InvokeAsync("SendRemoveCherryAtIndex", new RemoveCherryAtIndexCommand(index));
-                    await _connection.InvokeAsync("GivePointsToOpponent", new GivePointsToOpponentCommand(score));
+                    string serializedRemoveCherryAtIndexCommand = JsonSerializer.Serialize(new RemoveCherryAtIndexCommand(index));
+                    await _connection.InvokeAsync("SendCommand", serializedRemoveCherryAtIndexCommand, "RemoveCherryAtIndex");
                     break;
                 }
             }
@@ -344,7 +352,7 @@ namespace WPF.Game.ViewModels
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+                    await _connection.InvokeAsync("SendCommand", pacman.Speed.ToString(), "ChangeSpeedLabel");
                     if (pacman.Health < 0)
                     {
                         YellowLeft = 0;
@@ -357,7 +365,7 @@ namespace WPF.Game.ViewModels
                         Canvas.SetLeft(mainGrid, YellowLeft);
                         Canvas.SetTop(mainGrid, YellowTop);
                         await _connection.InvokeAsync("PacmanDamage", pacman.Health);
-                        await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+                        await _connection.InvokeAsync("SendCommand", pacman.Speed.ToString(), "ChangeSpeedLabel");
                     }
                     int index = Mobs.IndexOf(Mobs.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     await _connection.InvokeAsync("SendMakeVisitMobCommand", index.ToString());
@@ -368,22 +376,22 @@ namespace WPF.Game.ViewModels
                     if (item.GoLeft && item.Left + 40 > AppWidth)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connection.InvokeAsync("SendCommand", a, "Move");
                     }
                     else if (!item.GoLeft && item.Left - 5 < 1)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connection.InvokeAsync("SendCommand", a, "Move");
                     }
                     if (item.GoLeft)
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left + item.GetSpeed(), Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connection.InvokeAsync("SendCommand", a, "Move");
                     }
                     else
                     {
                         string a = JsonConvert.SerializeObject(new { Position = item.Left - item.GetSpeed(), Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        await _connection.InvokeAsync("SendCommand", a, "Move");
                     }
                     mobIndex++;
                 }
@@ -521,19 +529,22 @@ namespace WPF.Game.ViewModels
             GreenTop = deserializedObject.Top;
         }
 
-        public override void RemoveApple(RemoveAppleAtIndexCommand command)
+        public override void RemoveApple(string command)
         {
-            command.Execute(Apples);
+            RemoveAppleAtIndexCommand _command = JsonSerializer.Deserialize<RemoveAppleAtIndexCommand>(command);
+            _command.Execute(Apples);
         }
 
-        public override void RottenApple(RemoveRottenAppleAtIndexCommand command)
+        public override void RottenApple(string command)
         {
-            command.Execute(RottenApples);
+            RemoveRottenAppleAtIndexCommand _command = JsonSerializer.Deserialize<RemoveRottenAppleAtIndexCommand>(command);
+            _command.Execute(RottenApples);
         }
 
-        public override async Task RemoveCoin(RemoveCoinAtIndexCommand command)
+        public override async Task RemoveCoin(string command)
         {
-            command.Execute(Coins);
+            RemoveCoinAtIndexCommand _command = JsonSerializer.Deserialize<RemoveCoinAtIndexCommand>(command);
+            _command.Execute(Coins);
             if (Coins.Count == 0)
             {
                 gameTimer.Stop(); //cia reiktu pridet GAME PASSED kazkoki langa dar
@@ -541,14 +552,16 @@ namespace WPF.Game.ViewModels
             }
         }
 
-        public override void RemoveCherry(RemoveCherryAtIndexCommand command)
+        public override void RemoveCherry(string command)
         {
-            command.Execute(Cherries);
+            RemoveCherryAtIndexCommand _command = JsonSerializer.Deserialize<RemoveCherryAtIndexCommand>(command);
+            _command.Execute(Cherries);
         }
 
-        public override void UpdateOpScore(GivePointsToOpponentCommand command)
+        public override void UpdateOpScore(string command)
         {
-            command.Execute(greenPacman);
+            GivePointsToOpponentCommand _command = JsonSerializer.Deserialize<GivePointsToOpponentCommand>(command);
+            _command.Execute(greenPacman);
             opponentScore = greenPacman.Score;
         }
 
