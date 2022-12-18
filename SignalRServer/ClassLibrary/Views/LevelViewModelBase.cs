@@ -13,14 +13,14 @@ namespace ClassLibrary.Views
         public abstract void OnLeftClick();
         public abstract void SendOponmentCoordinates(string serializedObject);
 
-        public abstract void RemoveApple(RemoveAppleAtIndexCommand command);
+        public abstract void RemoveApple(string command);
 
-        public abstract void RottenApple(RemoveRottenAppleAtIndexCommand command);
+        public abstract void RottenApple(string command);
 
-        public abstract Task RemoveCoin(RemoveCoinAtIndexCommand command);
+        public abstract Task RemoveCoin(string command);
 
-        public abstract void RemoveCherry(RemoveCherryAtIndexCommand command);
-        public abstract void UpdateOpScore(GivePointsToOpponentCommand command);
+        public abstract void RemoveCherry(string command);
+        public abstract void UpdateOpScore(string command);
 
         public abstract void Move(string pos);
 

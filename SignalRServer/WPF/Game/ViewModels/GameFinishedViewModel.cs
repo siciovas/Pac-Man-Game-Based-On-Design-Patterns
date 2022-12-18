@@ -82,17 +82,17 @@ namespace WPF.Game.ViewModels
             return;
         }
 
-        public override void RemoveApple(RemoveAppleAtIndexCommand command)
+        public override void RemoveApple(string command)
         {
             return;
         }
 
-        public override void RemoveCherry(RemoveCherryAtIndexCommand command)
+        public override void RemoveCherry(string command)
         {
             return;
         }
 
-        public override Task RemoveCoin(RemoveCoinAtIndexCommand command)
+        public override Task RemoveCoin(string command)
         {
             return Task.CompletedTask;
         }
@@ -102,7 +102,7 @@ namespace WPF.Game.ViewModels
             throw new NotImplementedException();
         }
 
-        public override void RottenApple(RemoveRottenAppleAtIndexCommand command)
+        public override void RottenApple(string command)
         {
             return;
         }
@@ -112,7 +112,7 @@ namespace WPF.Game.ViewModels
             return;
         }
 
-        public override void UpdateOpScore(GivePointsToOpponentCommand command)
+        public override void UpdateOpScore(string command)
         {
             return;
         }

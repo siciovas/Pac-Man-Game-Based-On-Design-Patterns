@@ -50,36 +50,39 @@ namespace SignalRServer.Hubs
             await Clients.Others.SendAsync("OponentCordinates", serializedObject);
         }
 
-        public async Task SendRemoveAppleAtIndex(RemoveAppleAtIndexCommand command)
+        public async Task SendCommand(string command, string name)
         {
-            await Clients.Others.SendAsync("RemoveAppleAtIndex", command);
-        }
-
-        public async Task SendRemoveRottenAppleAtIndex(RemoveRottenAppleAtIndexCommand command)
-        {
-            await Clients.Others.SendAsync("RemoveRottenAppleAtIndex", command);
-        }
-
-        public async Task SendRemoveCoinAtIndex(RemoveCoinAtIndexCommand command)
-        {
-            await Clients.Others.SendAsync("RemoveCoinAtIndex", command);
-        }
-
-        public async Task SendRemoveCherryAtIndex(RemoveCherryAtIndexCommand command)
-        {
-            await Clients.Others.SendAsync("RemoveCherryAtIndex", command);
-        }
-        public async Task GivePointsToOpponent(GivePointsToOpponentCommand command)
-        {
-            await Clients.Others.SendAsync("OpponentScore", command);
+            switch (name)
+            {
+                case "RemoveAppleAtIndex":
+                    await Clients.Others.SendAsync("RemoveAppleAtIndex", command);
+                    break;
+                case "RemoveRottenAppleAtIndex":
+                    await Clients.Others.SendAsync("RemoveRottenAppleAtIndex", command);
+                    break;
+                case "RemoveCoinAtIndex":
+                    await Clients.Others.SendAsync("RemoveCoinAtIndex", command);
+                    break;
+                case "RemoveCherryAtIndex":
+                    await Clients.Others.SendAsync("RemoveCherryAtIndex", command);
+                    break;
+                case "GivePointsToOpponent":
+                    await Clients.Others.SendAsync("OpponentScore", command);
+                    break;
+                case "Move":
+                    await Clients.All.SendAsync("Move", command);
+                    break;
+                case "MoveObstacle":
+                    await Clients.All.SendAsync("MoveObstacle", command);
+                    break;
+                case "ChangeSpeedLabel":
+                    await Clients.Others.SendAsync("ChangeSpeed", command);
+                    break;
+            }
         }
         public async Task PacmanDamage(int damage)
         {
             await Clients.Others.SendAsync("PacmanDamage", damage);
-        }
-        public async Task Move(string pos)
-        {
-            await Clients.All.SendAsync("Move", pos);
         }
         public async Task LevelUp(int level)
         {
@@ -89,15 +92,6 @@ namespace SignalRServer.Hubs
         public async Task SendRemoveStrawberryAtIndex(RemoveStrawberryAtIndexCommand command)
         {
             await Clients.Others.SendAsync("RemoveStrawberryAtIndex", command);
-        }
-
-        public async Task MoveObstacle(string serializedObject)
-        {
-            await Clients.All.SendAsync("MoveObstacle", serializedObject);
-        }
-        public async Task ChangeSpeedLabel(string speed)
-        {
-            await Clients.Others.SendAsync("ChangeSpeed", speed);
         }
         public async Task SendAddApple(AddAppleCommand command)
         {
