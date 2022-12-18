@@ -27,6 +27,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using ClassLibrary.Interpreter;
 using System.Linq.Expressions;
 using ClassLibrary.Visitor;
+using ClassLibrary;
 
 namespace WPF.Game.ViewModels
 {
@@ -280,9 +281,9 @@ namespace WPF.Game.ViewModels
 
         public override void Move(string pos)
         {
-            var serializedObject = JsonConvert.DeserializeObject<dynamic>(pos);
-            Mobs[(int)serializedObject.Index].GoLeft = (bool)serializedObject.GoLeft;
-            Mobs[(int)serializedObject.Index].Left = (int)serializedObject.Position;
+            MoveModel serializedObject = JsonConvert.DeserializeObject<MoveModel>(pos);
+            Mobs[serializedObject.Index].GoLeft = serializedObject.GoLeft;
+            Mobs[serializedObject.Index].Left = serializedObject.Position;
         }
 
         public override void DamagePacman(int damage)
@@ -544,7 +545,7 @@ namespace WPF.Game.ViewModels
                     LayoutRoot.Children.Insert(0, mainGrid);
                     Canvas.SetLeft(mainGrid, YellowLeft);
                     Canvas.SetTop(mainGrid, YellowTop);
-                    await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+                    //await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     if (pacman.Health < 0)
                     {
                         YellowLeft = 0;
@@ -557,7 +558,7 @@ namespace WPF.Game.ViewModels
                         Canvas.SetLeft(mainGrid, YellowLeft);
                         Canvas.SetTop(mainGrid, YellowTop);
                         await _connection.InvokeAsync("PacmanDamage", pacman.Health);
-                        await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
+                        //await _connection.InvokeAsync("ChangeSpeedLabel", pacman.Speed.ToString());
                     }
                     int index = Mobs.IndexOf(Mobs.Where(a => a.Top == item.Top && a.Left == item.Left).FirstOrDefault());
                     await _connection.InvokeAsync("SendMakeVisitMobCommand", index.ToString());
@@ -567,23 +568,31 @@ namespace WPF.Game.ViewModels
                 {
                     if (item.GoLeft && item.Left + 40 > AppWidth)
                     {
-                        string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        item.GoLeft = false;
+                        //item.Left = item.Left;
+                       /* string a = JsonConvert.SerializeObject(new MoveModel { Position = item.Left, Index = mobIndex, GoLeft = false });
+                        await _connection.InvokeAsync("Move", a);*/
                     }
                     else if (!item.GoLeft && item.Left - 5 < 1)
                     {
-                        string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        item.GoLeft = true;
+                        //item.Left = item.Left;
+                        /*string a = JsonConvert.SerializeObject(new MoveModel { Position = item.Left, Index = mobIndex, GoLeft = true });
+                        await _connection.InvokeAsync("Move", a);*/
                     }
                     if (item.GoLeft)
                     {
-                        string a = JsonConvert.SerializeObject(new { Position = item.Left + item.GetSpeed(), Index = mobIndex, GoLeft = true });
-                        await _connection.InvokeAsync("Move", a);
+                        //item.GoLeft = true;
+                        item.Left = item.Left + item.GetSpeed();
+                        /*string a = JsonConvert.SerializeObject(new MoveModel { Position = item.Left + item.GetSpeed(), Index = mobIndex, GoLeft = true });
+                        await _connection.InvokeAsync("Move", a);*/
                     }
                     else
                     {
-                        string a = JsonConvert.SerializeObject(new { Position = item.Left - item.GetSpeed(), Index = mobIndex, GoLeft = false });
-                        await _connection.InvokeAsync("Move", a);
+                        //item.GoLeft = false;
+                        item.Left = item.Left - item.GetSpeed();
+                        /*string a = JsonConvert.SerializeObject(new MoveModel { Position = item.Left - item.GetSpeed(), Index = mobIndex, GoLeft = false });
+                        await _connection.InvokeAsync("Move", a);*/
                     }
                     mobIndex++;
                 }
@@ -611,23 +620,27 @@ namespace WPF.Game.ViewModels
                 }
                 if (item.GoLeft && item.Left + 40 > AppWidth)
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = false });
-                    await _connection.InvokeAsync("MoveObstacle", a);
+                    item.GoLeft = false;
+                    //string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = false });
+                    //await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 else if (!item.GoLeft && item.Left - 5 < 1)
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = true });
-                    await _connection.InvokeAsync("MoveObstacle", a);
+                    item.GoLeft = true;
+                    //string a = JsonConvert.SerializeObject(new { Position = item.Left, Index = spikeIndex, GoLeft = true });
+                    //await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 if (item.GoLeft)
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left + 5, Index = spikeIndex, GoLeft = true });
-                    await _connection.InvokeAsync("MoveObstacle", a);
+                    item.Left = item.Left + 5;
+                    //string a = JsonConvert.SerializeObject(new { Position = item.Left + 5, Index = spikeIndex, GoLeft = true });
+                    //await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 else
                 {
-                    string a = JsonConvert.SerializeObject(new { Position = item.Left - 5, Index = spikeIndex, GoLeft = false });
-                    await _connection.InvokeAsync("MoveObstacle", a);
+                    item.Left = item.Left - 5;
+                    //string a = JsonConvert.SerializeObject(new { Position = item.Left - 5, Index = spikeIndex, GoLeft = false });
+                    //await _connection.InvokeAsync("MoveObstacle", a);
                 }
                 spikeIndex++;
             }

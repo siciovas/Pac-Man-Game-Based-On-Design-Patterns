@@ -79,7 +79,7 @@ namespace SignalRServer.Hubs
         }
         public async Task Move(string pos)
         {
-            await Clients.All.SendAsync("Move", pos);
+            await Clients.Others.SendAsync("Move", pos);
         }
         public async Task LevelUp(int level)
         {
